@@ -48,7 +48,7 @@ Cada pergunta é um array:
 - Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: só a viragem da caixa (`#qbox` `out`/`in`); o contador de saltos mostra «−1» a subir (`.menos1`) e o número vira (`.n.vira`); o atleta `RUNNER` é o ícone do botão; ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
 - Resultado de cada pergunta: cartão translúcido no centro do ecrã (`#resbg` / `.rescard`), com a explicação, a fonte e o «Seguinte»; aparece 1,1 s depois de responder (depois da viragem e dos confetes).
 - Antes de cada ronda: contagem 3, 2, 1, «Já!» em grande (`contagem()`, `#cd`).
-- Saltar e Revelar: duplo toque (`arma()`): o 1.º toque mostra «Toca de novo para…» durante 2,5 s, sem parar o tempo; o 2.º faz a ação. Terminar: janela `confirma()` (`#conf`, ao centro, temporizador em pausa). «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
+- Saltar e Revelar: ação imediata, sem confirmação. Terminar: janela `confirma()` (`#conf`, ao centro, temporizador em pausa). «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.
