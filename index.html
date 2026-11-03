@@ -76,6 +76,12 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .startbig:hover{transform:translateY(-2px)}
 .startbig:active{transform:scale(.98)}
 .startbig svg{width:26px;height:26px}
+/* brilho que atravessa o botão e o ícone de play a pulsar */
+.startbig{position:relative;overflow:hidden}
+.startbig::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg)}
+@media (prefers-reduced-motion:no-preference){.startbig::after{animation:brilho 3.2s ease-in-out infinite}.startbig svg{animation:play 1.6s ease-in-out infinite}}
+@keyframes brilho{0%,55%{left:-40%}100%{left:130%}}
+@keyframes play{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.12)}}
 @media (prefers-reduced-motion:no-preference){.startbig{animation:convida 2.4s ease-in-out infinite}}
 @keyframes convida{0%,100%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 0 rgba(200,38,47,.5)}50%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 12px rgba(200,38,47,0)}}
 .rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -85,6 +91,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
 .rules strong{font-family:var(--display);font-weight:500;font-size:15px}
 .rules span{font-size:13px;color:var(--muted);line-height:1.4}
+/* cada regra com a sua cor: verde, amarelo, vermelho e azul-claro (as cores da bandeira e dos níveis) */
+.rules li{--c:var(--ok);position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--c) 35%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,var(--surface)),var(--surface) 70%)}
+.rules li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.rules li:nth-child(2){--c:var(--sun)}.rules li:nth-child(3){--c:var(--rubro)}.rules li:nth-child(4){--c:#3d8bfd}
+.rules li b{color:var(--c)!important}
 /* jogo */
 /* «Seguinte» fica preso ao fundo do ecrã, com a largura toda, para não obrigar a descer depois da explicação */
 .nextbar{position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);animation:sobe .35s ease-out}
@@ -536,6 +547,15 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
 $("start").onclick=start;$("again").onclick=start;
 
 // cartão de partilha (1080×1080)
+// Bandeira de fundo do cartão: grande, inclinada e cortada, em degradê a partir do canto superior direito (como no cabeçalho)
+function drawFlagBg(ctx,W,H,cy){const oc=document.createElement("canvas");oc.width=W;oc.height=H;const o=oc.getContext("2d");
+ const fw=W*1.25,fh=fw*600/1020;o.save();o.translate(W*1.02,H*cy);o.rotate(-11*Math.PI/180);o.translate(-fw*.6,-fh*.5);o.scale(fw/1020,fh/600);
+ o.fillStyle="#003893";o.fillRect(0,0,1020,600);o.fillStyle="#fff";o.fillRect(0,300,1020,150);o.fillStyle="#cf2027";o.fillRect(0,350,1020,50);
+ o.translate(382.5,375);o.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);
+ for(let i=0;i<10;i++){o.save();o.rotate(i*Math.PI/5);o.translate(0,-150);o.beginPath();for(let k=0;k<10;k++){const q=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;o.lineTo(q*Math.cos(a),q*Math.sin(a))}o.closePath();o.fill();o.restore()}
+ o.restore();o.globalCompositeOperation="destination-in";
+ const g=o.createRadialGradient(W*.95,H*cy,0,W*.95,H*cy,W*.62);g.addColorStop(0,"rgba(0,0,0,1)");g.addColorStop(.45,"rgba(0,0,0,.55)");g.addColorStop(1,"rgba(0,0,0,0)");
+ o.fillStyle=g;o.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.45;ctx.drawImage(oc,0,0);ctx.restore()}
 function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020,r=Math.max(5,w*.02);
  ctx.save();ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=w*.14;ctx.shadowOffsetY=w*.06;ctx.fillStyle="#003893";ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.restore();
  ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();ctx.translate(x,y);ctx.scale(s,s);
@@ -546,10 +566,10 @@ function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020,r=Math.max(5,w*.02);
  ctx.save();ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.stroke();ctx.restore()}
 async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesque"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
  const W=1080,H=1080,ctx=cv.getContext("2d"),t=L(),P=88,n=ronda.length,s=certas();
- const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);drawFlagBg(ctx,W,H,.1);
  let y=84;ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
- drawFlag(ctx,W-P-260,y-8,260);
+ 
  y=330;ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(t.card.lbl,P,y);
  y+=230;ctx.font='800 250px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#f7d116";ctx.fillText(String(s),P-8,y);const sw=ctx.measureText(String(s)).width;
  ctx.font='500 90px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText(`/ ${n} ${t.card.of}`,P+sw+20,y);
