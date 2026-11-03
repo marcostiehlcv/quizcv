@@ -56,7 +56,7 @@ header.mast .wrap{padding-block:18px 26px}
 .hero h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,8.5vw,44px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
 .flagwrap{margin:0 0 4px;width:clamp(96px,28vw,170px);aspect-ratio:17/10;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.28),0 12px 28px -10px rgba(0,0,0,.55)}
 .flag-cv{display:block;width:100%;height:100%}
-.sub{margin:12px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.sub{margin:10px 0 0;font-size:15px;line-height:1.45;color:rgba(255,255,255,.82)}
 button:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -71,28 +71,23 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .lvls{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 0;padding:0;list-style:none}
 .lvl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;color:#fff}
 .lvl.l1{background:var(--lv1)}.lvl.l2{background:var(--lv2)}.lvl.l3{background:var(--lv3)}
-/* página inicial: botão grande, uma faixa com os números da ronda e uma linha sobre os pontos (uma só cor de destaque) */
-.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.stats li{padding:14px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
-.stats li+li{border-left:1px solid var(--line)}
-.stats b{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.1;color:var(--fg)}
-.stats span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.ptsnote{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5;text-align:center}
-.ptsnote b{color:var(--fg);font-weight:600}
+/* página inicial: botão sólido e simples (amarelo do logótipo) e um cartão «Como funciona» com ícones monocromáticos */
+.startbig{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em;color:var(--ocean-deep);background:var(--sun);border:0;border-radius:14px;padding:17px 24px;cursor:pointer;box-shadow:0 8px 20px -10px rgba(0,0,0,.5);transition:transform .15s,filter .15s}
+.startbig:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.startbig:active{transform:scale(.98)}
+.startbig svg{width:20px;height:20px}
+.how{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.how h2{margin:0;font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.howl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.howl li{display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:center;min-width:0}
+.howl i{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--chip);color:var(--fg)}
+.howl i svg{width:19px;height:19px}
+.howl b{display:block;font-family:var(--display);font-weight:800;font-size:16px;line-height:1.2;white-space:nowrap}
+.howl span{display:block;font-size:13px;color:var(--muted);line-height:1.3}
+.how p{margin:0;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);line-height:1.5}
+.how p b{color:var(--fg);font-weight:600}
 .best{text-align:center}
 .ini{display:flex;flex-direction:column;gap:18px}
-.startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:#fff;border:0;border-radius:18px;padding:20px 24px 24px;text-shadow:0 2px 6px rgba(0,20,60,.35);background:linear-gradient(to bottom,transparent calc(100% - 14px),rgba(255,255,255,.92) calc(100% - 14px),rgba(255,255,255,.92) calc(100% - 11px),#cf2027 calc(100% - 11px),#cf2027 calc(100% - 6px),rgba(255,255,255,.92) calc(100% - 6px),rgba(255,255,255,.92) calc(100% - 3px),transparent calc(100% - 3px)),linear-gradient(170deg,#1d56c4 0%,var(--ocean) 45%,var(--ocean-deep) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7)}
-.startbig:hover{transform:translateY(-2px)}
-.startbig:active{transform:scale(.98)}
-.startbig svg{width:26px;height:26px;color:var(--sun)}
-/* brilho que atravessa o botão e o ícone de play a pulsar */
-.startbig{position:relative;overflow:hidden}
-.startbig::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg)}
-@media (prefers-reduced-motion:no-preference){.startbig::after{animation:brilho 3.2s ease-in-out infinite}.startbig svg{animation:play 1.6s ease-in-out infinite}}
-@keyframes brilho{0%,55%{left:-40%}100%{left:130%}}
-@keyframes play{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.12)}}
-@media (prefers-reduced-motion:no-preference){.startbig{animation:convida 2.4s ease-in-out infinite}}
-@keyframes convida{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7),0 0 0 0 rgba(247,209,22,.4)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7),0 0 0 10px rgba(247,209,22,0)}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rules b{color:var(--sun)}}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
 /* contagem antes de começar: 3, 2, 1, já! em grande */
@@ -287,8 +282,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     <section id="v-ini" class="ini">
       <button type="button" class="startbig" id="start"></button>
       <p class="msg" id="iniNone" hidden></p>
-      <ul class="stats" id="rules"></ul>
-      <p class="ptsnote" id="ptsNote"></p>
+      <div class="how" id="how"><h2 id="howT"></h2><ul class="howl" id="rules"></ul><p id="ptsNote"></p></div>
       <p class="best" id="best"></p>
     </section>
 
@@ -379,8 +373,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 <script>
 const I18N={
 pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Prova-o em 15 perguntas",
- rules:(n,t,sk,rv)=>[[String(n),"perguntas"],[`${t}s`,"por pergunta"],[String(sk),"saltos"],[String(rv),"ajuda"]],
- ptsNote:"Cada certa vale <b>10, 20 ou 30</b> pontos, conforme o nível, mais 1 por segundo que sobra. A ajuda revela a resposta e conta como certa, sem bónus.",
+ howT:"Como funciona",rules:(n,t,sk,rv)=>[["q",`${n} perguntas`,"Do fácil ao difícil"],["t",`${t} segundos`,"Por pergunta"],["s",`${sk} saltos`,"Trocam a pergunta"],["a",`${rv} ajuda`,"Revela a resposta"]],
+ ptsNote:"<b>Pontos:</b> 10, 20 ou 30 por resposta certa, conforme o nível, mais 1 por cada segundo que sobra.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
@@ -412,8 +406,8 @@ secs:s=>`${s} segundos`,gain:g=>g.ajuda?`+${g.total} pontos: ajuda usada, sem b�
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove it in 15 questions",
- rules:(n,t,sk,rv)=>[[String(n),"questions"],[`${t}s`,"per question"],[String(sk),"skips"],[String(rv),"help"]],
- ptsNote:"Each right answer is worth <b>10, 20 or 30</b> points, by level, plus 1 per second left. The help reveals the answer and counts as right, with no bonus.",
+ howT:"How it works",rules:(n,t,sk,rv)=>[["q",`${n} questions`,"From easy to hard"],["t",`${t} seconds`,"Per question"],["s",`${sk} skips`,"Swap the question"],["a",`${rv} help`,"Reveals the answer"]],
+ ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
@@ -483,11 +477,13 @@ const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 let ronda=[],idx=0,pts=0,saltos=SALTOS,revelar=REVELAR,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
 function show(v){vista=v;if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
+const HOWI={q:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>',t:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',s:'<path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/>',a:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'};
 function renderIni(){const t=L();
  $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
  $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!QS.length;
- $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,REVELAR).map(([b,sp])=>`<li><b>${esc(b)}</b><span>${esc(sp)}</span></li>`).join("");$("rules").hidden=!QS.length;
- $("ptsNote").innerHTML=t.ptsNote;$("ptsNote").hidden=!QS.length;
+ $("howT").textContent=t.howT;$("how").hidden=!QS.length;
+ $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,REVELAR).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
+ $("ptsNote").innerHTML=t.ptsNote;
  const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
