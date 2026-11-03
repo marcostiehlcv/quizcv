@@ -41,14 +41,14 @@ Cada pergunta é um array:
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
 - Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
 - Cabeçalho: bandeira de fundo `.flagbg` (grande, inclinada e cortada, em degradê radial a partir da direita, ondular lento), igual à do Hoje CV.
-- Página inicial: botão grande e vermelho `.startbig` (brilho a atravessar e play a pulsar) e as regras em quatro blocos coloridos (`I18N.*.rules`; verde, amarelo, vermelho, azul).
+- Página inicial: botão grande `.startbig` (vermelho em degradê radial com relevo, estrelas da bandeira à direita, brilho a atravessar, play e halo amarelo a pulsar) e as regras em quatro blocos coloridos (`I18N.*.rules`; verde, amarelo, vermelho, azul).
 - Cartão de partilha: bandeira de fundo `drawFlagBg()` no canto superior direito (inclinada, em degradê), igual à do Hoje CV.
 - Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
 - Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: só a viragem da caixa (`#qbox` `out`/`in`); o contador de saltos mostra «−1» a subir (`.menos1`) e o número vira (`.n.vira`); o atleta `RUNNER` é o ícone do botão; ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
 - Resultado de cada pergunta: cartão translúcido no centro do ecrã (`#resbg` / `.rescard`), com a explicação, a fonte e o «Seguinte»; aparece 1,1 s depois de responder (depois da viragem e dos confetes).
 - Antes de cada ronda: contagem 3, 2, 1, «Já!» em grande (`contagem()`, `#cd`).
-- Saltar e Revelar: ação imediata, sem confirmação. Terminar: janela `confirma()` (`#conf`, ao centro, temporizador em pausa). «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
+- Saltar e Revelar: ação imediata, sem confirmação. Revelar é uma ajuda de uso único por ronda (`REVELAR=1`): conta como certa, com os pontos base do nível e sem bónus de rapidez. Terminar: janela `confirma()` (`#conf`, ao centro, temporizador em pausa). «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.

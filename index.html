@@ -72,7 +72,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .lvl.l1{background:var(--lv1)}.lvl.l2{background:var(--lv2)}.lvl.l3{background:var(--lv3)}
 /* página inicial: botão grande e as regras em quatro blocos */
 .ini{display:flex;flex-direction:column;gap:18px}
-.startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:#fff;background:linear-gradient(135deg,#e0353d,var(--rubro));border:0;border-radius:18px;padding:20px 24px;cursor:pointer;box-shadow:0 10px 28px -12px rgba(0,0,0,.45);transition:transform .15s}
+.startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:#fff;border:0;border-radius:18px;padding:20px 24px;text-shadow:0 2px 6px rgba(80,0,10,.35);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cg fill='%23f7d116' fill-opacity='.55'%3E%3Cpolygon transform='rotate(0) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(36) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(72) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(108) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(144) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(180) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(216) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(252) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(288) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3Cpolygon transform='rotate(324) translate(0 -42)' points='0,-9 2.1,-2.9 8.6,-2.8 3.4,1.1 5.3,7.3 0,3.6 -5.3,7.3 -3.4,1.1 -8.6,-2.8 -2.1,-2.9'/%3E%3C/g%3E%3C/svg%3E") right -22px center/150px no-repeat,radial-gradient(120% 140% at 15% 0%,#ff6b70 0%,#e0353d 38%,#b81d27 72%,#8f1019 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -4px 0 rgba(0,0,0,.18),0 14px 30px -12px rgba(200,38,47,.65);cursor:pointer;box-shadow:0 10px 28px -12px rgba(0,0,0,.45);transition:transform .15s}
 .startbig:hover{transform:translateY(-2px)}
 .startbig:active{transform:scale(.98)}
 .startbig svg{width:26px;height:26px}
@@ -83,7 +83,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes brilho{0%,55%{left:-40%}100%{left:130%}}
 @keyframes play{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.12)}}
 @media (prefers-reduced-motion:no-preference){.startbig{animation:convida 2.4s ease-in-out infinite}}
-@keyframes convida{0%,100%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 0 rgba(200,38,47,.5)}50%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 12px rgba(200,38,47,0)}}
+@keyframes convida{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -4px 0 rgba(0,0,0,.18),0 14px 30px -12px rgba(200,38,47,.65),0 0 0 0 rgba(247,209,22,.45)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -4px 0 rgba(0,0,0,.18),0 14px 30px -12px rgba(200,38,47,.65),0 0 0 12px rgba(247,209,22,0)}}
 .rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rules li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .rules b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1;color:var(--ocean)}
@@ -188,6 +188,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .tool.big:active:not(:disabled){transform:scale(.97)}
 #skip{background:linear-gradient(135deg,#1c6dd0,var(--ocean))}
 #reveal{background:linear-gradient(135deg,var(--sun),#e08a00);color:var(--ocean-deep)}
+#reveal .n{background:rgba(0,37,102,.18)}
 #reveal:hover:not(:disabled){color:var(--ocean-deep)}
 .tool.big .n.vira{display:inline-block;animation:vira .5s .15s cubic-bezier(.3,.7,.4,1) both}
 @keyframes vira{0%{transform:perspective(200px) rotateX(0)}50%{transform:perspective(200px) rotateX(90deg)}51%{transform:perspective(200px) rotateX(-90deg)}100%{transform:perspective(200px) rotateX(0)}}
@@ -383,15 +384,15 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 <script>
 const I18N={
 pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Prova-o em 15 perguntas",
- rules:(n,t,sk)=>[[String(n),"perguntas","5 fáceis, 5 médias e 5 difíceis"],[`${t} s`,"por pergunta","Se o tempo acabar, conta como errada"],["10 · 20 · 30","pontos por acerto","Mais 1 ponto por cada segundo que sobra"],[String(sk),"saltos","Também podes revelar a resposta, sem pontos"]],
+ rules:(n,t,sk)=>[[String(n),"perguntas","5 fáceis, 5 médias e 5 difíceis"],[`${t} s`,"por pergunta","Se o tempo acabar, conta como errada"],["10 · 20 · 30","pontos por acerto","Mais 1 ponto por cada segundo que sobra"],[String(sk),"saltos","E 1 ajuda: revelar a resposta (conta como certa, sem bónus)"]],
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
  skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",keep:"Continuar a jogar",quit:"Terminar",
  quitQ:"Terminar o quiz?",quitTxt:"O resultado conta só as perguntas a que já respondeste.",quitYes:"Sim, terminar",
-secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
- right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Aqui está a resposta.",
+secs:s=>`${s} segundos`,gain:g=>g.ajuda?`+${g.total} pontos: ajuda usada, sem bónus de rapidez`:`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
+ right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Resposta revelada: conta como certa.",
  answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
  jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conheces Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
  jokesBad:["Precisas de comer uma cachupa para ganhar forças.","Um grogue daria jeito… ou talvez não.","Calma, até o Pico do Fogo tem dias nublados.","Morabeza: errar também faz parte.","Essa foi mais torta do que a estrada de Santo Antão.","Faz uma pausa para um pastel de milho e volta mais forte."],
@@ -410,20 +411,20 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações",geografia:"Geografia"},
  foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",
  about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
-  ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) ou revelar a resposta, sem pontos."],
+  ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda: revelar a resposta uma vez, que conta como certa mas só com os pontos do nível."],
   ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes. Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema»."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove it in 15 questions",
- rules:(n,t,sk)=>[[String(n),"questions","5 easy, 5 medium and 5 hard"],[`${t} s`,"per question","If time runs out, it counts as wrong"],["10 · 20 · 30","points per answer","Plus 1 point for every second left"],[String(sk),"skips","You can also reveal the answer, for no points"]],
+ rules:(n,t,sk)=>[[String(n),"questions","5 easy, 5 medium and 5 hard"],[`${t} s`,"per question","If time runs out, it counts as wrong"],["10 · 20 · 30","points per answer","Plus 1 point for every second left"],[String(sk),"skips","And 1 help: reveal the answer (counts as right, no bonus)"]],
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
  skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",keep:"Keep playing",quit:"End quiz",
  quitQ:"End the quiz?",quitTxt:"Your result only counts the questions you have already answered.",quitYes:"Yes, end it",
-secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
- right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Here is the answer.",
+secs:s=>`${s} seconds`,gain:g=>g.ajuda?`+${g.total} points: help used, no speed bonus`:`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
+ right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Answer revealed: it counts as right.",
  answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
  jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
  jokesBad:["You need a plate of cachupa to get your strength back.","A grogue might help… or maybe not.","Easy — even Pico do Fogo has cloudy days.","Morabeza: getting it wrong is part of it.","That one was more crooked than the Santo Antão road.","Take a break for a pastel de milho and come back stronger."],
@@ -442,7 +443,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations",geografia:"Geography"},
  foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",
  about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
-  ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) or reveal the answer, for no points."],
+  ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) and you have one help: reveal the answer once, which counts as right but only with the level points."],
   ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
@@ -453,7 +454,7 @@ const ls={get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON
 let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
 const L=()=>I18N[LANG];
 const API=(window.QUIZCV_CONFIG||{}).API||"";
-const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, VALOR={1:10,2:20,3:30};
+const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, REVELAR=1, VALOR={1:10,2:20,3:30};
 // [id, nível, tema, pergunta, [certa, …], explicação, fonte, pergunta_en, [opções_en], explicação_en, pista, pista_en]; a certa é sempre a 1.ª
 const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].length===4&&[1,2,3].includes(r[1]))
  .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9],p:r[10]||"",p_en:r[11]||""}));
@@ -482,7 +483,7 @@ function sorteia(nv,usadas,viz=[]){let pool=QS.filter(e=>e.nv===nv&&!usadas.has(
 const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 
 // estado da ronda
-let ronda=[],idx=0,pts=0,saltos=SALTOS,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
+let ronda=[],idx=0,pts=0,saltos=SALTOS,revelar=REVELAR,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
 function show(v){vista=v;if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 function renderIni(){const t=L();
@@ -492,7 +493,7 @@ function renderIni(){const t=L();
  const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
- idx=0;pts=0;saltos=SALTOS;res=[];show("jogo");nova()}
+ idx=0;pts=0;saltos=SALTOS;revelar=REVELAR;res=[];show("jogo");nova()}
 function nova(){resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
  const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
@@ -522,7 +523,7 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(estado){if(k===0)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
   return `<button type="button" class="opt ${cls}" data-k="${k}" ${estado?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
  $("skip").innerHTML=`${RUNNER}${esc(t.skipL)} <span class="n">${saltos}</span>`;$("skip").setAttribute("aria-label",t.skip(saltos));$("skip").disabled=!!estado||!saltos;$("skip").hidden=!!estado;
- $("reveal").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t.reveal)}`;$("reveal").hidden=!!estado;
+ $("reveal").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t.reveal)} <span class="n">${revelar}</span>`;$("reveal").hidden=!!estado;$("reveal").disabled=revelar<1;
  const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("quit").textContent=t.quit;$("report").disabled=rep;
  desenhaTempo();
  const fb=$("fb");
@@ -536,7 +537,9 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
 let ganhoAtual=null;
 function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;const e=ronda[idx],t=L();let ganho=0;
  if(est==="certo"){const bon=Math.ceil(restante);ganho=VALOR[e.nv]+bon;pts+=ganho;ganhoAtual={total:ganho,base:VALOR[e.nv],bonus:bon,nv:e.nv}}
- res.push(est==="certo"?"ok":est==="revelado"?"rev":"bad");
+ // ajuda «revelar»: uma vez por ronda; conta como certa, mas só com os pontos base do nível (sem bónus de rapidez)
+ if(est==="revelado"){revelar--;ganho=VALOR[e.nv];pts+=ganho;ganhoAtual={total:ganho,base:ganho,bonus:0,nv:e.nv,ajuda:true}}
+ res.push(est==="certo"||est==="revelado"?"ok":"bad");
  const fb=$("fb");fb.dataset.joke=est==="certo"?pick(t.jokesOk):est==="errado"?pick(t.jokesBad):est==="tempo"?pick(t.jokesTime):"";
  renderQ();
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
@@ -550,7 +553,7 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
 let resT=null;
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 // Saltar e Revelar: ação imediata, sem confirmação
-$("reveal").onclick=()=>{if(!estado)fecha("revelado",null)};
+$("reveal").onclick=()=>{if(!estado&&revelar>0)fecha("revelado",null)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>saltarAgora();
