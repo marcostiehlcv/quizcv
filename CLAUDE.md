@@ -43,7 +43,7 @@ Cada pergunta é um array:
 - Página inicial: botão grande e vermelho `.startbig` e as regras em quatro blocos (`I18N.*.rules`).
 - Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
-- Viragens: ao responder, revelar ou acabar o tempo, as quatro opções viram como cartas, uma a uma (`.opt.flip`, atraso `--d`); ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
+- Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: um atleta (`RUNNER`, também ícone do botão) atravessa o ecrã a saltar uma barreira (`.skipped`); ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
 - «Seguinte» (`.nextbar`) fica preso ao fundo do ecrã (sticky), com a largura toda, assim que a pergunta fecha.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
