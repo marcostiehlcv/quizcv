@@ -78,6 +78,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .rules strong{font-family:var(--display);font-weight:500;font-size:15px}
 .rules span{font-size:13px;color:var(--muted);line-height:1.4}
 /* jogo */
+/* «Seguinte» fica preso ao fundo do ecrã, com a largura toda, para não obrigar a descer depois da explicação */
+.nextbar{position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);animation:sobe .35s ease-out}
+.nextbar .btn{width:100%;font-size:18px;font-weight:800;padding:16px 24px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 24px -10px rgba(0,0,0,.55)}
+.nextbar .btn::after{content:"→";font-size:20px}
+@keyframes sobe{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .prog{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .dots{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:8px}
 .dots i{height:6px;border-radius:999px;background:var(--line)}
@@ -175,7 +180,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -206,6 +211,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 #shCv{width:100%;height:auto;border-radius:12px;display:block}
 @media (min-width:900px){
   .wrap{max-width:720px;padding-left:28px;padding-right:28px}
+  .nextbar{margin:0 -28px;padding-left:28px;padding-right:28px}
+  .nextbar .btn{width:auto;min-width:280px;margin-left:auto}
   header.mast .wrap{padding-block:22px 32px}
   .logo{font-size:26px}
   .hero h1{font-size:52px}
@@ -266,7 +273,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
         <button type="button" class="tool" id="report"></button>
       </div>
       <div class="fb" id="fb" hidden></div>
-      <div class="row" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
+      <div class="nextbar" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
     </section>
 
     <!-- resultado -->
