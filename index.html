@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quiz CV · Perguntas sobre Cabo Verde</title>
+<meta name="description" content="Um jogo de perguntas sobre a história, a cultura e a geografia de Cabo Verde. Quatro opções, uma certa, sempre com a explicação e a fonte. Também em inglês.">
+<meta name="author" content="Marco Stiehl">
+<meta name="theme-color" content="#003893">
+<meta property="og:title" content="Quiz CV">
+<meta property="og:description" content="Perguntas sobre Cabo Verde · A quiz about Cabo Verde">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:locale:alternate" content="en_GB">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003893'/%3E%3Crect y='34' width='64' height='14' fill='%23fff'/%3E%3Crect y='39' width='64' height='4' fill='%23cf2027'/%3E%3Ccircle cx='24' cy='41' r='13' fill='none' stroke='%23f7d116' stroke-width='3' stroke-dasharray='3 5'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}[hidden]{display:none!important}</style>
+<script src="perguntas.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Mesmo sistema visual do Hoje CV: coluna estreita, cabeçalho azul da bandeira, superfície clara por baixo */
+:root{
+  --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
+  --ok:#1f8a5b; --bad:#c8262f;
+  --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Literata",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff}
+header.mast .wrap{padding-block:18px 26px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
+.logo b{background:var(--sun);color:var(--ocean-deep);padding:0 7px;border-radius:6px}
+.lang{display:inline-flex;gap:2px;background:rgba(255,255,255,.12);padding:3px;border-radius:999px}
+.lang button{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:0;background:transparent;color:#fff;padding:5px 9px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ocean-deep)}
+.hero{margin-top:24px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px}
+.hero h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,8.5vw,44px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.flagwrap{margin:0 0 4px;width:clamp(96px,28vw,170px);aspect-ratio:17/10;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.28),0 12px 28px -10px rgba(0,0,0,.55)}
+.flag-cv{display:block;width:100%;height:100%}
+.sub{margin:12px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
+.label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.intro p{margin:0 0 10px}
+.intro p:last-child{margin:0}
+.btn{font-family:var(--display);font-weight:500;font-size:16px;border-radius:999px;padding:12px 24px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.btn.primary{background:var(--ocean);border-color:var(--ocean);color:#fff}
+.btn.primary:hover{background:var(--ocean-deep)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.best{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* jogo */
+.prog{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bar{height:6px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sun);border-radius:999px;transition:width .3s}
+.q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,28px);line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
+.tema{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);color:var(--muted);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;text-align:left;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt:disabled{cursor:default}
+.opt .k{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--chip);font-family:var(--mono);font-size:13px;color:var(--muted)}
+.opt.ok{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.opt.ok .k{background:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
+.opt.bad .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.fb{border-left:4px solid var(--ok);padding:4px 0 4px 14px}
+.fb.no{border-left-color:var(--bad)}
+.fb strong{font-family:var(--display);font-size:18px;display:block;margin-bottom:4px}
+.fb p{margin:0 0 6px;color:var(--muted);font-size:15.5px}
+.src{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ocean);text-decoration:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:var(--sun)}}
+:root[data-theme="dark"] .src{color:var(--sun)}
+/* fim */
+.score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
+:root[data-theme="dark"] .score{color:var(--sun)}
+.score small{font-size:.4em;color:var(--muted);font-weight:500}
+.msg{font-size:14px;color:var(--muted);margin:0}
+.foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
+.aboutlink{font:inherit;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.aboutlink:hover{color:var(--fg)}
+.sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(5,15,35,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);color:var(--fg);width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet h2{margin:0;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
+.about p{margin:0;line-height:1.6;font-size:15.5px}
+.about h3{margin:10px 0 -6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.about h3:first-child{margin-top:0}
+.sheet .acts{display:flex;justify-content:flex-end}
+@media (min-width:900px){
+  .wrap{max-width:720px;padding-left:28px;padding-right:28px}
+  header.mast .wrap{padding-block:22px 32px}
+  .logo{font-size:26px}
+  .hero h1{font-size:52px}
+  .flagwrap{width:220px}
+  .opts{grid-template-columns:1fr 1fr}
+  .sheet-bg{align-items:center}
+  .sheet{border-radius:20px;padding:24px}
+}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">
+      <a class="logo" href="/" aria-label="Quiz CV">Quiz <b>CV</b></a>
+      <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div>
+    </div>
+    <div class="hero" id="hero">
+      <h1 id="hTitle">Quanto sabe sobre Cabo Verde?</h1>
+      <figure class="flagwrap"><svg class="flag-cv" viewBox="0 0 1020 600" role="img" aria-label="Bandeira de Cabo Verde"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg></figure>
+    </div>
+    <p class="sub" id="hSub">Uma pergunta, quatro opções</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <!-- início -->
+    <section id="v-ini" class="card intro">
+      <p id="iniTxt"></p>
+      <p class="best" id="best"></p>
+      <div class="row" style="margin-top:14px"><button type="button" class="btn primary" id="start"></button></div>
+    </section>
+
+    <!-- pergunta -->
+    <section id="v-jogo" hidden style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <div class="prog"><span class="label" id="pNum"></span><span class="label" id="pPts"></span></div>
+        <div class="bar" style="margin-top:8px"><i id="pBar"></i></div>
+      </div>
+      <div><span class="tema" id="qTema"></span><h2 class="q" id="qTxt"></h2></div>
+      <div class="opts" id="opts"></div>
+      <div class="fb" id="fb" hidden></div>
+      <div class="row" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
+    </section>
+
+    <!-- resultado -->
+    <section id="v-fim" hidden class="card" style="display:flex;flex-direction:column;gap:12px">
+      <span class="label" id="fLbl"></span>
+      <div class="score" id="fScore"></div>
+      <p id="fTxt" style="margin:0"></p>
+      <div class="row"><button type="button" class="btn primary" id="again"></button><button type="button" class="btn" id="share"></button></div>
+      <p class="msg" id="fMsg" hidden></p>
+    </section>
+
+    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button></div>
+  </div>
+</main>
+
+<div class="sheet-bg" id="about" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <h2 id="aboutTitle"></h2>
+    <div class="about" id="aboutTxt" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div class="acts"><button type="button" class="btn" id="aboutClose"></button></div>
+  </div>
+</div>
+
+<script>
+const I18N={
+pt:{title:"Quanto sabe sobre Cabo Verde?",sub:"Uma pergunta, quatro opções",
+ ini:n=>`Responda a ${n} perguntas sobre a história, a cultura e a geografia de Cabo Verde. Cada pergunta tem quatro opções e só uma está certa. Depois de responder, vê a explicação e a fonte.`,
+ none:"Ainda não há perguntas. Volte em breve.",
+ start:"Começar",best:(b,n)=>`Melhor resultado: ${b} em ${n}`,
+ qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
+ right:"Certo!",wrong:"Não é essa.",answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
+ fLbl:"Resultado",verdict:(s,n)=>s===n?"Todas certas. Conhece bem Cabo Verde.":s>=n*.7?"Muito bem.":s>=n*.4?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Tente outra vez.",
+ again:"Jogar outra vez",share:"Copiar resultado",copied:"Resultado copiado.",
+ shareText:(s,n,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde. ${u}`,
+ temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",geografia:"Geografia"},
+ foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",close:"Fechar",
+ about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem várias perguntas, cada uma com quatro opções e uma só resposta certa."],
+  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responder. Não há perguntas sobre boatos nem opiniões."],
+  ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
+  ["","Um projeto de Marco Stiehl."]]},
+en:{title:"How well do you know Cabo Verde?",sub:"One question, four options",
+ ini:n=>`Answer ${n} questions about Cabo Verde's history, culture and geography. Each question has four options and only one is right. After answering, you see the explanation and the source.`,
+ none:"There are no questions yet. Please come back soon.",
+ start:"Start",best:(b,n)=>`Best score: ${b} out of ${n}`,
+ qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
+ right:"Correct!",wrong:"Not quite.",answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
+ fLbl:"Result",verdict:(s,n)=>s===n?"All correct. You know Cabo Verde well.":s>=n*.7?"Very good.":s>=n*.4?"Not bad. There is always more to discover.":"Plenty left to learn. Try again.",
+ again:"Play again",share:"Copy result",copied:"Result copied.",
+ shareText:(s,n,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right. ${u}`,
+ temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",geografia:"Geography"},
+ foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",close:"Close",
+ about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has several questions, each with four options and only one right answer."],
+  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. There are no questions about rumours or opinions."],
+  ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
+  ["","A project by Marco Stiehl."]]}
+};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+let LANG="pt";try{const l=localStorage.getItem("quizcv_lang");if(l==="en"||l==="pt")LANG=l}catch(_){}
+const L=()=>I18N[LANG];
+const RONDA=10;
+// [pergunta, opções, correta, explicação, fonte, tema, pergunta_en, opções_en, explicação_en]
+const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[1])&&r[1].length===4&&r[2]>=0&&r[2]<4)
+ .map(r=>({q:r[0],o:r[1],c:r[2],x:r[3],src:r[4],tema:r[5],q_en:r[6],o_en:r[7],x_en:r[8]}));
+const Q=e=>LANG==="en"&&e.q_en?e.q_en:e.q;
+const O=e=>LANG==="en"&&Array.isArray(e.o_en)&&e.o_en.length===4?e.o_en:e.o;
+const X=e=>LANG==="en"&&e.x_en?e.x_en:e.x;
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const SITE=/^(localhost|127\.|$)/.test(location.hostname)?"quizcv.vercel.app":location.hostname;
+
+let ronda=[],idx=0,pts=0,resp=null,ordem=[],vista="ini";
+const getBest=()=>{try{return +localStorage.getItem("quizcv_best")||0}catch(_){return 0}};
+const setBest=v=>{try{localStorage.setItem("quizcv_best",String(v))}catch(_){}};
+const nRonda=()=>Math.min(RONDA,QS.length);
+
+// durante o jogo o cabeçalho fica só com a marca, para a pergunta caber no ecrã
+function show(v){vista=v;$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
+function renderIni(){const t=L();
+ $("iniTxt").textContent=QS.length?t.ini(nRonda()):t.none;
+ $("start").textContent=t.start;$("start").hidden=!QS.length;
+ const b=getBest();$("best").textContent=b?t.best(b,nRonda()):"";$("best").hidden=!b}
+function start(){ronda=shuffle(QS).slice(0,nRonda());idx=0;pts=0;show("jogo");renderQ(true)}
+// ordem: posições das opções baralhadas (fica igual ao trocar de língua)
+function renderQ(nova){const t=L(),e=ronda[idx],n=ronda.length;
+ if(nova){resp=null;ordem=shuffle([0,1,2,3])}
+ $("pNum").textContent=t.qNum(idx+1,n);$("pPts").textContent=t.pts(pts);
+ $("pBar").style.width=`${(idx+(resp!==null?1:0))/n*100}%`;
+ $("qTema").textContent=t.temas[e.tema]||e.tema||"";$("qTema").hidden=!e.tema;
+ $("qTxt").textContent=Q(e);
+ const ops=O(e);
+ $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(resp!==null){if(k===e.c)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
+  return `<button type="button" class="opt ${cls}" data-k="${k}" ${resp!==null?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
+ const fb=$("fb");
+ if(resp===null){fb.hidden=true;$("nextRow").hidden=true;return}
+ const ok=resp===e.c;fb.hidden=false;fb.className="fb"+(ok?"":" no");
+ fb.innerHTML=`<strong>${ok?t.right:t.wrong}</strong>${ok?"":`<p>${esc(t.answer(ops[e.c]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
+ $("nextRow").hidden=false;$("next").textContent=idx+1<n?t.next:t.finish}
+$("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||resp!==null)return;resp=+b.dataset.k;if(resp===ronda[idx].c)pts++;renderQ(false);$("next").focus({preventScroll:true})});
+$("next").onclick=()=>{if(idx+1<ronda.length){idx++;renderQ(true);scrollTo({top:0,behavior:"smooth"})}else{if(pts>getBest())setBest(pts);show("fim");renderFim()}};
+function renderFim(){const t=L(),n=ronda.length;
+ $("fLbl").textContent=t.fLbl;$("fScore").innerHTML=`${pts}<small> / ${n}</small>`;$("fTxt").textContent=t.verdict(pts,n);
+ $("again").textContent=t.again;$("share").textContent=t.share;$("fMsg").hidden=true}
+$("start").onclick=start;$("again").onclick=start;
+$("share").onclick=async()=>{const txt=L().shareText(pts,ronda.length,SITE);try{await navigator.clipboard.writeText(txt);$("fMsg").textContent=L().copied}catch(_){$("fMsg").textContent=txt}$("fMsg").hidden=false};
+
+function applyLang(){const t=L();document.documentElement.lang=LANG;
+ $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;
+ $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
+ $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
+ document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
+ renderIni();if(vista==="jogo")renderQ(false);if(vista==="fim")renderFim()}
+$("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("quizcv_lang",LANG)}catch(_){}applyLang()});
+$("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
+$("aboutClose").onclick=()=>{$("about").hidden=true};
+$("about").addEventListener("click",ev=>{if(ev.target.id==="about")$("about").hidden=true});
+addEventListener("keydown",ev=>{if(ev.key==="Escape")$("about").hidden=true});
+applyLang();show("ini");
+</script>
+</body>
+</html>
