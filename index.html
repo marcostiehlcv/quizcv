@@ -36,12 +36,12 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
 .wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff}
-/* bandeira de fundo no cabeçalho: forte à direita, a desaparecer para a esquerda (por trás do texto), com um ondular lento */
-.flagbg{position:absolute;top:0;right:0;height:100%;width:auto;aspect-ratio:17/10;pointer-events:none;z-index:0;opacity:.9;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%)}
-.flagbg .estrelas{transform-box:view-box}
-@media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 14s ease-in-out infinite alternate}}
-@keyframes ondula{from{transform:translateX(0) scale(1.02)}to{transform:translateX(-14px) scale(1.06)}}
+/* bandeira de fundo no cabeçalho: grande, inclinada e cortada (só se vê parte das faixas e das estrelas), em degradê suave a partir da direita */
+.flagbg{position:absolute;top:50%;right:calc(-1 * min(330px,32vw));width:max(620px,62vw);height:auto;aspect-ratio:17/10;pointer-events:none;z-index:0;opacity:.5;
+  transform:translateY(-50%) rotate(-11deg);transform-origin:60% 50%;
+  -webkit-mask-image:radial-gradient(ellipse 60% 75% at 62% 55%,#000 0%,rgba(0,0,0,.55) 45%,transparent 75%);mask-image:radial-gradient(ellipse 60% 75% at 62% 55%,#000 0%,rgba(0,0,0,.55) 45%,transparent 75%)}
+@media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 18s ease-in-out infinite alternate}}
+@keyframes ondula{from{transform:translateY(-50%) rotate(-11deg) scale(1)}to{transform:translateY(-52%) rotate(-8deg) scale(1.05)}}
 header.mast>.wrap{position:relative;z-index:1}
 header.mast{position:relative;overflow:hidden}
 header.mast .wrap{padding-block:18px 26px}
@@ -163,6 +163,10 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 #skip{background:linear-gradient(135deg,#1c6dd0,var(--ocean))}
 #reveal{background:linear-gradient(135deg,var(--sun),#e08a00);color:var(--ocean-deep)}
 #reveal:hover:not(:disabled){color:var(--ocean-deep)}
+.tool.big .n.vira{display:inline-block;animation:vira .5s .15s cubic-bezier(.3,.7,.4,1) both}
+@keyframes vira{0%{transform:perspective(200px) rotateX(0)}50%{transform:perspective(200px) rotateX(90deg)}51%{transform:perspective(200px) rotateX(-90deg)}100%{transform:perspective(200px) rotateX(0)}}
+.menos1{position:fixed;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:26px;color:var(--sun);text-shadow:0 4px 12px rgba(0,0,0,.4);animation:menos1 .9s ease-out forwards}
+@keyframes menos1{0%{opacity:0;transform:translate(-50%,0) scale(.6)}25%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-56px) scale(1)}}
 .tool.big .n{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.22);border-radius:999px;padding:1px 7px}
 .fb{border-left:4px solid var(--ok);padding:4px 0 4px 14px;animation:fade .35s}
 .fb.no{border-left-color:var(--bad)}
@@ -186,7 +190,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -498,7 +502,9 @@ $("reveal").onclick=()=>fecha("revelado",null);
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
  
- const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,340)}};
+ const sb=$("skip").querySelector(".n"),rr=(sb||$("skip")).getBoundingClientRect();
+ if(!reduz()){const m=document.createElement("div");m.className="menos1";m.textContent="−1";m.style.left=(rr.left+rr.width/2)+"px";m.style.top=(rr.top-6)+"px";document.body.appendChild(m);setTimeout(()=>m.remove(),950)}
+ const go=()=>{ronda[idx]=n;nova();const nb=$("skip").querySelector(".n");if(nb&&!reduz())nb.classList.add("vira")};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,340)}};
 $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
 
 // animações: confetes com as cores da bandeira e «+N» no acerto; clarão e tremor no erro
