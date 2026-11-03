@@ -69,11 +69,34 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .dots i.ok{background:var(--ok)}.dots i.bad{background:var(--bad)}.dots i.rev{background:var(--muted)}.dots i.cur{background:var(--sun)}
 .qhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .tema{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);color:var(--muted);border-radius:999px;padding:3px 10px}
-.timer{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.tbar{height:4px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px}
-.tbar i{display:block;height:100%;width:100%;background:var(--ocean);border-radius:999px;transform-origin:left}
-.tbar.low i{background:var(--bad)}
-.timer.low{color:var(--bad)}
+/* temporizador: anel com os segundos em grande, a pulsar a cada segundo (mais forte e vermelho nos últimos 5) */
+.timer{position:relative;width:72px;height:72px;flex:none;display:grid;place-items:center}
+.timer svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:6}
+.timer .tr{stroke:var(--line)}
+.timer .tp{stroke:var(--ocean);stroke-linecap:round;stroke-dasharray:201;transition:stroke-dashoffset .1s linear,stroke .3s}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .timer .tp{stroke:var(--sun)}}
+:root[data-theme="dark"] .timer .tp{stroke:var(--sun)}
+.timer b{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.timer.beat b{animation:beat .6s ease-out}
+.timer.low .tp,:root .timer.low .tp{stroke:var(--bad)!important}
+.timer.low b{color:var(--bad)}
+.timer.low.beat{animation:ring .6s ease-out}
+.timer.low.beat b{animation:beatLow .6s ease-out}
+.timer.done b{opacity:.45}
+@keyframes beat{0%{transform:scale(1)}25%{transform:scale(1.22)}100%{transform:scale(1)}}
+@keyframes beatLow{0%{transform:scale(1)}25%{transform:scale(1.4)}100%{transform:scale(1)}}
+@keyframes ring{0%{transform:scale(1)}25%{transform:scale(1.08)}100%{transform:scale(1)}}
+.qtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.pista{margin:8px 0 0;color:var(--muted);font-size:15.5px;font-style:italic}
+#qbox{display:flex;flex-direction:column;gap:16px}
+#qbox.out{animation:out .28s ease-in forwards}
+#qbox.in{animation:in .32s ease-out}
+@keyframes out{to{opacity:0;transform:translateX(-60px) rotate(-2deg)}}
+@keyframes in{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+.skipped{position:fixed;left:50%;top:40%;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:30px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 22px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:skp .9s ease-out forwards}
+@keyframes skp{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}25%{opacity:1;transform:translate(-50%,0) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-30px) scale(1)}}
+.gain{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ok);margin:2px 0 6px}
 .q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,28px);line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
 .qcard{position:relative}
 .opts{display:grid;gap:10px}
@@ -112,7 +135,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes up{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb{animation:none}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -184,12 +207,19 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
         <div class="prog"><span class="label" id="pNum"></span><span class="label" id="pPts"></span></div>
         <div class="dots" id="dots"></div>
       </div>
+      <div id="qbox">
       <div class="qcard">
-        <div class="qhead"><span><span class="lvl" id="qLv"></span> <span class="tema" id="qTema"></span></span><span class="timer" id="tNum"></span></div>
-        <h2 class="q" id="qTxt"></h2>
-        <div class="tbar" id="tBar"><i></i></div>
+        <div class="qtop">
+          <div style="min-width:0">
+            <div class="qhead"><span><span class="lvl" id="qLv"></span> <span class="tema" id="qTema"></span></span></div>
+            <h2 class="q" id="qTxt"></h2>
+            <p class="pista" id="qPista"></p>
+          </div>
+          <div class="timer" id="timer" role="timer" aria-live="off"><svg viewBox="0 0 72 72"><circle class="tr" cx="36" cy="36" r="32"/><circle class="tp" id="tRing" cx="36" cy="36" r="32"/></svg><b id="tNum"></b></div>
+        </div>
       </div>
       <div class="opts" id="opts"></div>
+      </div>
       <div class="tools" id="tools">
         <button type="button" class="tool" id="skip"></button>
         <button type="button" class="tool" id="reveal"></button>
@@ -254,7 +284,7 @@ pt:{title:"Quanto sabe sobre Cabo Verde?",sub:"15 perguntas, do fácil ao difíc
  start:"Começar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
- skip:n=>`Saltar (${n})`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
+ skip:n=>`Saltar (${n})`,skipped:"Saltada ↷",secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
  right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Aqui está a resposta.",
  answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
  jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conhece Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
@@ -284,7 +314,7 @@ en:{title:"How well do you know Cabo Verde?",sub:"15 questions, from easy to har
  start:"Start",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
- skip:n=>`Skip (${n})`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
+ skip:n=>`Skip (${n})`,skipped:"Skipped ↷",secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
  right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Here is the answer.",
  answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
  jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
@@ -316,9 +346,11 @@ let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
 const L=()=>I18N[LANG];
 const API=(window.QUIZCV_CONFIG||{}).API||"";
 const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, VALOR={1:10,2:20,3:30};
-// [id, nível, tema, pergunta, [certa, …], explicação, fonte, pergunta_en, [opções_en], explicação_en]; a certa é sempre a 1.ª
+// [id, nível, tema, pergunta, [certa, …], explicação, fonte, pergunta_en, [opções_en], explicação_en, pista, pista_en]; a certa é sempre a 1.ª
 const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].length===4&&[1,2,3].includes(r[1]))
- .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9]}));
+ .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9],p:r[10]||"",p_en:r[11]||""}));
+// pista de contexto (só nas perguntas geradas); em EN só aparece se houver tradução
+const PI=e=>LANG==="en"?e.p_en:e.p;
 const Q=e=>LANG==="en"&&e.q_en?e.q_en:e.q;
 const O=e=>LANG==="en"&&Array.isArray(e.o_en)&&e.o_en.length===4?e.o_en:e.o;
 const X=e=>LANG==="en"&&e.x_en?e.x_en:e.x;
@@ -344,13 +376,17 @@ function renderIni(){const t=L();
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const e=sorteia(nv,usadas)||sorteia(nv,new Set());if(e){ronda.push(e);usadas.add(e.id)}}
  idx=0;pts=0;saltos=SALTOS;res=[];show("jogo");nova()}
-function nova(){resp=null;estado="";ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;renderQ();arranca()}
+function nova(){resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
+ const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
 // temporizador (pára com a janela de reporte aberta ou com o separador escondido)
 function arranca(){clearInterval(tick);t0=performance.now()-(TEMPO-restante)*1000;tick=setInterval(passo,100);passo()}
 function passo(){if(pausa||estado)return;restante=Math.max(0,TEMPO-(performance.now()-t0)/1000);desenhaTempo();if(restante<=0){clearInterval(tick);fecha("tempo",null)}}
-function desenhaTempo(){const s=Math.ceil(restante),low=restante<=5;$("tNum").textContent=`⏱ ${s}s`;$("tNum").classList.toggle("low",low&&!estado);
- $("tBar").classList.toggle("low",low);$("tBar").firstElementChild.style.transform=`scaleX(${restante/TEMPO})`}
+let ultSeg=null;
+function desenhaTempo(){const s=Math.ceil(restante),low=restante<=5&&!estado,tm=$("timer");$("tNum").textContent=s;
+ tm.classList.toggle("low",low);tm.classList.toggle("done",!!estado);$("tRing").style.strokeDashoffset=String(201*(1-restante/TEMPO));
+ tm.setAttribute("aria-label",L().secs(s));
+ if(s!==ultSeg&&!estado&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat")}ultSeg=s}
 const pausar=()=>{if(!pausa){pausa=true}};
 const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
 document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
@@ -360,7 +396,7 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  $("dots").innerHTML=ronda.map((_,i)=>`<i class="${i<res.length?res[i]:i===idx?"cur":""}"></i>`).join("");
  $("qLv").textContent=t.lv[e.nv];$("qLv").className=`lvl l${e.nv}`;
  $("qTema").textContent=t.temas[e.tema]||e.tema||"";$("qTema").hidden=!e.tema;
- $("qTxt").textContent=Q(e);
+ $("qTxt").textContent=Q(e);$("qPista").textContent=PI(e);$("qPista").hidden=!PI(e);
  const ops=O(e);
  $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(estado){if(k===0)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
   return `<button type="button" class="opt ${cls}" data-k="${k}" ${estado?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
@@ -372,12 +408,13 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  if(!estado){fb.hidden=true;$("nextRow").hidden=true;return}
  fb.hidden=false;fb.className="fb"+(estado==="certo"?"":estado==="revelado"?" rev":" no");
  const tit={certo:t.right,errado:t.wrong,tempo:t.timeout,revelado:t.revealed}[estado];
- fb.innerHTML=`<strong>${tit}</strong>${fb.dataset.joke?`<p class="joke">${esc(fb.dataset.joke)}</p>`:""}${estado==="certo"?"":`<p>${esc(t.answer(ops[0]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
+ fb.innerHTML=`<strong>${tit}</strong>${ganhoAtual?`<p class="gain">${esc(t.gain(ganhoAtual))}</p>`:""}${fb.dataset.joke?`<p class="joke">${esc(fb.dataset.joke)}</p>`:""}${estado==="certo"?"":`<p>${esc(t.answer(ops[0]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
  $("nextRow").hidden=false;$("next").textContent=idx+1<n?t.next:t.finish}
 
 // fecha a pergunta: certo / errado / tempo / revelado
+let ganhoAtual=null;
 function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;const e=ronda[idx],t=L();let ganho=0;
- if(est==="certo"){ganho=VALOR[e.nv]+Math.ceil(restante);pts+=ganho}
+ if(est==="certo"){const bon=Math.ceil(restante);ganho=VALOR[e.nv]+bon;pts+=ganho;ganhoAtual={total:ganho,base:VALOR[e.nv],bonus:bon,nv:e.nv}}
  res.push(est==="certo"?"ok":est==="revelado"?"rev":"bad");
  const fb=$("fb");fb.dataset.joke=est==="certo"?pick(t.jokesOk):est==="errado"?pick(t.jokesBad):est==="tempo"?pick(t.jokesTime):"";
  renderQ();
@@ -388,7 +425,10 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  $("next").focus({preventScroll:true})}
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 $("reveal").onclick=()=>fecha("revelado",null);
-$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas);if(!n)return;saltos--;usadas.add(n.id);ronda[idx]=n;nova()};
+// saltar: a pergunta sai para a esquerda e entra outra do mesmo nível
+$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";
+ const s=document.createElement("div");s.className="skipped";s.textContent=L().skipped;document.body.appendChild(s);setTimeout(()=>s.remove(),950);
+ const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,280)}};
 $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
 
 // animações: confetes com as cores da bandeira e «+N» no acerto; clarão e tremor no erro

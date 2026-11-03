@@ -30,11 +30,13 @@ Cada pergunta é um array:
 - «Em que ano nasceu/morreu X?» (títulos «Nasce X» / «Morre X»), «Em que ano? «título»» (só se o título não tiver o ano) e «Em que ilha nasceu X?» (só ilhas habitadas).
 - Nível: registos com `destaque` → médio; os outros → difícil; «em que ilha» → médio. Os anos errados ficam a ±4–20 anos (médio) ou ±1–8 (difícil), com semente fixa.
 - As fáceis vêm só do `perguntas-base.js`. Para ter mais variedade nas fáceis, acrescentar aí.
+- Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos).
 - Depois de regenerar o `eventos.js` do Hoje CV, correr de novo o gerador e fazer commit.
 
 ## Código
 - Ronda: `NIVEIS` (5×1, 5×2, 5×3), `TEMPO=20` s, `SALTOS=3`, pontos `VALOR` {10,20,30} + segundos que sobram.
 - `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
+- Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`; mais forte e vermelho nos últimos 5). Saltar: `#qbox` sai (`out`) e a nova entra (`in`), com o aviso «Saltada». O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.

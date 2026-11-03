@@ -35,6 +35,26 @@ const ilhasErradas = (ilha, seed) => {
   return outras.slice(0, 3);
 };
 
+// Pista: contexto tirado da descrição do registo, sem revelar a resposta.
+// Tiram-se as frases sobre o nascimento/morte (dizem o local) e, nas perguntas de ilha, os nomes de lugares.
+const LUGARES = [...ILHAS, "Mindelo", "Praia", "São Filipe", "Assomada", "Ribeira Grande", "Espargos", "Sal Rei", "Porto Novo", "Tarrafal",
+  "Santa Maria", "Cidade Velha", "Nova Sintra", "Pedra Badejo", "Calheta", "Vila do Maio", "Ribeira Brava", "Paul", "Caleijão", "São Domingos",
+  "Santa Catarina", "Santa Cruz", "Picos", "Mosteiros", "Pombas", "Ponta do Sol"];
+const reL = new RegExp(String.raw`\s*,?\s*\b(?:[Nn]atural d[aoe]s?|native of|d[aoe]s?|em|n[ao]s?|from|in|of|on)\s+(?:${LUGARES.join("|")})(?![\wÀ-ú])`, "g");
+const temLugar = (t) => LUGARES.some((l) => new RegExp(String.raw`(^|[^\wÀ-ú])${l}(?![\wÀ-ú])`).test(t));
+function pista(desc, nome, { semLugar, semAno }) {
+  if (!desc) return "";
+  let frases = desc.split(/(?<=[.!?])\s+/).map((f) => f.replace(/,?\s*\b(nasce|nasceu|nascid[ao]|morre|morreu|is born|was born|born|dies|died)\b.*$/i, ".").replace(/^\.$/, "")).filter(Boolean);
+  let t = frases.join(" ").trim();
+  if (nome && t.startsWith(nome)) t = t.slice(nome.length).replace(/^,?\s*/, "");
+  if (semLugar) { t = t.replace(reL, ""); if (temLugar(t)) return ""; }
+  if (semAno && t.includes(String(semAno))) return "";
+  t = t.replace(/\s+([,.])/g, "$1").replace(/^[\s,.;:]+/, "").trim();
+  if (t.length < 12) return "";
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+const OBSCUROS = /capit[ãa]o|assume o governo|governador|torna-se bispo|bispo de|takes office as governor|becomes captain/i;
+
 const gen = [];
 for (const r of D) {
   const [d, m, y, tit, desc, cat, ilha, dest, fonte, , , titEn, descEn, tema] = r;
@@ -48,6 +68,8 @@ for (const r of D) {
   if (cat === "nascimento") { nome = tit.replace(/^Nasce /, ""); const x = /^(.+) is born$/.exec(titEn || ""); nomeEn = x ? x[1] : nome; }
   if (cat === "falecimento") { nome = tit.replace(/^Morre /, ""); const x = /^(.+) dies$/.exec(titEn || ""); nomeEn = x ? x[1] : nome; }
   if (nome && nome === tit) continue; // título fora do padrão «Nasce X» / «Morre X»
+  if (!nome && OBSCUROS.test(tit + " " + (titEn || ""))) continue; // nomeações pouco conhecidas: difíceis de mais sem contexto
+  const pAno = pista(desc, nome, { semAno: y }), pAnoEn = pista(descEn, nomeEn, { semAno: y });
   // 1) em que ano
   let q, qEn;
   if (cat === "nascimento") { q = `Em que ano nasceu ${nome}?`; qEn = `In which year was ${nomeEn} born?`; }
@@ -57,12 +79,12 @@ for (const r of D) {
     q = `Em que ano? «${tit}»`; qEn = `In which year? “${titEn || tit}”`;
   }
   const errados = anosErrados(y, nivel, key);
-  if (errados.length === 3) gen.push(["h" + hash(key + "|ano"), nivel, t, q, [String(y), ...errados], expPt, fonte, qEn, [String(y), ...errados], expEn]);
+  if (errados.length === 3) gen.push(["h" + hash(key + "|ano"), nivel, t, q, [String(y), ...errados], expPt, fonte, qEn, [String(y), ...errados], expEn, pAno, pAno && pAnoEn ? pAnoEn : ""]);
   // 2) em que ilha nasceu (nível médio)
   if (cat === "nascimento" && ILHAS.includes(ilha)) {
     const e = ilhasErradas(ilha, key);
     gen.push(["h" + hash(key + "|ilha"), 2, t, `Em que ilha nasceu ${nome}?`, [ilha, ...e], expPt, fonte,
-      `On which island was ${nomeEn} born?`, [ilha, ...e], expEn]);
+      `On which island was ${nomeEn} born?`, [ilha, ...e], expEn, pista(desc, nome, { semLugar: true }), pista(descEn, nomeEn, { semLugar: true })]);
   }
 }
 
@@ -82,7 +104,7 @@ if (erros.length) { console.error(erros.join("\n")); process.exit(1); }
 const n = [1, 2, 3].map((k) => todas.filter((p) => p[1] === k).length);
 const agora = new Date(Date.now() - 3600e3).toISOString().slice(0, 16).replace("T", " "); // hora de Cabo Verde (UTC−1)
 const out = `// Gerado por scripts/gerar-perguntas.js — não editar à mão (editar perguntas-base.js ou o Hoje CV).
-// [id, nível, tema, pergunta, [certa, errada, errada, errada], explicação, fonte, pergunta_en, [opções_en], explicação_en]
+// [id, nível, tema, pergunta, [certa, errada, errada, errada], explicação, fonte, pergunta_en, [opções_en], explicação_en, pista, pista_en]
 window.QUIZCV_ATUALIZADO = ${JSON.stringify(agora)};
 window.QUIZCV_PERGUNTAS = [
 ${todas.map((p) => JSON.stringify(p)).join(",\n")}
