@@ -49,6 +49,10 @@ header.mast .wrap{padding-block:18px 26px}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
 .logo b{background:var(--sun);color:var(--ocean-deep);padding:0 7px;border-radius:6px}
+.brand-r{display:flex;align-items:center;gap:8px}
+.somb{display:grid;place-items:center;width:34px;height:34px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
+.somb svg{width:18px;height:18px}
+.somb[aria-pressed="false"]{color:rgba(255,255,255,.55)}
 .lang{display:inline-flex;gap:2px;background:rgba(255,255,255,.12);padding:3px;border-radius:999px}
 .lang button{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:0;background:transparent;color:#fff;padding:5px 9px;border-radius:999px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:#fff;color:var(--ocean-deep)}
@@ -267,7 +271,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
   <div class="wrap">
     <div class="brand">
       <a class="logo" href="/" aria-label="Quiz CV">Quiz <b>CV</b></a>
-      <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div>
+      <div class="brand-r"><button type="button" class="somb" id="somBtn" aria-pressed="true"></button><div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div></div>
     </div>
     <div class="hero" id="hero">
       <h1 id="hTitle">Quem quer ser cabo-verdiano?</h1>
@@ -379,7 +383,7 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Pro
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
- skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",keep:"Continuar a jogar",quit:"Terminar",
+ skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",somOn:"Ligar o som",somOff:"Desligar o som",keep:"Continuar a jogar",quit:"Terminar",
  quitQ:"Terminar o quiz?",quitTxt:"O resultado conta só as perguntas a que já respondeste.",quitYes:"Sim, terminar",
 secs:s=>`${s} segundos`,gain:g=>g.ajuda?`+${g.total} pontos: ajuda usada, sem bónus de rapidez`:`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
  right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Resposta revelada: conta como certa.",
@@ -412,7 +416,7 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove 
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
- skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",keep:"Keep playing",quit:"End quiz",
+ skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",somOn:"Turn sound on",somOff:"Turn sound off",keep:"Keep playing",quit:"End quiz",
  quitQ:"End the quiz?",quitTxt:"Your result only counts the questions you have already answered.",quitYes:"Yes, end it",
 secs:s=>`${s} seconds`,gain:g=>g.ajuda?`+${g.total} points: help used, no speed bonus`:`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
  right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Answer revealed: it counts as right.",
@@ -494,6 +498,23 @@ function nova(){resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);mar
 // temporizador (pára com a janela de reporte aberta ou com o separador escondido)
 function arranca(){clearInterval(tick);t0=performance.now()-(TEMPO-restante)*1000;tick=setInterval(passo,100);passo()}
 function passo(){if(pausa||estado)return;restante=Math.max(0,TEMPO-(performance.now()-t0)/1000);desenhaTempo();if(restante<=0){clearInterval(tick);fecha("tempo",null)}}
+// Som do temporizador (Web Audio, gerado no momento): verde = tique suave; amarelo = dois tiques mais agudos por segundo;
+// vermelho = batimento grave e tique agudo (muita tensão). Desligável no cabeçalho (quizcv_som).
+let som=ls.get("quizcv_som",true)!==false,AC=null;
+function audio(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(_){return null}}if(AC.state==="suspended")AC.resume();return AC}
+function bip(f,dur,vol,tipo="sine",f2=null,atraso=0){if(!som)return;const a=audio();if(!a)return;const t0=a.currentTime+atraso,o=a.createOscillator(),g=a.createGain();
+ o.type=tipo;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+dur);
+ g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+.008);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+ o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+dur+.03)}
+function somTique(s){if(s>10)bip(520,.05,.035);
+ else if(s>=6){bip(700,.06,.06,"triangle");bip(620,.05,.045,"triangle",null,.5)}
+ else{bip(105,.14,.32);bip(90,.12,.22,"sine",null,.18);bip(980,.035,.06,"square",null,.5)}}
+const somCerto=()=>{bip(660,.12,.09,"triangle");bip(990,.18,.08,"triangle",null,.1)};
+const somErrado=()=>bip(200,.28,.09,"sawtooth",120);
+const somTempo=()=>{bip(330,.5,.1,"triangle",110)};
+function desenhaSom(){const b=$("somBtn");b.setAttribute("aria-pressed",String(som));b.setAttribute("aria-label",som?L().somOff:L().somOn);b.title=b.getAttribute("aria-label");
+ b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/>${som?'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>':'<path d="m16 9 5 6M21 9l-5 6"/>'}</svg>`}
+$("somBtn").onclick=()=>{som=!som;ls.set("quizcv_som",som);desenhaSom();if(som)audio()};
 let ultSeg=null;
 const ALERTA=10,AMARELO=10,VERMELHO=6;
 function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!estado,low=s<VERMELHO&&!estado,tm=$("timer"),al=$("alerta");
@@ -502,7 +523,7 @@ function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!es
  if(alerta&&s!==ultSeg){al.classList.remove("beat");void al.offsetWidth;al.classList.add("beat")}$("tNum").textContent=s;
  tm.classList.toggle("low",low);tm.classList.toggle("done",!!estado);$("tRing").style.strokeDashoffset=String(201*(1-restante/TEMPO));
  tm.setAttribute("aria-label",L().secs(s));
- if(s!==ultSeg&&!estado&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat")}ultSeg=s}
+ if(s!==ultSeg&&!estado&&s<TEMPO&&!pausa){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat");if(vista==="jogo")somTique(s)}ultSeg=s}
 const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on")}};
 const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
 document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
@@ -539,9 +560,9 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
  // só a certa e a errada escolhida viram como cartas
  [btnOk,btnBad].forEach(b=>b&&b.classList.add("flip"));
- if(est==="certo"){btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
- if(est==="errado"){btnBad.classList.add("shake");falha()}
- if(est==="tempo")derrota();
+ if(est==="certo"){somCerto();btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
+ if(est==="errado"){somErrado();btnBad.classList.add("shake");falha()}
+ if(est==="tempo"){somTempo();derrota()}
  // o cartão do resultado aparece depois da viragem e dos confetes
  clearTimeout(resT);resT=setTimeout(()=>{if(!estado)return;$("resbg").hidden=false;$("next").focus({preventScroll:true})},reduz()?0:1100)}
 let resT=null;
@@ -587,7 +608,7 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
  $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":""}
 // contagem de 3 segundos antes de cada ronda
-function contagem(){const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
+function contagem(){audio();const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
  const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";i++;setTimeout(passo,reduz()?450:900)};
  n.className="";passo()}
 $("start").onclick=contagem;$("again").onclick=contagem;
@@ -661,7 +682,7 @@ function applyLang(){const t=L();document.documentElement.lang=LANG;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
  $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
- renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim()}
+ desenhaSom();renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim()}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;ls.set("quizcv_lang",LANG);applyLang()});
 $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};

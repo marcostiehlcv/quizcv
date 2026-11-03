@@ -49,6 +49,7 @@ Cada pergunta é um array:
 - Resultado de cada pergunta: cartão translúcido no centro do ecrã (`#resbg` / `.rescard`), com a explicação, a fonte e o «Seguinte»; aparece 1,1 s depois de responder (depois da viragem e dos confetes).
 - Antes de cada ronda: contagem 3, 2, 1, «Já!» em grande (`contagem()`, `#cd`).
 - Saltar e Revelar: ação imediata, sem confirmação. Revelar é uma ajuda de uso único por ronda (`REVELAR=1`): conta como certa, com os pontos base do nível e sem bónus de rapidez. Terminar: janela `confirma()` (`#conf`, ao centro, temporizador em pausa). «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
+- Som (Web Audio, sem ficheiros): `somTique(s)` a cada segundo — verde tique suave, amarelo dois tiques mais agudos, vermelho batimento grave + tique agudo; `somCerto`, `somErrado`, `somTempo`. Botão `#somBtn` no cabeçalho (`quizcv_som`); o áudio desbloqueia no clique em «Começar».
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: o ecrã final mostra o próprio cartão de partilha (`drawCard()` no `#fCv`, 1080×1080), com a frase do resultado por cima, pontos/recorde por baixo e os botões Partilhar… (menu nativo), Guardar imagem e Copiar texto; «Jogar outra vez» no mesmo estilo do botão inicial.
