@@ -43,6 +43,7 @@ header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 
 @media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 18s ease-in-out infinite alternate}}
 @keyframes ondula{from{transform:translateY(-50%) rotate(-11deg) scale(1)}to{transform:translateY(-52%) rotate(-8deg) scale(1.05)}}
 header.mast>.wrap{position:relative;z-index:1}
+@media (max-width:899px){.flagbg{opacity:.28;right:calc(-1 * 52vw);top:62%}}
 header.mast{position:relative;overflow:hidden}
 header.mast .wrap{padding-block:18px 26px}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -70,7 +71,15 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .lvls{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 0;padding:0;list-style:none}
 .lvl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;color:#fff}
 .lvl.l1{background:var(--lv1)}.lvl.l2{background:var(--lv2)}.lvl.l3{background:var(--lv3)}
-/* página inicial: botão grande e as regras em quatro blocos */
+/* página inicial: botão grande, uma faixa com os números da ronda e uma linha sobre os pontos (uma só cor de destaque) */
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.stats li{padding:14px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.stats li+li{border-left:1px solid var(--line)}
+.stats b{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.1;color:var(--fg)}
+.stats span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ptsnote{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5;text-align:center}
+.ptsnote b{color:var(--fg);font-weight:600}
+.best{text-align:center}
 .ini{display:flex;flex-direction:column;gap:18px}
 .startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:#fff;border:0;border-radius:18px;padding:20px 24px 24px;text-shadow:0 2px 6px rgba(0,20,60,.35);background:linear-gradient(to bottom,transparent calc(100% - 14px),rgba(255,255,255,.92) calc(100% - 14px),rgba(255,255,255,.92) calc(100% - 11px),#cf2027 calc(100% - 11px),#cf2027 calc(100% - 6px),rgba(255,255,255,.92) calc(100% - 6px),rgba(255,255,255,.92) calc(100% - 3px),transparent calc(100% - 3px)),linear-gradient(170deg,#1d56c4 0%,var(--ocean) 45%,var(--ocean-deep) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7)}
 .startbig:hover{transform:translateY(-2px)}
@@ -84,18 +93,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes play{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.12)}}
 @media (prefers-reduced-motion:no-preference){.startbig{animation:convida 2.4s ease-in-out infinite}}
 @keyframes convida{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7),0 0 0 0 rgba(247,209,22,.4)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px -12px rgba(0,30,90,.7),0 0 0 10px rgba(247,209,22,0)}}
-.rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.rules li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
-.rules b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rules b{color:var(--sun)}}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
-.rules strong{font-family:var(--display);font-weight:500;font-size:15px}
-.rules span{font-size:13px;color:var(--muted);line-height:1.4}
-/* cada regra com a sua cor: verde, amarelo, vermelho e azul-claro (as cores da bandeira e dos níveis) */
-.rules li{--c:var(--ok);position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--c) 35%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,var(--surface)),var(--surface) 70%)}
-.rules li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
-.rules li:nth-child(2){--c:var(--sun)}.rules li:nth-child(3){--c:var(--rubro)}.rules li:nth-child(4){--c:#3d8bfd}
-.rules li b{color:var(--c)!important}
 /* contagem antes de começar: 3, 2, 1, já! em grande */
 .contagem{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:color-mix(in srgb,var(--ocean-deep) 82%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .contagem b{font-family:var(--display);font-weight:800;font-size:clamp(140px,42vw,260px);line-height:1;color:#fff;text-shadow:0 20px 50px rgba(0,0,0,.45)}
@@ -247,7 +246,12 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .about p{margin:0;line-height:1.6;font-size:15.5px}
 .about h3{margin:10px 0 -6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .about h3:first-child{margin-top:0}
-#shCv{width:100%;height:auto;border-radius:12px;display:block}
+.fim{display:flex;flex-direction:column;gap:14px}
+.verdict{margin:0;font-family:var(--display);font-weight:800;font-size:22px;line-height:1.25;text-align:center;text-wrap:balance}
+#fCv{width:100%;height:auto;border-radius:18px;display:block;box-shadow:0 18px 40px -18px rgba(0,0,0,.6)}
+.fimacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fimacts .btn{padding:11px 8px;font-size:14.5px}
+@media (min-width:900px){.fim{max-width:560px;margin:0 auto;width:100%}}
 @media (min-width:900px){
   .wrap{max-width:720px;padding-left:28px;padding-right:28px}
   .nextbar{margin:0 -28px;padding-left:28px;padding-right:28px}
@@ -283,7 +287,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     <section id="v-ini" class="ini">
       <button type="button" class="startbig" id="start"></button>
       <p class="msg" id="iniNone" hidden></p>
-      <ul class="rules" id="rules"></ul>
+      <ul class="stats" id="rules"></ul>
+      <p class="ptsnote" id="ptsNote"></p>
       <p class="best" id="best"></p>
     </section>
 
@@ -316,13 +321,17 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     </section>
 
     <!-- resultado -->
-    <section id="v-fim" hidden class="card" style="display:flex;flex-direction:column;gap:14px">
-      <span class="label" id="fLbl"></span>
-      <div class="score" id="fScore"></div>
-      <p id="fTxt" style="margin:0"></p>
-      <div class="breakdown" id="fLv"></div>
+    <section id="v-fim" hidden class="fim">
+      <p class="verdict" id="fTxt"></p>
+      <canvas id="fCv" width="1080" height="1080" role="img"></canvas>
       <p class="best" id="fPts"></p>
-      <div class="row"><button type="button" class="btn primary" id="share"></button><button type="button" class="btn" id="again"></button></div>
+      <div class="fimacts">
+        <button type="button" class="btn primary" id="shrNative"></button>
+        <button type="button" class="btn" id="shrSave"></button>
+        <button type="button" class="btn" id="shrCopy"></button>
+      </div>
+      <p class="msg" id="shrMsg" hidden style="text-align:center"></p>
+      <button type="button" class="startbig" id="again"></button>
     </section>
 
     <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button></div>
@@ -367,24 +376,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
   </div>
 </div>
 
-<div class="sheet-bg" id="shr" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shrTitle">
-    <h2 id="shrTitle"></h2>
-    <canvas id="shCv" width="1080" height="1080"></canvas>
-    <p class="msg" id="shrMsg" hidden></p>
-    <div class="acts">
-      <button type="button" class="btn primary" id="shrNative"></button>
-      <button type="button" class="btn" id="shrSave"></button>
-      <button type="button" class="btn" id="shrCopy"></button>
-      <button type="button" class="btn" id="shrClose"></button>
-    </div>
-  </div>
-</div>
-
 <script>
 const I18N={
 pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Prova-o em 15 perguntas",
- rules:(n,t,sk)=>[[String(n),"perguntas","5 fáceis, 5 médias e 5 difíceis"],[`${t} s`,"por pergunta","Se o tempo acabar, conta como errada"],["10 · 20 · 30","pontos por acerto","Mais 1 ponto por cada segundo que sobra"],[String(sk),"saltos","E 1 ajuda: revelar a resposta (conta como certa, sem bónus)"]],
+ rules:(n,t,sk,rv)=>[[String(n),"perguntas"],[`${t}s`,"por pergunta"],[String(sk),"saltos"],[String(rv),"ajuda"]],
+ ptsNote:"Cada certa vale <b>10, 20 ou 30</b> pontos, conforme o nível, mais 1 por segundo que sobra. A ajuda revela a resposta e conta como certa, sem bónus.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
@@ -416,7 +412,8 @@ secs:s=>`${s} segundos`,gain:g=>g.ajuda?`+${g.total} pontos: ajuda usada, sem b�
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove it in 15 questions",
- rules:(n,t,sk)=>[[String(n),"questions","5 easy, 5 medium and 5 hard"],[`${t} s`,"per question","If time runs out, it counts as wrong"],["10 · 20 · 30","points per answer","Plus 1 point for every second left"],[String(sk),"skips","And 1 help: reveal the answer (counts as right, no bonus)"]],
+ rules:(n,t,sk,rv)=>[[String(n),"questions"],[`${t}s`,"per question"],[String(sk),"skips"],[String(rv),"help"]],
+ ptsNote:"Each right answer is worth <b>10, 20 or 30</b> points, by level, plus 1 per second left. The help reveals the answer and counts as right, with no bonus.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
@@ -489,7 +486,8 @@ function show(v){vista=v;if(v!=="jogo")$("resbg").hidden=true;$("alerta").classL
 function renderIni(){const t=L();
  $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
  $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!QS.length;
- $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS).map(([b,st,sp])=>`<li><b>${esc(b)}</b><strong>${esc(st)}</strong><span>${esc(sp)}</span></li>`).join("");$("rules").hidden=!QS.length;
+ $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,REVELAR).map(([b,sp])=>`<li><b>${esc(b)}</b><span>${esc(sp)}</span></li>`).join("");$("rules").hidden=!QS.length;
+ $("ptsNote").innerHTML=t.ptsNote;$("ptsNote").hidden=!QS.length;
  const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
@@ -586,10 +584,12 @@ let recorde=false;
 function fim(){clearInterval(tick);const b=ls.get("quizcv_best",0);recorde=pts>b;if(recorde)ls.set("quizcv_best",pts);show("fim");renderFim();scrollTo({top:0})}
 const certas=()=>res.filter(x=>x==="ok").length;
 function renderFim(){const t=L(),n=ronda.length,s=certas();
- $("fLbl").textContent=t.fLbl;$("fScore").innerHTML=`${s}<small> / ${n}</small>`;$("fTxt").textContent=t.verdict(s,n);
- $("fLv").innerHTML=[1,2,3].map(k=>{const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0);return `<div><b>${ii.filter(i=>res[i]==="ok").length}/${ii.length}</b><span>${t.lv[k]}</span></div>`}).join("");
- $("fPts").textContent=t.ptsTotal(pts,recorde);
- $("again").textContent=t.again;$("share").textContent=t.share}
+ $("fTxt").textContent=t.verdict(s,n);$("fPts").textContent=t.ptsTotal(pts,recorde);
+ $("fCv").setAttribute("aria-label",t.shareText(s,n,pts,SITE));drawCard($("fCv"));
+ $("again").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.again)}`;
+ $("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrMsg").hidden=true;
+ let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
+ $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":""}
 // contagem de 3 segundos antes de cada ronda
 function contagem(){const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
  const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";i++;setTimeout(passo,reduz()?450:900)};
@@ -638,16 +638,12 @@ async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesqu
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
  ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
 const shareText=()=>L().shareText(certas(),ronda.length,pts,SITE);
-const cardBlob=()=>new Promise(r=>$("shCv").toBlob(r,"image/png"));
+const cardBlob=()=>new Promise(r=>$("fCv").toBlob(r,"image/png"));
 const shrMsg=m=>{$("shrMsg").textContent=m;$("shrMsg").hidden=false};
-$("share").onclick=async()=>{$("shrMsg").hidden=true;$("shr").hidden=false;await drawCard($("shCv"));
- let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
- $("shrNative").hidden=!ok&&!navigator.share;$("shrSave").focus()};
 $("shrNative").onclick=async()=>{try{const blob=await cardBlob();const f=new File([blob],"quizcv.png",{type:"image/png"});
  if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],text:shareText()});else await navigator.share({text:shareText()})}catch(err){if(err&&err.name!=="AbortError")shrMsg(L().nativeFail)}};
 $("shrSave").onclick=async()=>{const blob=await cardBlob();const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="quizcv-resultado.png";document.body.appendChild(a);a.click();a.remove();shrMsg(L().saved)};
 $("shrCopy").onclick=async()=>{try{await navigator.clipboard.writeText(shareText());shrMsg(L().copied)}catch(_){shrMsg(shareText())}};
-$("shrClose").onclick=()=>{$("shr").hidden=true};
 
 // reportes: motivos fixos, sem texto livre; POST {id, motivos} para o Apps Script (config.js)
 $("report").onclick=()=>{const t=L(),e=ronda[idx];pausar();
@@ -668,15 +664,14 @@ function applyLang(){const t=L();document.documentElement.lang=LANG;
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
  $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
- $("shrTitle").textContent=t.shrTitle;$("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrClose").textContent=t.close;
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
- renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim();if(!$("shr").hidden)drawCard($("shCv"))}
+ renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim()}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;ls.set("quizcv_lang",LANG);applyLang()});
 $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
-for(const id of ["about","shr"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
+for(const id of ["about"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
 $("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
-addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("shr").hidden=true;if(!$("rep").hidden)fechaRep()});
+addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;if(!$("rep").hidden)fechaRep()});
 applyLang();show("ini");
 </script>
 </body>
