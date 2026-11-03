@@ -14,6 +14,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 |---|---|
 | `index.html` | O site inteiro (HTML + CSS + JS) |
 | `perguntas-base.js` | Perguntas escritas à mão (fonte de verdade; módulo Node) |
+| `perguntas-base-2.js` | Segundo lote escrito à mão (b51–b150), juntado pelo `perguntas-base.js` |
 | `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
 | `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |
 | `config.js` | `window.QUIZCV_CONFIG = { API: "<url /exec>" }` para os reportes (vazio = desligados) |
@@ -39,7 +40,7 @@ Cada pergunta é um array:
 - Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`); cores do anel: verde até 11 s, amarelo (`mid`) de 10 a 6 s, vermelho (`low`, a pulsar mais forte) abaixo de 6 s. Saltar: `#qbox` sai (`out`) e a nova entra (`in`), com o aviso «Saltada». O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
 - Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
-- Página inicial: botão grande `.startbig` e as regras em quatro blocos (`I18N.*.rules`).
+- Página inicial: botão grande e vermelho `.startbig` e as regras em quatro blocos (`I18N.*.rules`).
 - Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.

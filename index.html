@@ -64,12 +64,12 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .lvl.l1{background:var(--lv1)}.lvl.l2{background:var(--lv2)}.lvl.l3{background:var(--lv3)}
 /* página inicial: botão grande e as regras em quatro blocos */
 .ini{display:flex;flex-direction:column;gap:18px}
-.startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:var(--ocean-deep);background:var(--sun);border:0;border-radius:18px;padding:20px 24px;cursor:pointer;box-shadow:0 10px 28px -12px rgba(0,0,0,.45);transition:transform .15s}
+.startbig{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;color:#fff;background:linear-gradient(135deg,#e0353d,var(--rubro));border:0;border-radius:18px;padding:20px 24px;cursor:pointer;box-shadow:0 10px 28px -12px rgba(0,0,0,.45);transition:transform .15s}
 .startbig:hover{transform:translateY(-2px)}
 .startbig:active{transform:scale(.98)}
 .startbig svg{width:26px;height:26px}
 @media (prefers-reduced-motion:no-preference){.startbig{animation:convida 2.4s ease-in-out infinite}}
-@keyframes convida{0%,100%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 0 rgba(242,194,48,.45)}50%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 10px rgba(242,194,48,0)}}
+@keyframes convida{0%,100%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 0 rgba(200,38,47,.5)}50%{box-shadow:0 10px 28px -12px rgba(0,0,0,.45),0 0 0 12px rgba(200,38,47,0)}}
 .rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rules li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .rules b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1;color:var(--ocean)}

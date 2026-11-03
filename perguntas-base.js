@@ -205,3 +205,4 @@ module.exports = [
    "On which island is the fishing town of Ponta do Sol?", ["Santo Antão", "São Nicolau", "São Vicente", "Sal"],
    "Ponta do Sol lies at the northern tip of Santo Antão, in Ribeira Grande municipality."]
 ];
+module.exports.push(...require("./perguntas-base-2.js"));
