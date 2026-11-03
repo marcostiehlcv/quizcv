@@ -1,6 +1,6 @@
 # Quiz CV
 
-**Quanto sabe sobre Cabo Verde?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
+**Quanto sabes sobre Cabo Verde?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
 
 ## Como funciona
 
@@ -11,7 +11,7 @@
 - Depois de responder, aparece a explicação e a fonte, com um comentário bem-disposto.
 - «Reportar problema» assinala uma pergunta com erro (motivos fixos, sem texto livre).
 - No fim, o resultado pode ser partilhado como imagem ou texto. O melhor resultado fica guardado no navegador, e as perguntas já vistas só se repetem quando se esgotam.
-- Em português (por defeito) e inglês, nos temas claro e escuro.
+- Em português de Portugal (a tratar por «tu»), por defeito, e inglês, nos temas claro e escuro.
 
 ## Critérios
 
