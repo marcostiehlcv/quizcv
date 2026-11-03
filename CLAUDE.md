@@ -37,6 +37,7 @@ Cada pergunta é um array:
 - Ronda: `NIVEIS` (5×1, 5×2, 5×3), `TEMPO=20` s, `SALTOS=3`, pontos `VALOR` {10,20,30} + segundos que sobram.
 - `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
 - Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`; mais forte e vermelho nos últimos 5). Saltar: `#qbox` sai (`out`) e a nova entra (`in`), com o aviso «Saltada». O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
+- Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa a vermelho nas margens da janela a cada segundo, cada vez mais forte (`--k` de 0 a 1); o anel do temporizador fica vermelho ao mesmo tempo. Desliga ao responder, saltar, pausar ou sair do jogo.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.

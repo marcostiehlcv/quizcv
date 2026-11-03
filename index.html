@@ -87,6 +87,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes beat{0%{transform:scale(1)}25%{transform:scale(1.22)}100%{transform:scale(1)}}
 @keyframes beatLow{0%{transform:scale(1)}25%{transform:scale(1.4)}100%{transform:scale(1)}}
 @keyframes ring{0%{transform:scale(1)}25%{transform:scale(1.08)}100%{transform:scale(1)}}
+/* alerta do tempo: a partir dos 10 s toda a janela pulsa a vermelho, cada vez mais forte até ao fim */
+#alerta{position:fixed;inset:0;z-index:28;pointer-events:none;opacity:0;box-shadow:inset 0 0 calc(40px + var(--k,0)*110px) calc(var(--k,0)*24px) var(--bad);background:radial-gradient(ellipse at center,transparent 62%,color-mix(in srgb,var(--bad) calc(var(--k,0)*16%),transparent))}
+#alerta.on{opacity:calc(.3 + var(--k,0)*.4)}
+#alerta.on.beat{animation:alerta .9s ease-out}
+@keyframes alerta{0%{opacity:calc(.55 + var(--k,0)*.4)}100%{opacity:calc(.15 + var(--k,0)*.3)}}
 .qtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .pista{margin:8px 0 0;color:var(--muted);font-size:15.5px;font-style:italic}
 #qbox{display:flex;flex-direction:column;gap:16px}
@@ -135,7 +140,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes up{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -243,6 +248,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
   </div>
 </main>
 
+<div id="alerta" aria-hidden="true"></div>
 <div class="sheet-bg" id="about" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
     <h2 id="aboutTitle"></h2>
@@ -367,7 +373,7 @@ const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 // estado da ronda
 let ronda=[],idx=0,pts=0,saltos=SALTOS,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
-function show(v){vista=v;$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
+function show(v){vista=v;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 function renderIni(){const t=L();
  $("iniTxt").textContent=QS.length?t.ini(NIVEIS.length,TEMPO):t.none;
  $("iniLv").innerHTML=[1,2,3].map(k=>`<li class="lvl l${k}">${t.lv[k]} · ${NIVEIS.filter(x=>x===k).length}</li>`).join("");
@@ -383,11 +389,14 @@ function nova(){resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);mar
 function arranca(){clearInterval(tick);t0=performance.now()-(TEMPO-restante)*1000;tick=setInterval(passo,100);passo()}
 function passo(){if(pausa||estado)return;restante=Math.max(0,TEMPO-(performance.now()-t0)/1000);desenhaTempo();if(restante<=0){clearInterval(tick);fecha("tempo",null)}}
 let ultSeg=null;
-function desenhaTempo(){const s=Math.ceil(restante),low=restante<=5&&!estado,tm=$("timer");$("tNum").textContent=s;
+const ALERTA=10;
+function desenhaTempo(){const s=Math.ceil(restante),low=restante<=ALERTA&&!estado,tm=$("timer"),al=$("alerta");
+ al.classList.toggle("on",low&&vista==="jogo"&&!pausa);al.style.setProperty("--k",low?String(Math.min(1,(ALERTA-restante)/ALERTA)):"0");
+ if(low&&s!==ultSeg){al.classList.remove("beat");void al.offsetWidth;al.classList.add("beat")}$("tNum").textContent=s;
  tm.classList.toggle("low",low);tm.classList.toggle("done",!!estado);$("tRing").style.strokeDashoffset=String(201*(1-restante/TEMPO));
  tm.setAttribute("aria-label",L().secs(s));
  if(s!==ultSeg&&!estado&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat")}ultSeg=s}
-const pausar=()=>{if(!pausa){pausa=true}};
+const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on")}};
 const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
 document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
 
@@ -426,7 +435,7 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 $("reveal").onclick=()=>fecha("revelado",null);
 // saltar: a pergunta sai para a esquerda e entra outra do mesmo nível
-$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";
+$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
  const s=document.createElement("div");s.className="skipped";s.textContent=L().skipped;document.body.appendChild(s);setTimeout(()=>s.remove(),950);
  const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,280)}};
 $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
