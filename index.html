@@ -103,6 +103,14 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .contagem b.tic{animation:tic .9s cubic-bezier(.2,.8,.3,1) both}
 @keyframes tic{0%{opacity:0;transform:scale(1.8)}25%{opacity:1;transform:scale(1)}80%{opacity:1;transform:scale(.92)}100%{opacity:0;transform:scale(.7)}}
 #quit{margin-left:auto}
+/* cartão do resultado da pergunta: translúcido, no centro, com a explicação e o «Seguinte» */
+.resbg{position:fixed;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,15,35,.35);animation:resbg .3s ease-out}
+.rescard{width:100%;max-width:480px;max-height:calc(100vh - 32px);overflow:auto;display:flex;flex-direction:column;gap:16px;padding:20px;border-radius:22px;border:1px solid color-mix(in srgb,var(--fg) 14%,transparent);background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 24px 60px -20px rgba(0,0,0,.6);animation:rescard .4s cubic-bezier(.2,.9,.3,1.15)}
+.rescard .fb{animation:none}
+.rescard .nextbar{position:static;margin:0;padding:0;background:none;animation:none}
+.rescard .nextbar .btn{width:100%;min-width:0;margin:0}
+@keyframes resbg{from{opacity:0}to{opacity:1}}
+@keyframes rescard{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
 /* jogo */
 /* «Seguinte» fica preso ao fundo do ecrã, com a largura toda, para não obrigar a descer depois da explicação */
 .nextbar{position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);animation:sobe .35s ease-out}
@@ -208,7 +216,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.resbg,.rescard,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -301,8 +309,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
         <button type="button" class="tool" id="report"></button>
         <button type="button" class="tool" id="quit"></button>
       </div>
-      <div class="fb" id="fb" hidden></div>
-      <div class="nextbar" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
+
     </section>
 
     <!-- resultado -->
@@ -325,6 +332,14 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     <h2 id="aboutTitle"></h2>
     <div class="about" id="aboutTxt" style="display:flex;flex-direction:column;gap:12px"></div>
     <div class="acts"><button type="button" class="btn" id="aboutClose"></button></div>
+  </div>
+</div>
+
+<!-- resultado da pergunta: cartão no centro do ecrã, por cima das opções (sem scroll) -->
+<div class="resbg" id="resbg" hidden>
+  <div class="rescard" role="dialog" aria-modal="false" aria-live="polite">
+    <div class="fb" id="fb" hidden></div>
+    <div class="nextbar" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
   </div>
 </div>
 
@@ -469,7 +484,7 @@ const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 // estado da ronda
 let ronda=[],idx=0,pts=0,saltos=SALTOS,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
-function show(v){vista=v;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
+function show(v){vista=v;if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 function renderIni(){const t=L();
  $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
  $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!QS.length;
@@ -511,7 +526,7 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("quit").textContent=t.quit;$("report").disabled=rep;
  desenhaTempo();
  const fb=$("fb");
- if(!estado){fb.hidden=true;$("nextRow").hidden=true;return}
+ if(!estado){fb.hidden=true;$("nextRow").hidden=true;$("resbg").hidden=true;return}
  fb.hidden=false;fb.className="fb"+(estado==="certo"?"":estado==="revelado"?" rev":" no");
  const tit={certo:t.right,errado:t.wrong,tempo:t.timeout,revelado:t.revealed}[estado];
  fb.innerHTML=`<strong>${tit}</strong>${ganhoAtual?`<p class="gain">${esc(t.gain(ganhoAtual))}</p>`:""}${fb.dataset.joke?`<p class="joke">${esc(fb.dataset.joke)}</p>`:""}${estado==="certo"?"":`<p>${esc(t.answer(ops[0]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
@@ -530,7 +545,9 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  if(est==="certo"){btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
  if(est==="errado"){btnBad.classList.add("shake");falha()}
  if(est==="tempo")derrota();
- $("next").focus({preventScroll:true})}
+ // o cartão do resultado aparece depois da viragem e dos confetes
+ clearTimeout(resT);resT=setTimeout(()=>{if(!estado)return;$("resbg").hidden=false;$("next").focus({preventScroll:true})},reduz()?0:1100)}
+let resT=null;
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 $("reveal").onclick=async()=>{if(estado)return;const t=L();if(await confirma(t.revealQ,t.revealTxt,t.revealYes)&&!estado)fecha("revelado",null)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
@@ -571,7 +588,7 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("again").textContent=t.again;$("share").textContent=t.share}
 // contagem de 3 segundos antes de cada ronda
 function contagem(){const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
- const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className=(i===3?"go ":"")+"tic";void n.offsetWidth;i++;setTimeout(passo,reduz()?450:900)};
+ const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";i++;setTimeout(passo,reduz()?450:900)};
  n.className="";passo()}
 $("start").onclick=contagem;$("again").onclick=contagem;
 // confirmação (janela própria; o temporizador pára enquanto está aberta)
