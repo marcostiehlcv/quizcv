@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Quiz CV · Perguntas sobre Cabo Verde</title>
-<meta name="description" content="Um jogo de perguntas sobre a história, a cultura e a geografia de Cabo Verde. Quatro opções, uma certa, sempre com a explicação e a fonte. Também em inglês.">
+<meta name="description" content="Um jogo de perguntas sobre a história, a cultura e a geografia de Cabo Verde. 15 perguntas, do fácil ao difícil, sempre com a explicação e a fonte. Também em inglês.">
 <meta name="author" content="Marco Stiehl">
 <meta name="theme-color" content="#003893">
 <meta property="og:title" content="Quiz CV">
@@ -14,6 +14,7 @@
 <meta property="og:locale:alternate" content="en_GB">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003893'/%3E%3Crect y='34' width='64' height='14' fill='%23fff'/%3E%3Crect y='39' width='64' height='4' fill='%23cf2027'/%3E%3Ccircle cx='24' cy='41' r='13' fill='none' stroke='%23f7d116' stroke-width='3' stroke-dasharray='3 5'/%3E%3C/svg%3E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}[hidden]{display:none!important}</style>
+<script src="config.js"></script>
 <script src="perguntas.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@500&display=swap">
@@ -21,17 +22,17 @@
 /* Mesmo sistema visual do Hoje CV: coluna estreita, cabeçalho azul da bandeira, superfície clara por baixo */
 :root{
   --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
-  --ok:#1f8a5b; --bad:#c8262f;
+  --ok:#1f8a5b; --bad:#c8262f; --lv1:#1f8a5b; --lv2:#b07a00; --lv3:#c8262f;
   --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
   --display:"Bricolage Grotesque",system-ui,sans-serif;
   --body:"Literata",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; color-scheme:dark}
+  --bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; --lv1:#2fa872; --lv2:#e0a400; --lv3:#e0474f; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --ok:#2fa872; --bad:#e0474f; --lv1:#2fa872; --lv2:#e0a400; --lv3:#e0474f; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
 .wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff}
@@ -52,51 +53,94 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
 .intro p{margin:0 0 10px}
-.intro p:last-child{margin:0}
 .btn{font-family:var(--display);font-weight:500;font-size:16px;border-radius:999px;padding:12px 24px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
 .btn.primary{background:var(--ocean);border-color:var(--ocean);color:#fff}
 .btn.primary:hover{background:var(--ocean-deep)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.best{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.best{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+.lvls{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 0;padding:0;list-style:none}
+.lvl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;color:#fff}
+.lvl.l1{background:var(--lv1)}.lvl.l2{background:var(--lv2)}.lvl.l3{background:var(--lv3)}
 /* jogo */
 .prog{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.bar{height:6px;border-radius:999px;background:var(--line);overflow:hidden}
-.bar i{display:block;height:100%;background:var(--sun);border-radius:999px;transition:width .3s}
+.dots{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:8px}
+.dots i{height:6px;border-radius:999px;background:var(--line)}
+.dots i.ok{background:var(--ok)}.dots i.bad{background:var(--bad)}.dots i.rev{background:var(--muted)}.dots i.cur{background:var(--sun)}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.tema{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);color:var(--muted);border-radius:999px;padding:3px 10px}
+.timer{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tbar{height:4px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px}
+.tbar i{display:block;height:100%;width:100%;background:var(--ocean);border-radius:999px;transform-origin:left}
+.tbar.low i{background:var(--bad)}
+.timer.low{color:var(--bad)}
 .q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,28px);line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
-.tema{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--chip);color:var(--muted);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.qcard{position:relative}
 .opts{display:grid;gap:10px}
-.opt{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;text-align:left;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.opt{position:relative;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;text-align:left;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;transition:transform .15s,opacity .25s}
 .opt:hover:not(:disabled){border-color:var(--muted)}
+.opt:active:not(:disabled){transform:scale(.98)}
 .opt:disabled{cursor:default}
 .opt .k{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--chip);font-family:var(--mono);font-size:13px;color:var(--muted)}
 .opt.ok{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
 .opt.ok .k{background:var(--ok);color:#fff}
 .opt.bad{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
 .opt.bad .k{background:var(--bad);color:#fff}
-.opt.dim{opacity:.55}
-.fb{border-left:4px solid var(--ok);padding:4px 0 4px 14px}
+.opt.dim{opacity:.5}
+.opt.ok.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.opt.bad.shake{animation:shake .45s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tool{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted);padding:6px 12px;cursor:pointer}
+.tool:hover:not(:disabled){color:var(--fg);border-color:var(--muted)}
+.tool:disabled{opacity:.4;cursor:not-allowed}
+.fb{border-left:4px solid var(--ok);padding:4px 0 4px 14px;animation:fade .35s}
 .fb.no{border-left-color:var(--bad)}
-.fb strong{font-family:var(--display);font-size:18px;display:block;margin-bottom:4px}
+.fb.rev{border-left-color:var(--muted)}
+.fb strong{font-family:var(--display);font-size:19px;display:block}
+.fb .joke{margin:2px 0 8px;font-style:italic;color:var(--fg);font-size:15.5px}
 .fb p{margin:0 0 6px;color:var(--muted);font-size:15.5px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .src{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ocean);text-decoration:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:var(--sun)}}
 :root[data-theme="dark"] .src{color:var(--sun)}
+/* animações de acerto e de erro */
+.fx{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
+.fx i{position:absolute;width:9px;height:14px;border-radius:2px;will-change:transform,opacity}
+.plus{position:fixed;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:28px;color:var(--ok);animation:up 1.1s ease-out forwards}
+@keyframes up{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
+.flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
+@keyframes flash{from{opacity:.18}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb{animation:none}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
 :root[data-theme="dark"] .score{color:var(--sun)}
 .score small{font-size:.4em;color:var(--muted);font-weight:500}
 .msg{font-size:14px;color:var(--muted);margin:0}
+.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.breakdown div{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.breakdown b{display:block;font-family:var(--display);font-size:22px}
+.breakdown span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
 .aboutlink{font:inherit;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .aboutlink:hover{color:var(--fg)}
 .sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(5,15,35,.55);display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--surface);color:var(--fg);width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
 .sheet h2{margin:0;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
+.sheet .ev{font-size:14px;color:var(--muted);margin:-6px 0 0}
+.sheet .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.sheet .acts .btn{padding:10px 18px;font-size:15px}
+.sheet .send{background:var(--rubro);border-color:var(--rubro);color:#fff}
+.ropts{display:flex;flex-direction:column;gap:8px}
+.ropt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:15px}
+.ropt:has(input:checked){border-color:var(--ocean);background:var(--chip)}
+.ropt input{margin-top:2px;accent-color:var(--ocean);width:18px;height:18px;flex:none}
 .about p{margin:0;line-height:1.6;font-size:15.5px}
 .about h3{margin:10px 0 -6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .about h3:first-child{margin-top:0}
-.sheet .acts{display:flex;justify-content:flex-end}
+#shCv{width:100%;height:auto;border-radius:12px;display:block}
 @media (min-width:900px){
   .wrap{max-width:720px;padding-left:28px;padding-right:28px}
   header.mast .wrap{padding-block:22px 32px}
@@ -120,7 +164,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
       <h1 id="hTitle">Quanto sabe sobre Cabo Verde?</h1>
       <figure class="flagwrap"><svg class="flag-cv" viewBox="0 0 1020 600" role="img" aria-label="Bandeira de Cabo Verde"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg></figure>
     </div>
-    <p class="sub" id="hSub">Uma pergunta, quatro opções</p>
+    <p class="sub" id="hSub"></p>
   </div>
 </header>
 
@@ -129,29 +173,40 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     <!-- início -->
     <section id="v-ini" class="card intro">
       <p id="iniTxt"></p>
-      <p class="best" id="best"></p>
-      <div class="row" style="margin-top:14px"><button type="button" class="btn primary" id="start"></button></div>
+      <ul class="lvls" id="iniLv"></ul>
+      <p class="best" id="best" style="margin-top:12px"></p>
+      <div class="row" style="margin-top:16px"><button type="button" class="btn primary" id="start"></button></div>
     </section>
 
     <!-- pergunta -->
     <section id="v-jogo" hidden style="display:flex;flex-direction:column;gap:16px">
       <div>
         <div class="prog"><span class="label" id="pNum"></span><span class="label" id="pPts"></span></div>
-        <div class="bar" style="margin-top:8px"><i id="pBar"></i></div>
+        <div class="dots" id="dots"></div>
       </div>
-      <div><span class="tema" id="qTema"></span><h2 class="q" id="qTxt"></h2></div>
+      <div class="qcard">
+        <div class="qhead"><span><span class="lvl" id="qLv"></span> <span class="tema" id="qTema"></span></span><span class="timer" id="tNum"></span></div>
+        <h2 class="q" id="qTxt"></h2>
+        <div class="tbar" id="tBar"><i></i></div>
+      </div>
       <div class="opts" id="opts"></div>
+      <div class="tools" id="tools">
+        <button type="button" class="tool" id="skip"></button>
+        <button type="button" class="tool" id="reveal"></button>
+        <button type="button" class="tool" id="report"></button>
+      </div>
       <div class="fb" id="fb" hidden></div>
       <div class="row" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
     </section>
 
     <!-- resultado -->
-    <section id="v-fim" hidden class="card" style="display:flex;flex-direction:column;gap:12px">
+    <section id="v-fim" hidden class="card" style="display:flex;flex-direction:column;gap:14px">
       <span class="label" id="fLbl"></span>
       <div class="score" id="fScore"></div>
       <p id="fTxt" style="margin:0"></p>
-      <div class="row"><button type="button" class="btn primary" id="again"></button><button type="button" class="btn" id="share"></button></div>
-      <p class="msg" id="fMsg" hidden></p>
+      <div class="breakdown" id="fLv"></div>
+      <p class="best" id="fPts"></p>
+      <div class="row"><button type="button" class="btn primary" id="share"></button><button type="button" class="btn" id="again"></button></div>
     </section>
 
     <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button></div>
@@ -166,99 +221,267 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
   </div>
 </div>
 
+<div class="sheet-bg" id="rep" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="repTitle">
+    <h2 id="repTitle"></h2>
+    <p class="ev" id="repQ"></p>
+    <div class="label" id="repLbl"></div>
+    <div class="ropts" id="repOpts"></div>
+    <p class="msg" id="repMsg" hidden></p>
+    <div class="acts"><button type="button" class="btn" id="repCancel"></button><button type="button" class="btn send" id="repSend" disabled></button></div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="shr" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shrTitle">
+    <h2 id="shrTitle"></h2>
+    <canvas id="shCv" width="1080" height="1080"></canvas>
+    <p class="msg" id="shrMsg" hidden></p>
+    <div class="acts">
+      <button type="button" class="btn primary" id="shrNative"></button>
+      <button type="button" class="btn" id="shrSave"></button>
+      <button type="button" class="btn" id="shrCopy"></button>
+      <button type="button" class="btn" id="shrClose"></button>
+    </div>
+  </div>
+</div>
+
 <script>
 const I18N={
-pt:{title:"Quanto sabe sobre Cabo Verde?",sub:"Uma pergunta, quatro opções",
- ini:n=>`Responda a ${n} perguntas sobre a história, a cultura e a geografia de Cabo Verde. Cada pergunta tem quatro opções e só uma está certa. Depois de responder, vê a explicação e a fonte.`,
+pt:{title:"Quanto sabe sobre Cabo Verde?",sub:"15 perguntas, do fácil ao difícil",
+ ini:(n,t)=>`Responda a ${n} perguntas sobre a história, a cultura e a geografia de Cabo Verde, sempre a subir de nível. Tem ${t} segundos para cada uma e quatro opções, só uma certa. Pode saltar até 3 perguntas e revelar a resposta quando não souber.`,
  none:"Ainda não há perguntas. Volte em breve.",
- start:"Começar",best:(b,n)=>`Melhor resultado: ${b} em ${n}`,
+ start:"Começar",best:b=>`Melhor resultado: ${b} pontos`,
+ lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
- right:"Certo!",wrong:"Não é essa.",answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
- fLbl:"Resultado",verdict:(s,n)=>s===n?"Todas certas. Conhece bem Cabo Verde.":s>=n*.7?"Muito bem.":s>=n*.4?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Tente outra vez.",
- again:"Jogar outra vez",share:"Copiar resultado",copied:"Resultado copiado.",
- shareText:(s,n,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde. ${u}`,
- temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",geografia:"Geografia"},
- foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",close:"Fechar",
- about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem várias perguntas, cada uma com quatro opções e uma só resposta certa."],
-  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responder. Não há perguntas sobre boatos nem opiniões."],
+ skip:n=>`Saltar (${n})`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
+ right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Aqui está a resposta.",
+ answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
+ jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conhece Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
+ jokesBad:["Precisa de comer uma cachupa para ganhar forças.","Um grogue daria jeito… ou talvez não.","Calma, até o Pico do Fogo tem dias nublados.","Morabeza: errar também faz parte.","Essa foi mais torta do que a estrada de Santo Antão.","Uma pausa para um pastel de milho e volta mais forte."],
+ jokesTime:["O tempo voou como o vento de Barlavento.","Demorou mais do que o barco para a Brava.","Leva leve, mas não tão leve!"],
+ fLbl:"Resultado",of:"certas",
+ verdict:(s,n)=>s===n?"Todas certas! Merece um lugar no Panteão das ilhas.":s>=12?"Excelente. Conhece Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Uma cachupa e tente outra vez.",
+ ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
+ again:"Jogar outra vez",share:"Partilhar resultado",
+ shrTitle:"Partilhar resultado",native:"Partilhar…",save:"Guardar imagem",copy:"Copiar texto",close:"Fechar",
+ copied:"Texto copiado.",saved:"Imagem guardada.",nativeFail:"Não foi possível abrir a partilha. Use «Guardar imagem».",
+ shareText:(s,n,p,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde (${p} pontos). Consegue fazer melhor? https://${u}`,
+ card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"QUANTO SABE SOBRE CABO VERDE?"},
+ repTitle:"Reportar problema",repLbl:"O que está errado? Escolha uma ou mais opções",
+ repMot:{certa:"A resposta dada como certa está errada",outra:"Há mais do que uma opção certa",pergunta:"A pergunta é confusa ou ambígua",fonte:"A fonte não confirma a resposta",traducao:"Erro de português ou de tradução",ofensivo:"Conteúdo ofensivo"},
+ cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tente mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
+ temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações",geografia:"Geografia"},
+ foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",
+ about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
+  ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Pode saltar até 3 perguntas por ronda (entra outra do mesmo nível) ou revelar a resposta, sem pontos."],
+  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responder. Muitas vêm dos registos do Hoje CV. Se encontrar um erro, use «Reportar problema»."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
-en:{title:"How well do you know Cabo Verde?",sub:"One question, four options",
- ini:n=>`Answer ${n} questions about Cabo Verde's history, culture and geography. Each question has four options and only one is right. After answering, you see the explanation and the source.`,
+en:{title:"How well do you know Cabo Verde?",sub:"15 questions, from easy to hard",
+ ini:(n,t)=>`Answer ${n} questions about Cabo Verde's history, culture and geography, getting harder as you go. You have ${t} seconds for each one and four options, only one right. You can skip up to 3 questions and reveal the answer when you don't know it.`,
  none:"There are no questions yet. Please come back soon.",
- start:"Start",best:(b,n)=>`Best score: ${b} out of ${n}`,
+ start:"Start",best:b=>`Best score: ${b} points`,
+ lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
- right:"Correct!",wrong:"Not quite.",answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
- fLbl:"Result",verdict:(s,n)=>s===n?"All correct. You know Cabo Verde well.":s>=n*.7?"Very good.":s>=n*.4?"Not bad. There is always more to discover.":"Plenty left to learn. Try again.",
- again:"Play again",share:"Copy result",copied:"Result copied.",
- shareText:(s,n,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right. ${u}`,
- temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",geografia:"Geography"},
- foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",close:"Close",
- about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has several questions, each with four options and only one right answer."],
-  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. There are no questions about rumours or opinions."],
+ skip:n=>`Skip (${n})`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
+ right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Here is the answer.",
+ answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
+ jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
+ jokesBad:["You need a plate of cachupa to get your strength back.","A grogue might help… or maybe not.","Easy — even Pico do Fogo has cloudy days.","Morabeza: getting it wrong is part of it.","That one was more crooked than the Santo Antão road.","Take a break for a pastel de milho and come back stronger."],
+ jokesTime:["Time flew like the Barlavento wind.","Slower than the ferry to Brava.","Leva leve — but not that leve!"],
+ fLbl:"Result",of:"right",
+ verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
+ ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
+ again:"Play again",share:"Share result",
+ shrTitle:"Share result",native:"Share…",save:"Save image",copy:"Copy text",close:"Close",
+ copied:"Text copied.",saved:"Image saved.",nativeFail:"Sharing could not be opened. Use “Save image”.",
+ shareText:(s,n,p,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right (${p} points). Can you beat it? https://${u}`,
+ card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"HOW WELL DO YOU KNOW CABO VERDE?"},
+ repTitle:"Report a problem",repLbl:"What is wrong? Choose one or more options",
+ repMot:{certa:"The answer marked as right is wrong",outra:"More than one option is right",pergunta:"The question is confusing or ambiguous",fonte:"The source does not confirm the answer",traducao:"Language or translation error",ofensivo:"Offensive content"},
+ cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
+ temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations",geografia:"Geography"},
+ foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",
+ about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
+  ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) or reveal the answer, for no points."],
+  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
-let LANG="pt";try{const l=localStorage.getItem("quizcv_lang");if(l==="en"||l==="pt")LANG=l}catch(_){}
+const ls={get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(_){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
+let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
 const L=()=>I18N[LANG];
-const RONDA=10;
-// [pergunta, opções, correta, explicação, fonte, tema, pergunta_en, opções_en, explicação_en]
-const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[1])&&r[1].length===4&&r[2]>=0&&r[2]<4)
- .map(r=>({q:r[0],o:r[1],c:r[2],x:r[3],src:r[4],tema:r[5],q_en:r[6],o_en:r[7],x_en:r[8]}));
+const API=(window.QUIZCV_CONFIG||{}).API||"";
+const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, VALOR={1:10,2:20,3:30};
+// [id, nível, tema, pergunta, [certa, …], explicação, fonte, pergunta_en, [opções_en], explicação_en]; a certa é sempre a 1.ª
+const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].length===4&&[1,2,3].includes(r[1]))
+ .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9]}));
 const Q=e=>LANG==="en"&&e.q_en?e.q_en:e.q;
 const O=e=>LANG==="en"&&Array.isArray(e.o_en)&&e.o_en.length===4?e.o_en:e.o;
 const X=e=>LANG==="en"&&e.x_en?e.x_en:e.x;
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
 const SITE=/^(localhost|127\.|$)/.test(location.hostname)?"quizcv.vercel.app":location.hostname;
 
-let ronda=[],idx=0,pts=0,resp=null,ordem=[],vista="ini";
-const getBest=()=>{try{return +localStorage.getItem("quizcv_best")||0}catch(_){return 0}};
-const setBest=v=>{try{localStorage.setItem("quizcv_best",String(v))}catch(_){}};
-const nRonda=()=>Math.min(RONDA,QS.length);
+// Perguntas já vistas (entre rondas), para não repetir até se esgotarem as de cada nível
+let vistas=new Set(ls.get("quizcv_vistas",[]));
+function sorteia(nv,usadas){let pool=QS.filter(e=>e.nv===nv&&!usadas.has(e.id));let novas=pool.filter(e=>!vistas.has(e.id));
+ if(!novas.length){QS.filter(e=>e.nv===nv).forEach(e=>vistas.delete(e.id));novas=pool}return novas.length?pick(novas):null}
+const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 
-// durante o jogo o cabeçalho fica só com a marca, para a pergunta caber no ecrã
+// estado da ronda
+let ronda=[],idx=0,pts=0,saltos=SALTOS,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
+const usadas=new Set();
 function show(v){vista=v;$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 function renderIni(){const t=L();
- $("iniTxt").textContent=QS.length?t.ini(nRonda()):t.none;
+ $("iniTxt").textContent=QS.length?t.ini(NIVEIS.length,TEMPO):t.none;
+ $("iniLv").innerHTML=[1,2,3].map(k=>`<li class="lvl l${k}">${t.lv[k]} · ${NIVEIS.filter(x=>x===k).length}</li>`).join("");
  $("start").textContent=t.start;$("start").hidden=!QS.length;
- const b=getBest();$("best").textContent=b?t.best(b,nRonda()):"";$("best").hidden=!b}
-function start(){ronda=shuffle(QS).slice(0,nRonda());idx=0;pts=0;show("jogo");renderQ(true)}
-// ordem: posições das opções baralhadas (fica igual ao trocar de língua)
-function renderQ(nova){const t=L(),e=ronda[idx],n=ronda.length;
- if(nova){resp=null;ordem=shuffle([0,1,2,3])}
+ const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
+function start(){usadas.clear();ronda=[];
+ for(const nv of NIVEIS){const e=sorteia(nv,usadas)||sorteia(nv,new Set());if(e){ronda.push(e);usadas.add(e.id)}}
+ idx=0;pts=0;saltos=SALTOS;res=[];show("jogo");nova()}
+function nova(){resp=null;estado="";ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;renderQ();arranca()}
+
+// temporizador (pára com a janela de reporte aberta ou com o separador escondido)
+function arranca(){clearInterval(tick);t0=performance.now()-(TEMPO-restante)*1000;tick=setInterval(passo,100);passo()}
+function passo(){if(pausa||estado)return;restante=Math.max(0,TEMPO-(performance.now()-t0)/1000);desenhaTempo();if(restante<=0){clearInterval(tick);fecha("tempo",null)}}
+function desenhaTempo(){const s=Math.ceil(restante),low=restante<=5;$("tNum").textContent=`⏱ ${s}s`;$("tNum").classList.toggle("low",low&&!estado);
+ $("tBar").classList.toggle("low",low);$("tBar").firstElementChild.style.transform=`scaleX(${restante/TEMPO})`}
+const pausar=()=>{if(!pausa){pausa=true}};
+const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
+document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
+
+function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  $("pNum").textContent=t.qNum(idx+1,n);$("pPts").textContent=t.pts(pts);
- $("pBar").style.width=`${(idx+(resp!==null?1:0))/n*100}%`;
+ $("dots").innerHTML=ronda.map((_,i)=>`<i class="${i<res.length?res[i]:i===idx?"cur":""}"></i>`).join("");
+ $("qLv").textContent=t.lv[e.nv];$("qLv").className=`lvl l${e.nv}`;
  $("qTema").textContent=t.temas[e.tema]||e.tema||"";$("qTema").hidden=!e.tema;
  $("qTxt").textContent=Q(e);
  const ops=O(e);
- $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(resp!==null){if(k===e.c)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
-  return `<button type="button" class="opt ${cls}" data-k="${k}" ${resp!==null?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
+ $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(estado){if(k===0)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
+  return `<button type="button" class="opt ${cls}" data-k="${k}" ${estado?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
+ $("skip").textContent=t.skip(saltos);$("skip").disabled=!!estado||!saltos;$("skip").hidden=!!estado;
+ $("reveal").textContent=t.reveal;$("reveal").hidden=!!estado;
+ const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("report").disabled=rep;
+ desenhaTempo();
  const fb=$("fb");
- if(resp===null){fb.hidden=true;$("nextRow").hidden=true;return}
- const ok=resp===e.c;fb.hidden=false;fb.className="fb"+(ok?"":" no");
- fb.innerHTML=`<strong>${ok?t.right:t.wrong}</strong>${ok?"":`<p>${esc(t.answer(ops[e.c]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
+ if(!estado){fb.hidden=true;$("nextRow").hidden=true;return}
+ fb.hidden=false;fb.className="fb"+(estado==="certo"?"":estado==="revelado"?" rev":" no");
+ const tit={certo:t.right,errado:t.wrong,tempo:t.timeout,revelado:t.revealed}[estado];
+ fb.innerHTML=`<strong>${tit}</strong>${fb.dataset.joke?`<p class="joke">${esc(fb.dataset.joke)}</p>`:""}${estado==="certo"?"":`<p>${esc(t.answer(ops[0]))}</p>`}<p>${esc(X(e))}</p>${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}`;
  $("nextRow").hidden=false;$("next").textContent=idx+1<n?t.next:t.finish}
-$("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||resp!==null)return;resp=+b.dataset.k;if(resp===ronda[idx].c)pts++;renderQ(false);$("next").focus({preventScroll:true})});
-$("next").onclick=()=>{if(idx+1<ronda.length){idx++;renderQ(true);scrollTo({top:0,behavior:"smooth"})}else{if(pts>getBest())setBest(pts);show("fim");renderFim()}};
-function renderFim(){const t=L(),n=ronda.length;
- $("fLbl").textContent=t.fLbl;$("fScore").innerHTML=`${pts}<small> / ${n}</small>`;$("fTxt").textContent=t.verdict(pts,n);
- $("again").textContent=t.again;$("share").textContent=t.share;$("fMsg").hidden=true}
+
+// fecha a pergunta: certo / errado / tempo / revelado
+function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;const e=ronda[idx],t=L();let ganho=0;
+ if(est==="certo"){ganho=VALOR[e.nv]+Math.ceil(restante);pts+=ganho}
+ res.push(est==="certo"?"ok":est==="revelado"?"rev":"bad");
+ const fb=$("fb");fb.dataset.joke=est==="certo"?pick(t.jokesOk):est==="errado"?pick(t.jokesBad):est==="tempo"?pick(t.jokesTime):"";
+ renderQ();
+ const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
+ if(est==="certo"){btnOk.classList.add("pop");festa(btnOk,ganho)}
+ if(est==="errado"){btnBad.classList.add("shake");falha()}
+ if(est==="tempo")falha();
+ $("next").focus({preventScroll:true})}
+$("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
+$("reveal").onclick=()=>fecha("revelado",null);
+$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas);if(!n)return;saltos--;usadas.add(n.id);ronda[idx]=n;nova()};
+$("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
+
+// animações: confetes com as cores da bandeira e «+N» no acerto; clarão e tremor no erro
+const reduz=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+function festa(el,ganho){if(reduz())return;const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ const fx=document.createElement("div");fx.className="fx";document.body.appendChild(fx);
+ const cores=["#003893","#f7d116","#cf2027","#ffffff","#2fa872"];
+ for(let i=0;i<46;i++){const p=document.createElement("i");p.style.background=cores[i%cores.length];p.style.left=cx+"px";p.style.top=cy+"px";fx.appendChild(p);
+  const a=Math.random()*Math.PI*2,v=120+Math.random()*220,dx=Math.cos(a)*v,dy=Math.sin(a)*v-160,rot=Math.random()*720-360;
+  p.animate([{transform:"translate(-50%,-50%) rotate(0)",opacity:1},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy+320}px)) rotate(${rot}deg)`,opacity:0}],{duration:1100+Math.random()*500,easing:"cubic-bezier(.2,.6,.4,1)",fill:"forwards"})}
+ const pl=document.createElement("div");pl.className="plus";pl.textContent="+"+ganho;pl.style.left=cx+"px";pl.style.top=(r.top-10)+"px";document.body.appendChild(pl);
+ setTimeout(()=>{fx.remove();pl.remove()},1700)}
+function falha(){if(reduz())return;const f=document.createElement("div");f.className="flash";document.body.appendChild(f);setTimeout(()=>f.remove(),600);
+ if(navigator.vibrate)try{navigator.vibrate(120)}catch(_){}}
+
+// resultado
+let recorde=false;
+function fim(){clearInterval(tick);const b=ls.get("quizcv_best",0);recorde=pts>b;if(recorde)ls.set("quizcv_best",pts);show("fim");renderFim();scrollTo({top:0})}
+const certas=()=>res.filter(x=>x==="ok").length;
+function renderFim(){const t=L(),n=ronda.length,s=certas();
+ $("fLbl").textContent=t.fLbl;$("fScore").innerHTML=`${s}<small> / ${n}</small>`;$("fTxt").textContent=t.verdict(s,n);
+ $("fLv").innerHTML=[1,2,3].map(k=>{const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0);return `<div><b>${ii.filter(i=>res[i]==="ok").length}/${ii.length}</b><span>${t.lv[k]}</span></div>`}).join("");
+ $("fPts").textContent=t.ptsTotal(pts,recorde);
+ $("again").textContent=t.again;$("share").textContent=t.share}
 $("start").onclick=start;$("again").onclick=start;
-$("share").onclick=async()=>{const txt=L().shareText(pts,ronda.length,SITE);try{await navigator.clipboard.writeText(txt);$("fMsg").textContent=L().copied}catch(_){$("fMsg").textContent=txt}$("fMsg").hidden=false};
+
+// cartão de partilha (1080×1080)
+function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020,r=Math.max(5,w*.02);
+ ctx.save();ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=w*.14;ctx.shadowOffsetY=w*.06;ctx.fillStyle="#003893";ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.restore();
+ ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();ctx.translate(x,y);ctx.scale(s,s);
+ ctx.fillStyle="#003893";ctx.fillRect(0,0,1020,600);ctx.fillStyle="#fff";ctx.fillRect(0,300,1020,150);ctx.fillStyle="#cf2027";ctx.fillRect(0,350,1020,50);
+ ctx.translate(382.5,375);ctx.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);
+ for(let i=0;i<10;i++){ctx.save();ctx.rotate(i*Math.PI/5);ctx.translate(0,-150);ctx.beginPath();for(let k=0;k<10;k++){const q=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;ctx.lineTo(q*Math.cos(a),q*Math.sin(a))}ctx.closePath();ctx.fill();ctx.restore()}
+ ctx.restore();
+ ctx.save();ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.stroke();ctx.restore()}
+async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesque"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
+ const W=1080,H=1080,ctx=cv.getContext("2d"),t=L(),P=88,n=ronda.length,s=certas();
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ let y=84;ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
+ ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
+ drawFlag(ctx,W-P-260,y-8,260);
+ y=330;ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(t.card.lbl,P,y);
+ y+=230;ctx.font='800 250px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#f7d116";ctx.fillText(String(s),P-8,y);const sw=ctx.measureText(String(s)).width;
+ ctx.font='500 90px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText(`/ ${n} ${t.card.of}`,P+sw+20,y);
+ y+=90;ctx.font='500 34px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="#fff";ctx.fillText(t.card.pts(pts),P,y);
+ // um quadrado por pergunta
+ y+=70;const sq=44,gap=12;res.forEach((r,i)=>{ctx.fillStyle=r==="ok"?"#2fa872":r==="rev"?"rgba(255,255,255,.35)":"#e0474f";ctx.beginPath();ctx.roundRect(P+i*(sq+gap),y,sq,sq,8);ctx.fill()});
+ y+=sq+40;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
+ for(const k of [1,2,3]){const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0),lab=`${t.lv[k].toUpperCase()} ${ii.filter(i=>res[i]==="ok").length}/${ii.length}`,tw=ctx.measureText(lab).width+40;
+  ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(lab,x+20,y+35);x+=tw+14}
+ const fb=H-150;ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
+ ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
+ ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
+const shareText=()=>L().shareText(certas(),ronda.length,pts,SITE);
+const cardBlob=()=>new Promise(r=>$("shCv").toBlob(r,"image/png"));
+const shrMsg=m=>{$("shrMsg").textContent=m;$("shrMsg").hidden=false};
+$("share").onclick=async()=>{$("shrMsg").hidden=true;$("shr").hidden=false;await drawCard($("shCv"));
+ let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
+ $("shrNative").hidden=!ok&&!navigator.share;$("shrSave").focus()};
+$("shrNative").onclick=async()=>{try{const blob=await cardBlob();const f=new File([blob],"quizcv.png",{type:"image/png"});
+ if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],text:shareText()});else await navigator.share({text:shareText()})}catch(err){if(err&&err.name!=="AbortError")shrMsg(L().nativeFail)}};
+$("shrSave").onclick=async()=>{const blob=await cardBlob();const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="quizcv-resultado.png";document.body.appendChild(a);a.click();a.remove();shrMsg(L().saved)};
+$("shrCopy").onclick=async()=>{try{await navigator.clipboard.writeText(shareText());shrMsg(L().copied)}catch(_){shrMsg(shareText())}};
+$("shrClose").onclick=()=>{$("shr").hidden=true};
+
+// reportes: motivos fixos, sem texto livre; POST {id, motivos} para o Apps Script (config.js)
+$("report").onclick=()=>{const t=L(),e=ronda[idx];pausar();
+ $("repQ").textContent=Q(e);$("repMsg").hidden=true;$("repSend").disabled=true;$("repSend").hidden=false;
+ $("repOpts").innerHTML=Object.entries(t.repMot).map(([k,v])=>`<label class="ropt"><input type="checkbox" value="${k}"><span>${esc(v)}</span></label>`).join("");
+ $("rep").hidden=false};
+$("repOpts").addEventListener("change",()=>{$("repSend").disabled=!$("repOpts").querySelector("input:checked")});
+const fechaRep=()=>{$("rep").hidden=true;if(vista==="jogo")retomar()};
+$("repCancel").onclick=fechaRep;
+$("repSend").onclick=async()=>{const t=L(),e=ronda[idx],motivos=[...$("repOpts").querySelectorAll("input:checked")].map(i=>i.value);
+ $("repSend").disabled=true;let m=t.repOff;
+ if(API){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({id:e.id,motivos,lang:LANG})});const j=await r.json();m=j&&j.ok?t.repOk:t.repFail}catch(_){m=t.repFail}}
+ if(m!==t.repFail){const s=ls.get("quizcv_rep",[]);s.push(e.id);ls.set("quizcv_rep",s)}
+ $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;renderQ()};
 
 function applyLang(){const t=L();document.documentElement.lang=LANG;
  $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
+ $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
+ $("shrTitle").textContent=t.shrTitle;$("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrClose").textContent=t.close;
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
- renderIni();if(vista==="jogo")renderQ(false);if(vista==="fim")renderFim()}
-$("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("quizcv_lang",LANG)}catch(_){}applyLang()});
+ renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim();if(!$("shr").hidden)drawCard($("shCv"))}
+$("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;ls.set("quizcv_lang",LANG);applyLang()});
 $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
-$("about").addEventListener("click",ev=>{if(ev.target.id==="about")$("about").hidden=true});
-addEventListener("keydown",ev=>{if(ev.key==="Escape")$("about").hidden=true});
+for(const id of ["about","shr"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
+$("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
+addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;$("about").hidden=true;$("shr").hidden=true;if(!$("rep").hidden)fechaRep()});
 applyLang();show("ini");
 </script>
 </body>

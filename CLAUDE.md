@@ -13,24 +13,40 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 | Ficheiro | Função |
 |---|---|
 | `index.html` | O site inteiro (HTML + CSS + JS) |
-| `perguntas.js` | `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS = [[...]]` |
+| `perguntas-base.js` | Perguntas escritas à mão (fonte de verdade; módulo Node) |
+| `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
+| `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |
+| `config.js` | `window.QUIZCV_CONFIG = { API: "<url /exec>" }` para os reportes (vazio = desligados) |
+| `Code.gs` | Apps Script dos reportes (folha `reportes`, estado `pendente`) |
 
 Cada pergunta é um array:
-`[pergunta, [4 opções], correta (0–3), explicação, fonte, tema, pergunta_en, [4 opções_en], explicação_en]`
-- `tema`: `politica | historia | musica | literatura | artes | desporto | religiao | sociedade | geografia` (rótulos em `I18N.*.temas`).
-- As opções são baralhadas no jogo (`ordem`); a ordem no ficheiro não importa. As opções em EN têm de estar na mesma ordem que as em PT.
-- Perguntas com formato inválido são ignoradas pelo `QS`.
-- Os 3 registos atuais são só exemplos. **A geração das perguntas ainda está por fazer** (ideia: gerar a partir dos registos `verificado` do Hoje CV, com distratores plausíveis).
+`[id, nível, tema, pergunta, [certa, errada, errada, errada], explicação, fonte, pergunta_en, [opções_en], explicação_en]`
+- **A primeira opção é sempre a certa**; o jogo baralha-as (`ordem`). As opções em EN na mesma ordem.
+- `nível`: 1 fácil, 2 médio, 3 difícil. `id`: `bNN` (escritas à mão) ou `h<hash>` (geradas; djb2 em base 36, estável).
+- `tema`: `politica | historia | musica | literatura | artes | desporto | religiao | sociedade | catastrofe | celebracao | geografia`.
+
+### Geração (`node scripts/gerar-perguntas.js`)
+- Do Hoje CV entram os registos com fonte, exceto presidentes de câmara e datas tradicionais.
+- «Em que ano nasceu/morreu X?» (títulos «Nasce X» / «Morre X»), «Em que ano? «título»» (só se o título não tiver o ano) e «Em que ilha nasceu X?» (só ilhas habitadas).
+- Nível: registos com `destaque` → médio; os outros → difícil; «em que ilha» → médio. Os anos errados ficam a ±4–20 anos (médio) ou ±1–8 (difícil), com semente fixa.
+- As fáceis vêm só do `perguntas-base.js`. Para ter mais variedade nas fáceis, acrescentar aí.
+- Depois de regenerar o `eventos.js` do Hoje CV, correr de novo o gerador e fazer commit.
 
 ## Código
-- Vistas: `ini` → `jogo` → `fim` (`show(v)`). `RONDA=10` perguntas por ronda (ou menos, se houver menos).
-- `localStorage`: `quizcv_lang` (língua), `quizcv_best` (melhor resultado).
-- «Copiar resultado» copia `shareText` com o domínio (`SITE`; em local, `quizcv.vercel.app`).
+- Ronda: `NIVEIS` (5×1, 5×2, 5×3), `TEMPO=20` s, `SALTOS=3`, pontos `VALOR` {10,20,30} + segundos que sobram.
+- `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
+- Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
+- Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
+- Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.
+- Reportes: motivos fixos (`certa`, `outra`, `pergunta`, `fonte`, `traducao`, `ofensivo`), POST `{id, motivos, lang}`; já enviados em `quizcv_rep`.
 
 ## Critérios para as perguntas
 1. Só factos comprovados, com fonte consultável (de preferência fontes de confiança, como no Hoje CV).
 2. Uma só resposta certa, sem ambiguidade; os distratores têm de ser plausíveis mas claramente errados.
 3. PT-PT com tradução EN.
+
+## Reportes (Apps Script)
+Criar uma Google Sheet (ex.: «Quiz CV — Reportes»), Extensões → Apps Script, colar o `Code.gs`; Deploy → New deployment → Web app, Execute as **Me**, Who has access **Anyone**. Pôr o URL `/exec` em `config.js`.
 
 ## Publicar
 Testar localmente (`python -m http.server 8000`), commit para o repositório, Vercel republica.

@@ -4,13 +4,17 @@
 
 ## Como funciona
 
-- Cada ronda tem até 10 perguntas, escolhidas ao acaso.
-- Cada pergunta tem quatro opções e uma só resposta certa. As opções aparecem baralhadas.
-- Depois de responder, aparece a explicação e a fonte.
-- No fim, mostra o resultado e permite copiá-lo para partilhar. O melhor resultado fica guardado no navegador.
+- Cada ronda tem 15 perguntas, escolhidas ao acaso e sempre a subir de nível: 5 fáceis, 5 médias e 5 difíceis.
+- Cada pergunta tem quatro opções (baralhadas), uma só certa, e 20 segundos para responder.
+- Uma resposta certa vale 10, 20 ou 30 pontos, conforme o nível, mais um bónus pelos segundos que sobram.
+- Pode saltar até 3 perguntas por ronda (entra outra do mesmo nível) ou revelar a resposta (sem pontos).
+- Depois de responder, aparece a explicação e a fonte, com um comentário bem-disposto.
+- «Reportar problema» assinala uma pergunta com erro (motivos fixos, sem texto livre).
+- No fim, o resultado pode ser partilhado como imagem ou texto. O melhor resultado fica guardado no navegador, e as perguntas já vistas só se repetem quando se esgotam.
 - Em português (por defeito) e inglês, nos temas claro e escuro.
 
 ## Critérios
 
 - Só factos comprovados, cada um com uma fonte consultável.
+- Muitas perguntas vêm dos registos verificados do Hoje CV, com a mesma fonte.
 - Pergunta, opções e explicação em PT-PT, com tradução em inglês.
