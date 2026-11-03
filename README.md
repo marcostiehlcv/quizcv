@@ -1,6 +1,6 @@
 # Quiz CV
 
-**Achas que conheces Cabo Verde?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
+**Quem quer ser cabo-verdiano?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
 
 ## Como funciona
 

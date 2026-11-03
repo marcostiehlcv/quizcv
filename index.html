@@ -36,6 +36,14 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
 .wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff}
+/* bandeira de fundo no cabeçalho: forte à direita, a desaparecer para a esquerda (por trás do texto), com um ondular lento */
+.flagbg{position:absolute;top:0;right:0;height:100%;width:auto;aspect-ratio:17/10;pointer-events:none;z-index:0;opacity:.9;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%)}
+.flagbg .estrelas{transform-box:view-box}
+@media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 14s ease-in-out infinite alternate}}
+@keyframes ondula{from{transform:translateX(0) scale(1.02)}to{transform:translateX(-14px) scale(1.06)}}
+header.mast>.wrap{position:relative;z-index:1}
+header.mast{position:relative;overflow:hidden}
 header.mast .wrap{padding-block:18px 26px}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
@@ -121,12 +129,6 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 #qbox.in{animation:in .45s cubic-bezier(.2,.8,.3,1)}
 @keyframes out{to{opacity:0;transform:perspective(1200px) rotateY(-90deg) translateX(-30px)}}
 @keyframes in{from{opacity:0;transform:perspective(1200px) rotateY(90deg) translateX(30px)}to{opacity:1;transform:none}}
-.skipped{position:fixed;inset:0;z-index:31;pointer-events:none}
-.skipped .atleta{position:absolute;left:0;top:38%;width:110px;color:var(--sun);animation:skp 1s cubic-bezier(.4,0,.6,1) forwards}
-.skipped .atleta svg{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
-.skipped .barreira{position:absolute;left:calc(50% - 22px);top:calc(38% + 62px);width:44px;height:34px;border:4px solid var(--muted);border-bottom:0;border-top-color:var(--rubro);border-top-width:6px;opacity:0;animation:barr 1s ease forwards}
-@keyframes skp{0%{transform:translate(-120px,0)}30%{transform:translate(calc(30vw - 55px),0)}50%{transform:translate(calc(50vw - 55px),-70px) rotate(-8deg)}70%{transform:translate(calc(70vw - 55px),0)}100%{transform:translate(calc(100vw + 20px),0)}}
-@keyframes barr{0%,100%{opacity:0}20%,75%{opacity:1}}
 .gain{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ok);margin:2px 0 6px}
 .q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,28px);line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
 .qcard{position:relative}
@@ -184,7 +186,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -229,14 +231,14 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 </head>
 <body>
 <header class="mast">
+  <svg class="flagbg" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" viewBox="0 0 1020 600"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg>
   <div class="wrap">
     <div class="brand">
       <a class="logo" href="/" aria-label="Quiz CV">Quiz <b>CV</b></a>
       <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div>
     </div>
     <div class="hero" id="hero">
-      <h1 id="hTitle">Achas que conheces Cabo Verde?</h1>
-      <figure class="flagwrap"><svg class="flag-cv" viewBox="0 0 1020 600" role="img" aria-label="Bandeira de Cabo Verde"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg></figure>
+      <h1 id="hTitle">Quem quer ser cabo-verdiano?</h1>
     </div>
     <p class="sub" id="hSub"></p>
   </div>
@@ -330,7 +332,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 
 <script>
 const I18N={
-pt:{title:"Achas que conheces Cabo Verde?",sub:"Prova-o em 15 perguntas, do fácil ao difícil",
+pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Prova-o em 15 perguntas",
  rules:(n,t,sk)=>[[String(n),"perguntas","5 fáceis, 5 médias e 5 difíceis"],[`${t} s`,"por pergunta","Se o tempo acabar, conta como errada"],["10 · 20 · 30","pontos por acerto","Mais 1 ponto por cada segundo que sobra"],[String(sk),"saltos","Também podes revelar a resposta, sem pontos"]],
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
@@ -349,7 +351,7 @@ pt:{title:"Achas que conheces Cabo Verde?",sub:"Prova-o em 15 perguntas, do fác
  shrTitle:"Partilhar resultado",native:"Partilhar…",save:"Guardar imagem",copy:"Copiar texto",close:"Fechar",
  copied:"Texto copiado.",saved:"Imagem guardada.",nativeFail:"Não foi possível abrir a partilha. Usa «Guardar imagem».",
  shareText:(s,n,p,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde (${p} pontos). Consegues fazer melhor? https://${u}`,
- card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"ACHAS QUE CONHECES CABO VERDE?"},
+ card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"QUEM QUER SER CABO-VERDIANO?"},
  repTitle:"Reportar problema",repLbl:"O que está errado? Escolhe uma ou mais opções",
  repMot:{certa:"A resposta dada como certa está errada",outra:"Há mais do que uma opção certa",pergunta:"A pergunta é confusa ou ambígua",fonte:"A fonte não confirma a resposta",traducao:"Erro de português ou de tradução",ofensivo:"Conteúdo ofensivo"},
  cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tenta mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
@@ -360,7 +362,7 @@ pt:{title:"Achas que conheces Cabo Verde?",sub:"Prova-o em 15 perguntas, do fác
   ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes. Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema»."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
-en:{title:"Think you know Cabo Verde?",sub:"Prove it in 15 questions, from easy to hard",
+en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove it in 15 questions",
  rules:(n,t,sk)=>[[String(n),"questions","5 easy, 5 medium and 5 hard"],[`${t} s`,"per question","If time runs out, it counts as wrong"],["10 · 20 · 30","points per answer","Plus 1 point for every second left"],[String(sk),"skips","You can also reveal the answer, for no points"]],
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
@@ -379,7 +381,7 @@ en:{title:"Think you know Cabo Verde?",sub:"Prove it in 15 questions, from easy 
  shrTitle:"Share result",native:"Share…",save:"Save image",copy:"Copy text",close:"Close",
  copied:"Text copied.",saved:"Image saved.",nativeFail:"Sharing could not be opened. Use “Save image”.",
  shareText:(s,n,p,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right (${p} points). Can you beat it? https://${u}`,
- card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"THINK YOU KNOW CABO VERDE?"},
+ card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"WHO WANTS TO BE CABO VERDEAN?"},
  repTitle:"Report a problem",repLbl:"What is wrong? Choose one or more options",
  repMot:{certa:"The answer marked as right is wrong",outra:"More than one option is right",pergunta:"The question is confusing or ambiguous",fonte:"The source does not confirm the answer",traducao:"Language or translation error",ofensivo:"Offensive content"},
  cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
@@ -492,10 +494,10 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  $("next").focus({preventScroll:true})}
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 $("reveal").onclick=()=>fecha("revelado",null);
-// saltar: um atleta salta a barreira e a pergunta vira, entrando outra do mesmo nível
+// saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
- const s=document.createElement("div");s.className="skipped";s.setAttribute("role","status");s.setAttribute("aria-label",L().skipped);s.innerHTML=`<span class="barreira"></span><div class="atleta">${RUNNER}</div>`;document.body.appendChild(s);setTimeout(()=>s.remove(),1050);
+ 
  const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,340)}};
 $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
 

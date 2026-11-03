@@ -6,7 +6,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 - Responder **sempre em português de Portugal (PT-PT)**.
 - Todo o texto visível existe em **PT (por defeito) e EN** no objeto `I18N` do `index.html`.
 - Mesmo sistema visual do Hoje CV: tokens CSS em `:root` (claro) e `prefers-color-scheme: dark` / `data-theme`; não usar cores soltas. Alterações para computador dentro de `@media (min-width:900px)`.
-- Textos em PT-PT a **tratar o jogador por «tu»** (informal): «Achas que conheces Cabo Verde?», «Tenta outra vez». Tom leve e bem-disposto nos comentários, informativo nas explicações.
+- Textos em PT-PT a **tratar o jogador por «tu»** (informal): «Quem quer ser cabo-verdiano?» (título, em referência ao «Quem quer ser milionário?»), «Tenta outra vez». Tom leve e bem-disposto nos comentários, informativo nas explicações.
 - Bandeira oficial igual à do Hoje CV (viewBox 1020×600; não alterar proporções).
 
 ## Estrutura
@@ -37,13 +37,14 @@ Cada pergunta é um array:
 ## Código
 - Ronda: `NIVEIS` (5×1, 5×2, 5×3), `TEMPO=20` s, `SALTOS=3`, pontos `VALOR` {10,20,30} + segundos que sobram.
 - `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
-- Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`); cores do anel: verde até 11 s, amarelo (`mid`) de 10 a 6 s, vermelho (`low`, a pulsar mais forte) abaixo de 6 s. Saltar: `#qbox` sai (`out`) e a nova entra (`in`), com o aviso «Saltada». O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
+- Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`); cores do anel: verde até 11 s, amarelo (`mid`) de 10 a 6 s, vermelho (`low`, a pulsar mais forte) abaixo de 6 s. Saltar: `#qbox` sai (`out`) e a nova entra (`in`). O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
 - Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
+- Cabeçalho: bandeira de fundo `.flagbg` (forte à direita, a desaparecer para a esquerda, ondular lento), igual à do Hoje CV.
 - Página inicial: botão grande e vermelho `.startbig` e as regras em quatro blocos (`I18N.*.rules`).
 - Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
-- Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: um atleta (`RUNNER`, também ícone do botão) atravessa o ecrã a saltar uma barreira (`.skipped`); ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
+- Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: só a viragem da caixa (`#qbox` `out`/`in`); o atleta `RUNNER` é apenas o ícone do botão; ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
 - «Seguinte» (`.nextbar`) fica preso ao fundo do ecrã (sticky), com a largura toda, assim que a pergunta fecha.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
