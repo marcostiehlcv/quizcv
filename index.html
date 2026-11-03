@@ -111,10 +111,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .qtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .pista{margin:8px 0 0;color:var(--muted);font-size:15.5px;font-style:italic}
 #qbox{display:flex;flex-direction:column;gap:16px}
-#qbox.out{animation:out .28s ease-in forwards}
-#qbox.in{animation:in .32s ease-out}
-@keyframes out{to{opacity:0;transform:translateX(-60px) rotate(-2deg)}}
-@keyframes in{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+#qbox{transform-origin:center;backface-visibility:hidden}
+#qbox.out{animation:out .34s cubic-bezier(.5,0,.75,0) forwards}
+#qbox.in{animation:in .45s cubic-bezier(.2,.8,.3,1)}
+@keyframes out{to{opacity:0;transform:perspective(1200px) rotateY(-90deg) translateX(-30px)}}
+@keyframes in{from{opacity:0;transform:perspective(1200px) rotateY(90deg) translateX(30px)}to{opacity:1;transform:none}}
 .skipped{position:fixed;left:50%;top:40%;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:30px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 22px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:skp .9s ease-out forwards}
 @keyframes skp{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}25%{opacity:1;transform:translate(-50%,0) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-30px) scale(1)}}
 .gain{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ok);margin:2px 0 6px}
@@ -133,6 +134,10 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .opt.dim{opacity:.5}
 .opt.ok.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
 .opt.bad.shake{animation:shake .45s}
+.opt.flip{animation:flip .55s var(--d,0s) cubic-bezier(.3,.7,.4,1) both}
+.opt.flip.ok.pop{animation:flip .55s var(--d,0s) cubic-bezier(.3,.7,.4,1) both,pop .5s calc(var(--d,0s) + .55s) cubic-bezier(.3,1.6,.5,1)}
+.opt.flip.bad.shake{animation:flip .55s var(--d,0s) cubic-bezier(.3,.7,.4,1) both,shake .45s calc(var(--d,0s) + .55s)}
+@keyframes flip{0%{transform:perspective(800px) rotateX(0)}45%{transform:perspective(800px) rotateX(90deg);filter:brightness(1.4)}55%{transform:perspective(800px) rotateX(-90deg)}100%{transform:perspective(800px) rotateX(0)}}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
 .tools{display:flex;gap:8px;flex-wrap:wrap}
@@ -170,7 +175,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -468,7 +473,9 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  const fb=$("fb");fb.dataset.joke=est==="certo"?pick(t.jokesOk):est==="errado"?pick(t.jokesBad):est==="tempo"?pick(t.jokesTime):"";
  renderQ();
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
- if(est==="certo"){btnOk.classList.add("pop");festa(btnOk,ganho)}
+ // as quatro opções viram como cartas, uma a uma, para mostrar a resposta
+ $("opts").querySelectorAll(".opt").forEach((b,i)=>{b.style.setProperty("--d",(i*.09)+"s");b.classList.add("flip")});
+ if(est==="certo"){btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:500)}
  if(est==="errado"){btnBad.classList.add("shake");falha()}
  if(est==="tempo")derrota();
  $("next").focus({preventScroll:true})}
@@ -477,7 +484,7 @@ $("reveal").onclick=()=>fecha("revelado",null);
 // saltar: a pergunta sai para a esquerda e entra outra do mesmo nível
 $("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
  const s=document.createElement("div");s.className="skipped";s.textContent=L().skipped;document.body.appendChild(s);setTimeout(()=>s.remove(),950);
- const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,280)}};
+ const go=()=>{ronda[idx]=n;nova()};if(reduz())go();else{$("qbox").classList.remove("in");$("qbox").classList.add("out");setTimeout(go,340)}};
 $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behavior:"smooth"})}else fim()};
 
 // animações: confetes com as cores da bandeira e «+N» no acerto; clarão e tremor no erro
