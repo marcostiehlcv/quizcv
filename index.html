@@ -609,7 +609,7 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":""}
 // contagem de 3 segundos antes de cada ronda
 function contagem(){audio();const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
- const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";i++;setTimeout(passo,reduz()?450:900)};
+ const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";if(i<3)bip(440,.18,.12,"triangle");else{bip(880,.35,.13,"triangle");bip(1320,.3,.06,"sine")}i++;setTimeout(passo,reduz()?450:900)};
  n.className="";passo()}
 $("start").onclick=contagem;$("again").onclick=contagem;
 // confirmação (janela própria; o temporizador pára enquanto está aberta)
