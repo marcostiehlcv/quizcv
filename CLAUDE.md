@@ -6,7 +6,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 - Responder **sempre em português de Portugal (PT-PT)**.
 - Todo o texto visível existe em **PT (por defeito) e EN** no objeto `I18N` do `index.html`.
 - Mesmo sistema visual do Hoje CV: tokens CSS em `:root` (claro) e `prefers-color-scheme: dark` / `data-theme`; não usar cores soltas. Alterações para computador dentro de `@media (min-width:900px)`.
-- Textos em PT-PT a **tratar o jogador por «tu»** (informal): «Quanto sabes…», «Tenta outra vez». Tom leve e bem-disposto nos comentários, informativo nas explicações.
+- Textos em PT-PT a **tratar o jogador por «tu»** (informal): «Achas que conheces Cabo Verde?», «Tenta outra vez». Tom leve e bem-disposto nos comentários, informativo nas explicações.
 - Bandeira oficial igual à do Hoje CV (viewBox 1020×600; não alterar proporções).
 
 ## Estrutura
@@ -40,7 +40,8 @@ Cada pergunta é um array:
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
 - Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
 - Página inicial: botão grande `.startbig` e as regras em quatro blocos (`I18N.*.rules`).
-- Fim do tempo: `tubarao()` — um tubarão (SVG `SHARK`) atravessa o ecrã, as mandíbulas (`.jaw`) fecham-se e a caixa da pergunta fica com uma dentada (`.qcard.bitten`) até à seguinte; com movimento reduzido, só o clarão de `falha()`.
+- Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
+- Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.

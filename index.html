@@ -139,6 +139,15 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .tool{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted);padding:6px 12px;cursor:pointer}
 .tool:hover:not(:disabled){color:var(--fg);border-color:var(--muted)}
 .tool:disabled{opacity:.4;cursor:not-allowed}
+/* saltar e revelar: botões cheios e coloridos, com ícone */
+.tool.big{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:15px;font-weight:500;letter-spacing:0;text-transform:none;border:0;padding:10px 18px;color:#fff;box-shadow:0 6px 16px -8px rgba(0,0,0,.45);transition:transform .15s,filter .15s}
+.tool.big svg{width:18px;height:18px}
+.tool.big:hover:not(:disabled){color:#fff;filter:brightness(1.08);transform:translateY(-1px)}
+.tool.big:active:not(:disabled){transform:scale(.97)}
+#skip{background:linear-gradient(135deg,#1c6dd0,var(--ocean))}
+#reveal{background:linear-gradient(135deg,var(--sun),#e08a00);color:var(--ocean-deep)}
+#reveal:hover:not(:disabled){color:var(--ocean-deep)}
+.tool.big .n{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.22);border-radius:999px;padding:1px 7px}
 .fb{border-left:4px solid var(--ok);padding:4px 0 4px 14px;animation:fade .35s}
 .fb.no{border-left-color:var(--bad)}
 .fb.rev{border-left-color:var(--muted)}
@@ -154,26 +163,14 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .fx i{position:absolute;width:9px;height:14px;border-radius:2px;will-change:transform,opacity}
 .plus{position:fixed;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:28px;color:var(--ok);animation:up 1.1s ease-out forwards}
 @keyframes up{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
-/* fim do tempo: um tubarão atravessa o ecrã, as mandíbulas fecham-se e a pergunta fica com uma dentada */
-.shark{position:fixed;inset:0;z-index:32;pointer-events:none;overflow:hidden}
-.shark .peixe{position:absolute;top:34%;left:0;width:min(78vw,520px);transform:translateX(-110%);animation:nada 1s cubic-bezier(.5,0,.4,1) forwards}
-.shark .peixe svg{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 24px rgba(0,0,0,.35))}
-@keyframes nada{0%{transform:translateX(-110%) rotate(4deg)}55%{transform:translateX(calc(50vw - 50%)) rotate(-3deg) scale(1.15)}100%{transform:translateX(calc(50vw - 50%)) rotate(0) scale(1.6);opacity:0}}
-.shark .jaw{position:absolute;left:-2%;right:-2%;height:52%}
-.shark .jaw.t{background:linear-gradient(var(--ocean-deep) calc(100% - 44px),#f5f7fb 0)}
-.shark .jaw.b{background:linear-gradient(#f5f7fb 44px,var(--ocean-deep) 0)}
-.shark .jaw.t{top:0;transform:translateY(-104%);animation:fechaT 1.25s .75s cubic-bezier(.6,0,.3,1) forwards;-webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 44px) no-repeat,conic-gradient(from -30deg at 50% 100%,#000 60deg,transparent 0) bottom/56px 44px repeat-x;mask:linear-gradient(#000,#000) top/100% calc(100% - 44px) no-repeat,conic-gradient(from -30deg at 50% 100%,#000 60deg,transparent 0) bottom/56px 44px repeat-x}
-.shark .jaw.b{bottom:0;transform:translateY(104%);animation:fechaB 1.25s .75s cubic-bezier(.6,0,.3,1) forwards;-webkit-mask:linear-gradient(#000,#000) bottom/100% calc(100% - 44px) no-repeat,conic-gradient(from 150deg at 50% 0,#000 60deg,transparent 0) top/56px 44px repeat-x;mask:linear-gradient(#000,#000) bottom/100% calc(100% - 44px) no-repeat,conic-gradient(from 150deg at 50% 0,#000 60deg,transparent 0) top/56px 44px repeat-x}
-@keyframes fechaT{0%{transform:translateY(-104%)}35%,55%{transform:translateY(0)}100%{transform:translateY(-104%)}}
-@keyframes fechaB{0%{transform:translateY(104%)}35%,55%{transform:translateY(0)}100%{transform:translateY(104%)}}
-#qbox.chomp{animation:chomp .5s 1.05s ease-out}
-@keyframes chomp{0%,100%{transform:none}30%{transform:scale(.97) rotate(-1deg)}60%{transform:scale(1.01) rotate(.6deg)}}
-/* dentada que fica na caixa da pergunta até à seguinte */
-.qcard.bitten{-webkit-mask:radial-gradient(circle 34px at calc(100% - 4px) 18px,transparent 33px,#000 34px),radial-gradient(circle 30px at calc(100% - 58px) -6px,transparent 29px,#000 30px),radial-gradient(circle 26px at calc(100% + 6px) 70px,transparent 25px,#000 26px);-webkit-mask-composite:source-in;
-  mask:radial-gradient(circle 34px at calc(100% - 4px) 18px,transparent 33px,#000 34px),radial-gradient(circle 30px at calc(100% - 58px) -6px,transparent 29px,#000 30px),radial-gradient(circle 26px at calc(100% + 6px) 70px,transparent 25px,#000 26px);mask-composite:intersect}
+/* fim do tempo: transição suave para a derrota (a pergunta perde a cor e encolhe um pouco, e volta) */
+#qbox.perdeu{animation:perdeu 1.1s ease-in-out}
+@keyframes perdeu{0%{filter:none;opacity:1;transform:none}40%{filter:grayscale(1) brightness(.75);opacity:.55;transform:scale(.97) translateY(6px)}100%{filter:none;opacity:1;transform:none}}
+.velo{position:fixed;inset:0;z-index:28;pointer-events:none;background:radial-gradient(ellipse at center,transparent 40%,rgba(5,15,35,.55));animation:velo 1.2s ease-in-out forwards}
+@keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.shark *{animation:none!important}.shark{display:none}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.plus,.flash,.fb,.timer b,.timer,#qbox,.skipped,#alerta,.velo{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -222,7 +219,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
       <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div>
     </div>
     <div class="hero" id="hero">
-      <h1 id="hTitle">Quanto sabes sobre Cabo Verde?</h1>
+      <h1 id="hTitle">Achas que conheces Cabo Verde?</h1>
       <figure class="flagwrap"><svg class="flag-cv" viewBox="0 0 1020 600" role="img" aria-label="Bandeira de Cabo Verde"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg></figure>
     </div>
     <p class="sub" id="hSub"></p>
@@ -259,8 +256,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
       <div class="opts" id="opts"></div>
       </div>
       <div class="tools" id="tools">
-        <button type="button" class="tool" id="skip"></button>
-        <button type="button" class="tool" id="reveal"></button>
+        <button type="button" class="tool big" id="skip"></button>
+        <button type="button" class="tool big" id="reveal"></button>
         <button type="button" class="tool" id="report"></button>
       </div>
       <div class="fb" id="fb" hidden></div>
@@ -317,18 +314,18 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 
 <script>
 const I18N={
-pt:{title:"Quanto sabes sobre Cabo Verde?",sub:"15 perguntas, do fácil ao difícil",
+pt:{title:"Achas que conheces Cabo Verde?",sub:"Prova-o em 15 perguntas, do fácil ao difícil",
  rules:(n,t,sk)=>[[String(n),"perguntas","5 fáceis, 5 médias e 5 difíceis"],[`${t} s`,"por pergunta","Se o tempo acabar, conta como errada"],["10 · 20 · 30","pontos por acerto","Mais 1 ponto por cada segundo que sobra"],[String(sk),"saltos","Também podes revelar a resposta, sem pontos"]],
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
- skip:n=>`Saltar (${n})`,skipped:"Saltada ↷",secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
+ skip:n=>`Saltar (${n})`,skipL:"Saltar",skipped:"Saltada ↷",secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
  right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Aqui está a resposta.",
  answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
  jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conheces Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
  jokesBad:["Precisas de comer uma cachupa para ganhar forças.","Um grogue daria jeito… ou talvez não.","Calma, até o Pico do Fogo tem dias nublados.","Morabeza: errar também faz parte.","Essa foi mais torta do que a estrada de Santo Antão.","Faz uma pausa para um pastel de milho e volta mais forte."],
- jokesTime:["O tubarão foi mais rápido.","Nhac! Esta já foi comida pelo tubarão.","O tempo voou como o vento de Barlavento.","Demoraste mais do que o barco para a Brava.","Leva leve, mas não tão leve!"],
+ jokesTime:["O tempo voou como o vento de Barlavento.","Demoraste mais do que o barco para a Brava.","Leva leve, mas não tão leve!"],
  fLbl:"Resultado",of:"certas",
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
@@ -336,7 +333,7 @@ pt:{title:"Quanto sabes sobre Cabo Verde?",sub:"15 perguntas, do fácil ao difí
  shrTitle:"Partilhar resultado",native:"Partilhar…",save:"Guardar imagem",copy:"Copiar texto",close:"Fechar",
  copied:"Texto copiado.",saved:"Imagem guardada.",nativeFail:"Não foi possível abrir a partilha. Usa «Guardar imagem».",
  shareText:(s,n,p,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde (${p} pontos). Consegues fazer melhor? https://${u}`,
- card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"QUANTO SABES SOBRE CABO VERDE?"},
+ card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"ACHAS QUE CONHECES CABO VERDE?"},
  repTitle:"Reportar problema",repLbl:"O que está errado? Escolhe uma ou mais opções",
  repMot:{certa:"A resposta dada como certa está errada",outra:"Há mais do que uma opção certa",pergunta:"A pergunta é confusa ou ambígua",fonte:"A fonte não confirma a resposta",traducao:"Erro de português ou de tradução",ofensivo:"Conteúdo ofensivo"},
  cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tenta mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
@@ -347,18 +344,18 @@ pt:{title:"Quanto sabes sobre Cabo Verde?",sub:"15 perguntas, do fácil ao difí
   ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes. Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema»."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
-en:{title:"How well do you know Cabo Verde?",sub:"15 questions, from easy to hard",
+en:{title:"Think you know Cabo Verde?",sub:"Prove it in 15 questions, from easy to hard",
  rules:(n,t,sk)=>[[String(n),"questions","5 easy, 5 medium and 5 hard"],[`${t} s`,"per question","If time runs out, it counts as wrong"],["10 · 20 · 30","points per answer","Plus 1 point for every second left"],[String(sk),"skips","You can also reveal the answer, for no points"]],
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
- skip:n=>`Skip (${n})`,skipped:"Skipped ↷",secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
+ skip:n=>`Skip (${n})`,skipL:"Skip",skipped:"Skipped ↷",secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
  right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Here is the answer.",
  answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
  jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
  jokesBad:["You need a plate of cachupa to get your strength back.","A grogue might help… or maybe not.","Easy — even Pico do Fogo has cloudy days.","Morabeza: getting it wrong is part of it.","That one was more crooked than the Santo Antão road.","Take a break for a pastel de milho and come back stronger."],
- jokesTime:["The shark was faster.","Chomp! The shark got this one.","Time flew like the Barlavento wind.","Slower than the ferry to Brava.","Leva leve — but not that leve!"],
+ jokesTime:["Time flew like the Barlavento wind.","Slower than the ferry to Brava.","Leva leve — but not that leve!"],
  fLbl:"Result",of:"right",
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
@@ -366,7 +363,7 @@ en:{title:"How well do you know Cabo Verde?",sub:"15 questions, from easy to har
  shrTitle:"Share result",native:"Share…",save:"Save image",copy:"Copy text",close:"Close",
  copied:"Text copied.",saved:"Image saved.",nativeFail:"Sharing could not be opened. Use “Save image”.",
  shareText:(s,n,p,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right (${p} points). Can you beat it? https://${u}`,
- card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"HOW WELL DO YOU KNOW CABO VERDE?"},
+ card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"THINK YOU KNOW CABO VERDE?"},
  repTitle:"Report a problem",repLbl:"What is wrong? Choose one or more options",
  repMot:{certa:"The answer marked as right is wrong",outra:"More than one option is right",pergunta:"The question is confusing or ambiguous",fonte:"The source does not confirm the answer",traducao:"Language or translation error",ofensivo:"Offensive content"},
  cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
@@ -424,7 +421,7 @@ function renderIni(){const t=L();
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
  idx=0;pts=0;saltos=SALTOS;res=[];show("jogo");nova()}
-function nova(){document.querySelector(".qcard").classList.remove("bitten");resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
+function nova(){resp=null;estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
  const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
 // temporizador (pára com a janela de reporte aberta ou com o separador escondido)
@@ -452,8 +449,8 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  const ops=O(e);
  $("opts").innerHTML=ordem.map((k,i)=>{let cls="";if(estado){if(k===0)cls="ok";else if(k===resp)cls="bad";else cls="dim"}
   return `<button type="button" class="opt ${cls}" data-k="${k}" ${estado?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
- $("skip").textContent=t.skip(saltos);$("skip").disabled=!!estado||!saltos;$("skip").hidden=!!estado;
- $("reveal").textContent=t.reveal;$("reveal").hidden=!!estado;
+ $("skip").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/></svg>${esc(t.skipL)} <span class="n">${saltos}</span>`;$("skip").setAttribute("aria-label",t.skip(saltos));$("skip").disabled=!!estado||!saltos;$("skip").hidden=!!estado;
+ $("reveal").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t.reveal)}`;$("reveal").hidden=!!estado;
  const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("report").disabled=rep;
  desenhaTempo();
  const fb=$("fb");
@@ -473,7 +470,7 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
  if(est==="certo"){btnOk.classList.add("pop");festa(btnOk,ganho)}
  if(est==="errado"){btnBad.classList.add("shake");falha()}
- if(est==="tempo")tubarao();
+ if(est==="tempo")derrota();
  $("next").focus({preventScroll:true})}
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 $("reveal").onclick=()=>fecha("revelado",null);
@@ -493,13 +490,10 @@ function festa(el,ganho){if(reduz())return;const r=el.getBoundingClientRect(),cx
   p.animate([{transform:"translate(-50%,-50%) rotate(0)",opacity:1},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy+320}px)) rotate(${rot}deg)`,opacity:0}],{duration:1100+Math.random()*500,easing:"cubic-bezier(.2,.6,.4,1)",fill:"forwards"})}
  const pl=document.createElement("div");pl.className="plus";pl.textContent="+"+ganho;pl.style.left=cx+"px";pl.style.top=(r.top-10)+"px";document.body.appendChild(pl);
  setTimeout(()=>{fx.remove();pl.remove()},1700)}
-// Tubarão (os Tubarões Azuis): atravessa o ecrã, as mandíbulas fecham-se e a pergunta fica mordida
-const SHARK=`<svg viewBox="0 0 320 140" aria-hidden="true"><path d="M8 78c34-26 86-46 150-48 30-1 58 4 84 14l34-38c4-5 10 0 9 6l-10 46c18 8 30 16 37 22-7 5-21 12-40 18l14 40c2 6-4 10-9 6l-34-30c-26 9-55 13-86 12C93 124 42 108 8 78z" fill="#5b7894"/><path d="M8 78c34 22 86 38 150 40 31 1 60-3 86-12-30 2-67-2-100-10C99 88 54 86 8 78z" fill="#dfe8f1"/><path d="M150 32l26-30c3-3 8 0 7 4l-8 32z" fill="#4a6580"/><circle cx="56" cy="66" r="6" fill="#0f1a2e"/><circle cx="58" cy="64" r="2" fill="#fff"/><path d="M14 80c14 4 28 6 44 6" stroke="#0f1a2e" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M20 82l5 8 5-7 5 8 5-7 5 7 4-8" fill="#fff"/><path d="M96 70c4 8 4 16 0 24M108 68c4 9 4 18 0 27M120 68c4 9 4 18 0 27" stroke="#46607a" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-function tubarao(){if(reduz())return falha();const d=document.createElement("div");d.className="shark";
- d.innerHTML=`<div class="peixe">${SHARK}</div><div class="jaw t"></div><div class="jaw b"></div>`;document.body.appendChild(d);
- const b=$("qbox");b.classList.remove("chomp");void b.offsetWidth;b.classList.add("chomp");
- setTimeout(()=>{document.querySelector(".qcard").classList.add("bitten");if(navigator.vibrate)try{navigator.vibrate([60,40,160])}catch(_){}},1150);
- setTimeout(()=>d.remove(),2100)}
+// fim do tempo: um véu escuro suave e a pergunta a perder a cor por instantes, antes de mostrar a resposta
+function derrota(){if(reduz())return;const v=document.createElement("div");v.className="velo";document.body.appendChild(v);setTimeout(()=>v.remove(),1300);
+ const b=$("qbox");b.classList.remove("in","perdeu");void b.offsetWidth;b.classList.add("perdeu");
+ if(navigator.vibrate)try{navigator.vibrate(200)}catch(_){}}
 function falha(){if(reduz())return;const f=document.createElement("div");f.className="flash";document.body.appendChild(f);setTimeout(()=>f.remove(),600);
  if(navigator.vibrate)try{navigator.vibrate(120)}catch(_){}}
 
