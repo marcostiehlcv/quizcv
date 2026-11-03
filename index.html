@@ -144,6 +144,25 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 #alerta{--ac:var(--bad)}#alerta.mid{--ac:var(--sun)}
 #alerta.on{opacity:calc(.3 + var(--k,0)*.4)}
 #alerta.on.beat{animation:alerta .9s ease-out}
+/* tensão visual: amarelo (10–6 s) a pergunta respira; vermelho (<6 s) o ecrã bate como um coração e a pergunta treme;
+   últimos 3 s: número gigante a vermelho por trás de tudo, tremor mais forte e cores a perder saturação */
+body.tens-r #alerta.on{animation:alerta .5s ease-out infinite}
+body.tens-y main .wrap{animation:respira 1s ease-in-out infinite}
+body.tens-r main .wrap{animation:coracao .5s ease-out infinite}
+body.tens-r #qbox{animation:treme .14s linear infinite}
+body.tens-x #qbox{animation:treme2 .09s linear infinite}
+body.tens-x main{filter:saturate(.6) contrast(1.08)}
+body.tens-r .timer{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--bad) 70%,transparent))}
+body.tens-x .timer b{font-size:36px}
+@keyframes respira{0%,100%{transform:none}50%{transform:scale(1.004)}}
+@keyframes coracao{0%{transform:scale(1)}15%{transform:scale(1.012)}30%{transform:scale(1)}45%{transform:scale(1.007)}100%{transform:scale(1)}}
+@keyframes treme{0%,100%{transform:translate(0,0)}25%{transform:translate(.6px,-.6px)}50%{transform:translate(-.6px,.4px)}75%{transform:translate(.4px,.6px)}}
+@keyframes treme2{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(1.6px,-1px) rotate(.15deg)}50%{transform:translate(-1.4px,1px) rotate(-.15deg)}75%{transform:translate(1px,1.4px)}}
+main{position:relative;z-index:1}
+.fantasma{position:fixed;inset:0;z-index:0;pointer-events:none;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:min(90vw,70vh);line-height:1;color:var(--bad);opacity:0}
+.fantasma.on{animation:fantasma 1s ease-out forwards}
+@keyframes fantasma{0%{opacity:0;transform:scale(1.6)}20%{opacity:.16;transform:scale(1)}100%{opacity:.05;transform:scale(.85)}}
+@media (prefers-reduced-motion:reduce){body.tens-y main .wrap,body.tens-r main .wrap,body.tens-r #qbox,body.tens-x #qbox,.fantasma.on,body.tens-r #alerta.on{animation:none!important}}
 @keyframes alerta{0%{opacity:calc(.55 + var(--k,0)*.4)}100%{opacity:calc(.15 + var(--k,0)*.3)}}
 .qtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .pista{margin:8px 0 0;color:var(--muted);font-size:15.5px;font-style:italic}
@@ -337,6 +356,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 </main>
 
 <div id="alerta" aria-hidden="true"></div>
+<div class="fantasma" id="fantasma" aria-hidden="true"></div>
 <div class="sheet-bg" id="about" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
     <h2 id="aboutTitle"></h2>
@@ -480,7 +500,7 @@ const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 // estado da ronda
 let ronda=[],idx=0,pts=0,saltos=SALTOS,revelar=REVELAR,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
-function show(v){vista=v;if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
+function show(v){vista=v;pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 const HOWI={q:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>',t:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',s:'<path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/>',a:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'};
 function renderIni(){const t=L();
  $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
@@ -506,15 +526,32 @@ function bip(f,dur,vol,tipo="sine",f2=null,atraso=0){if(!som)return;const a=audi
  o.type=tipo;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+dur);
  g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+.008);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
  o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+dur+.03)}
-function somTique(s){if(s>10)bip(520,.05,.035);
- else if(s>=6){bip(700,.06,.06,"triangle");bip(620,.05,.045,"triangle",null,.5)}
- else{bip(105,.14,.32);bip(90,.12,.22,"sine",null,.18);bip(980,.035,.06,"square",null,.5)}}
+function somTique(s){if(s>10){bip(520,.05,.035);return}
+ if(s>=6){bip(700,.06,.07,"triangle");bip(620,.05,.05,"triangle",null,.5);return}
+ // vermelho: coração a bater duas vezes por segundo, cada vez mais forte, e tique agudo
+ const v=Math.min(1,.55+(6-s)*.09);
+ bip(100,.14,.34*v);bip(85,.12,.24*v,"sine",null,.16);bip(100,.14,.34*v,"sine",null,.5);bip(85,.12,.24*v,"sine",null,.66);
+ bip(980,.035,.07,"square",null,.25);bip(980,.035,.07,"square",null,.75);
+ // últimos 3 s: alarme a subir de tom em cada quarto de segundo
+ if(s<=3)for(let q=0;q<4;q++)bip(1100+(3-s)*220+q*90,.07,.07,"square",null,q*.25)}
+// drone de tensão: dois osciladores desafinados num filtro que abre e sobe de tom até ao fim do tempo
+let drone=null;
+function tensao(k){if(!som||k<=0){pararTensao();return}const a=audio();if(!a)return;
+ if(!drone){const g=a.createGain(),f=a.createBiquadFilter(),o1=a.createOscillator(),o2=a.createOscillator();
+  f.type="lowpass";f.Q.value=6;o1.type="sawtooth";o2.type="sawtooth";g.gain.value=0.0001;
+  o1.connect(f);o2.connect(f);f.connect(g).connect(a.destination);o1.start();o2.start();drone={g,f,o1,o2}}
+ const t=a.currentTime+.12,base=55*(1+k*1.2);
+ drone.o1.frequency.linearRampToValueAtTime(base,t);drone.o2.frequency.linearRampToValueAtTime(base*1.03+k*3,t);
+ drone.f.frequency.linearRampToValueAtTime(180+k*k*2400,t);drone.g.gain.linearRampToValueAtTime(.015+k*k*.11,t)}
+function pararTensao(){if(!drone||!AC)return;const d=drone,t=AC.currentTime;drone=null;
+ try{d.g.gain.cancelScheduledValues(t);d.g.gain.setValueAtTime(d.g.gain.value,t);d.g.gain.linearRampToValueAtTime(0.0001,t+.25);d.o1.stop(t+.3);d.o2.stop(t+.3)}catch(_){}}
+function tensaoVisual(s,ativo){const b=document.body;b.classList.toggle("tens-y",ativo&&s<=AMARELO&&s>=VERMELHO);b.classList.toggle("tens-r",ativo&&s<VERMELHO);b.classList.toggle("tens-x",ativo&&s<=3)}
 const somCerto=()=>{bip(660,.12,.09,"triangle");bip(990,.18,.08,"triangle",null,.1)};
 const somErrado=()=>bip(200,.28,.09,"sawtooth",120);
 const somTempo=()=>{bip(330,.5,.1,"triangle",110)};
 function desenhaSom(){const b=$("somBtn");b.setAttribute("aria-pressed",String(som));b.setAttribute("aria-label",som?L().somOff:L().somOn);b.title=b.getAttribute("aria-label");
  b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/>${som?'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>':'<path d="m16 9 5 6M21 9l-5 6"/>'}</svg>`}
-$("somBtn").onclick=()=>{som=!som;ls.set("quizcv_som",som);desenhaSom();if(som)audio()};
+$("somBtn").onclick=()=>{som=!som;ls.set("quizcv_som",som);desenhaSom();if(som)audio();else pararTensao()};
 let ultSeg=null;
 const ALERTA=10,AMARELO=10,VERMELHO=6;
 function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!estado,low=s<VERMELHO&&!estado,tm=$("timer"),al=$("alerta");
@@ -523,8 +560,12 @@ function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!es
  if(alerta&&s!==ultSeg){al.classList.remove("beat");void al.offsetWidth;al.classList.add("beat")}$("tNum").textContent=s;
  tm.classList.toggle("low",low);tm.classList.toggle("done",!!estado);$("tRing").style.strokeDashoffset=String(201*(1-restante/TEMPO));
  tm.setAttribute("aria-label",L().secs(s));
- if(s!==ultSeg&&!estado&&s<TEMPO&&!pausa){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat");if(vista==="jogo")somTique(s)}ultSeg=s}
-const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on")}};
+ const ativo=!estado&&!pausa&&vista==="jogo";tensaoVisual(s,ativo);
+ if(ativo&&restante<=ALERTA)tensao(Math.min(1,(ALERTA-restante)/ALERTA));else pararTensao();
+ if(s!==ultSeg&&ativo&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat");somTique(s);
+  const fa=$("fantasma");if(s<=5&&s>0&&!reduz()){fa.textContent=s;fa.classList.remove("on");void fa.offsetWidth;fa.classList.add("on")}}
+ if(!ativo||s>5)$("fantasma").classList.remove("on");ultSeg=s}
+const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on");pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on")}};
 const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
 document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
 
@@ -572,7 +613,7 @@ $("reveal").onclick=()=>{if(!estado&&revelar>0)fecha("revelado",null)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>saltarAgora();
-const saltarAgora=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
+const saltarAgora=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");estado="saltar";$("alerta").classList.remove("on");
  
  const sb=$("skip").querySelector(".n"),rr=(sb||$("skip")).getBoundingClientRect();
  if(!reduz()){const m=document.createElement("div");m.className="menos1";m.textContent="−1";m.style.left=(rr.left+rr.width/2)+"px";m.style.top=(rr.top-6)+"px";document.body.appendChild(m);setTimeout(()=>m.remove(),950)}
