@@ -47,6 +47,8 @@ Cada pergunta é um array:
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
 - Viragens: ao responder, revelar ou acabar o tempo, só a opção certa e a errada escolhida dão uma volta em Y (`.opt.flip`). Saltar: só a viragem da caixa (`#qbox` `out`/`in`); o contador de saltos mostra «−1» a subir (`.menos1`) e o número vira (`.n.vira`); o atleta `RUNNER` é o ícone do botão; ao saltar e ao passar à seguinte, a caixa `#qbox` vira em 3D (`out` / `in`).
 - «Seguinte» (`.nextbar`) fica preso ao fundo do ecrã (sticky), com a largura toda, assim que a pergunta fecha.
+- Antes de cada ronda: contagem 3, 2, 1, «Já!» em grande (`contagem()`, `#cd`).
+- Confirmações: `confirma(título, texto, botão)` abre a janela `#conf` (temporizador em pausa) antes de Saltar, Revelar e Terminar. «Terminar» (`#quit`) acaba a ronda e mostra o resultado só com as perguntas respondidas.
 - Estados de cada pergunta: `certo`, `errado`, `tempo`, `revelado` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: certas/15, por nível, pontos e recorde (`quizcv_best`). Cartão 1080×1080 em `drawCard()` (mesma bandeira `drawFlag` do Hoje CV): Partilhar… (menu nativo), Guardar imagem, Copiar texto.

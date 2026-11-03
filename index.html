@@ -96,6 +96,13 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .rules li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
 .rules li:nth-child(2){--c:var(--sun)}.rules li:nth-child(3){--c:var(--rubro)}.rules li:nth-child(4){--c:#3d8bfd}
 .rules li b{color:var(--c)!important}
+/* contagem antes de começar: 3, 2, 1, já! em grande */
+.contagem{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:color-mix(in srgb,var(--ocean-deep) 82%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.contagem b{font-family:var(--display);font-weight:800;font-size:clamp(140px,42vw,260px);line-height:1;color:#fff;text-shadow:0 20px 50px rgba(0,0,0,.45)}
+.contagem b.go{color:var(--sun);font-size:clamp(90px,26vw,170px)}
+.contagem b.tic{animation:tic .9s cubic-bezier(.2,.8,.3,1) both}
+@keyframes tic{0%{opacity:0;transform:scale(1.8)}25%{opacity:1;transform:scale(1)}80%{opacity:1;transform:scale(.92)}100%{opacity:0;transform:scale(.7)}}
+#quit{margin-left:auto}
 /* jogo */
 /* «Seguinte» fica preso ao fundo do ecrã, com a largura toda, para não obrigar a descer depois da explicação */
 .nextbar{position:sticky;bottom:0;z-index:5;margin:0 -16px;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);animation:sobe .35s ease-out}
@@ -201,7 +208,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -292,6 +299,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
         <button type="button" class="tool big" id="skip"></button>
         <button type="button" class="tool big" id="reveal"></button>
         <button type="button" class="tool" id="report"></button>
+        <button type="button" class="tool" id="quit"></button>
       </div>
       <div class="fb" id="fb" hidden></div>
       <div class="nextbar" id="nextRow" hidden><button type="button" class="btn primary" id="next"></button></div>
@@ -317,6 +325,16 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
     <h2 id="aboutTitle"></h2>
     <div class="about" id="aboutTxt" style="display:flex;flex-direction:column;gap:12px"></div>
     <div class="acts"><button type="button" class="btn" id="aboutClose"></button></div>
+  </div>
+</div>
+
+<div class="contagem" id="cd" hidden aria-live="assertive"><b id="cdN"></b></div>
+
+<div class="sheet-bg" id="conf" hidden>
+  <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="confTitle" aria-describedby="confTxt">
+    <h2 id="confTitle"></h2>
+    <p class="ev" id="confTxt" style="margin:0"></p>
+    <div class="acts"><button type="button" class="btn" id="confNo"></button><button type="button" class="btn primary" id="confYes"></button></div>
   </div>
 </div>
 
@@ -353,7 +371,10 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"Achas que conheces Cabo Verde? Pro
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
- skip:n=>`Saltar (${n})`,skipL:"Saltar",secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
+ skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",keep:"Continuar a jogar",quit:"Terminar",
+ quitQ:"Terminar o quiz?",quitTxt:"O resultado conta só as perguntas a que já respondeste.",quitYes:"Sim, terminar",
+ skipQ:"Saltar esta pergunta?",skipTxt:n=>`Entra outra do mesmo nível. Ficas com ${n} ${n===1?"salto":"saltos"}.`,skipYes:"Sim, saltar",
+ revealQ:"Revelar a resposta?",revealTxt:"Vês a resposta certa, mas esta pergunta não dá pontos.",revealYes:"Sim, revelar",secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"Revelar resposta",report:"Reportar problema",reported:"Reportado",
  right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",revealed:"Aqui está a resposta.",
  answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
  jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conheces Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
@@ -383,7 +404,10 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"Think you know Cabo Verde? Prove 
  start:"Start playing",best:b=>`Best score: ${b} points`,
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
- skip:n=>`Skip (${n})`,skipL:"Skip",secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
+ skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",keep:"Keep playing",quit:"End quiz",
+ quitQ:"End the quiz?",quitTxt:"Your result only counts the questions you have already answered.",quitYes:"Yes, end it",
+ skipQ:"Skip this question?",skipTxt:n=>`Another one of the same level comes in. You will have ${n} ${n===1?"skip":"skips"} left.`,skipYes:"Yes, skip",
+ revealQ:"Reveal the answer?",revealTxt:"You see the right answer, but this question gives no points.",revealYes:"Yes, reveal",secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"Reveal answer",report:"Report a problem",reported:"Reported",
  right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",revealed:"Here is the answer.",
  answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
  jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
@@ -484,7 +508,7 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
   return `<button type="button" class="opt ${cls}" data-k="${k}" ${estado?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(ops[k])}</span></button>`}).join("");
  $("skip").innerHTML=`${RUNNER}${esc(t.skipL)} <span class="n">${saltos}</span>`;$("skip").setAttribute("aria-label",t.skip(saltos));$("skip").disabled=!!estado||!saltos;$("skip").hidden=!!estado;
  $("reveal").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>${esc(t.reveal)}`;$("reveal").hidden=!!estado;
- const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("report").disabled=rep;
+ const rep=ls.get("quizcv_rep",[]).includes(e.id);$("report").textContent=rep?t.reported:t.report;$("quit").textContent=t.quit;$("report").disabled=rep;
  desenhaTempo();
  const fb=$("fb");
  if(!estado){fb.hidden=true;$("nextRow").hidden=true;return}
@@ -508,10 +532,11 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  if(est==="tempo")derrota();
  $("next").focus({preventScroll:true})}
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
-$("reveal").onclick=()=>fecha("revelado",null);
+$("reveal").onclick=async()=>{if(estado)return;const t=L();if(await confirma(t.revealQ,t.revealTxt,t.revealYes)&&!estado)fecha("revelado",null)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
-$("skip").onclick=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
+$("skip").onclick=async()=>{if(estado||!saltos)return;const t=L();if(await confirma(t.skipQ,t.skipTxt(saltos-1),t.skipYes)&&!estado)saltarAgora()};
+const saltarAgora=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);estado="saltar";$("alerta").classList.remove("on");
  
  const sb=$("skip").querySelector(".n"),rr=(sb||$("skip")).getBoundingClientRect();
  if(!reduz()){const m=document.createElement("div");m.className="menos1";m.textContent="−1";m.style.left=(rr.left+rr.width/2)+"px";m.style.top=(rr.top-6)+"px";document.body.appendChild(m);setTimeout(()=>m.remove(),950)}
@@ -544,7 +569,16 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("fLv").innerHTML=[1,2,3].map(k=>{const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0);return `<div><b>${ii.filter(i=>res[i]==="ok").length}/${ii.length}</b><span>${t.lv[k]}</span></div>`}).join("");
  $("fPts").textContent=t.ptsTotal(pts,recorde);
  $("again").textContent=t.again;$("share").textContent=t.share}
-$("start").onclick=start;$("again").onclick=start;
+// contagem de 3 segundos antes de cada ronda
+function contagem(){const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
+ const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className=(i===3?"go ":"")+"tic";void n.offsetWidth;i++;setTimeout(passo,reduz()?450:900)};
+ n.className="";passo()}
+$("start").onclick=contagem;$("again").onclick=contagem;
+// confirmação (janela própria; o temporizador pára enquanto está aberta)
+function confirma(tit,txt,sim){return new Promise(res=>{const t=L();pausar();$("confTitle").textContent=tit;$("confTxt").textContent=txt;$("confYes").textContent=sim;$("confNo").textContent=t.keep;$("conf").hidden=false;$("confYes").focus();
+ const fecha=v=>{$("conf").hidden=true;$("confYes").onclick=$("confNo").onclick=null;$("conf").onclick=null;if(vista==="jogo")retomar();res(v)};
+ $("confYes").onclick=()=>fecha(true);$("confNo").onclick=()=>fecha(false);$("conf").onclick=ev=>{if(ev.target.id==="conf")fecha(false)}})}
+$("quit").onclick=async()=>{const t=L();if(await confirma(t.quitQ,t.quitTxt,t.quitYes))fim()};
 
 // cartão de partilha (1080×1080)
 // Bandeira de fundo do cartão: grande, inclinada e cortada, em degradê a partir do canto superior direito (como no cabeçalho)
@@ -621,7 +655,7 @@ $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
 for(const id of ["about","shr"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
 $("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
-addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;$("about").hidden=true;$("shr").hidden=true;if(!$("rep").hidden)fechaRep()});
+addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("shr").hidden=true;if(!$("rep").hidden)fechaRep()});
 applyLang();show("ini");
 </script>
 </body>
