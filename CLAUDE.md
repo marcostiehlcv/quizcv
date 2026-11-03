@@ -41,7 +41,7 @@ Cada pergunta é um array:
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
 - Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
 - Cabeçalho: bandeira de fundo `.flagbg` (grande, inclinada e cortada, em degradê radial a partir da direita, ondular lento), igual à do Hoje CV.
-- Página inicial: botão grande `.startbig` (vermelho em degradê radial com relevo, estrelas da bandeira à direita, brilho a atravessar, play e halo amarelo a pulsar) e as regras em quatro blocos coloridos (`I18N.*.rules`; verde, amarelo, vermelho, azul).
+- Página inicial: botão grande `.startbig` (azul do cabeçalho com a faixa branca-vermelha-branca da bandeira na base, play amarelo; brilho a atravessar e halo amarelo a pulsar). Evitar vermelho com estrelas amarelas (lembra a bandeira da China) e as regras em quatro blocos coloridos (`I18N.*.rules`; verde, amarelo, vermelho, azul).
 - Cartão de partilha: bandeira de fundo `drawFlagBg()` no canto superior direito (inclinada, em degradê), igual à do Hoje CV.
 - Fim do tempo: `derrota()` — um véu escuro suave (`.velo`) e a pergunta perde a cor e encolhe por instantes (`#qbox.perdeu`), antes de mostrar a resposta. (O tubarão foi experimentado e retirado.)
 - Saltar e Revelar são botões cheios e coloridos (`.tool.big`: azul com o número de saltos, amarelo-laranja com ícone de olho); Reportar fica discreto.
