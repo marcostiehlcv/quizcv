@@ -488,9 +488,11 @@ let vistas=new Set(ls.get("quizcv_vistas",[]));
 const formato=e=>/\b(ilha|cidade) nasceu\b/.test(e.q)?"lugar":/\b(nasceu|morreu)\b/.test(e.q)?"vida":/^Em que ano\? «/.test(e.q)?"ano":"outro";
 const pessoa=e=>{const m=/(?:nasceu|morreu) (.+)\?$/.exec(e.q);return m?m[1]:""};
 const atleta=e=>e.tema==="desporto"&&!!pessoa(e);
+const doAno=e=>/^(Em que (ano|década|século)|Quando)\b/.test(e.q); // perguntas de data (de qualquer formato): nunca duas seguidas
 const MAXF={vida:4,lugar:3,ano:5},MAXATLETA=1; // máximo por ronda de 15
 // viz: as perguntas antes e depois do lugar a preencher; fora: a pergunta que vai ser trocada (ao saltar).
-// Regras: nem o mesmo tema nem o mesmo formato ao lado, limites por ronda (MAXF, MAXATLETA) e a mesma pessoa só uma vez.
+// Regras: nem o mesmo tema nem o mesmo formato ao lado, nem duas perguntas de data seguidas (doAno),
+// limites por ronda (MAXF, MAXATLETA) e a mesma pessoa só uma vez.
 // Primeiro tenta as perguntas ainda não vistas e depois as já vistas (a variedade conta mais do que a novidade:
 // senão, com o tempo, as não vistas ficam quase só de um formato); só no fim alivia as regras.
 function sorteia(nv,usadas,viz=[],fora=null){let pool=QS.filter(e=>e.nv===nv&&!usadas.has(e.id));let novas=pool.filter(e=>!vistas.has(e.id));
@@ -499,8 +501,12 @@ function sorteia(nv,usadas,viz=[],fora=null){let pool=QS.filter(e=>e.nv===nv&&!u
  let atletas=0;r.forEach(e=>{const f=formato(e);conta[f]=(conta[f]||0)+1;if(atleta(e))atletas++});
  const igualFormato=e=>perto.some(v=>formato(v)!=="outro"&&formato(v)===formato(e));
  const limites=e=>(conta[formato(e)]||0)<(MAXF[formato(e)]||99)&&!(atleta(e)&&atletas>=MAXATLETA);
- const regras=[e=>limites(e)&&!igualFormato(e)&&!perto.some(v=>v.tema===e.tema),e=>limites(e)&&!igualFormato(e),e=>!igualFormato(e),()=>true];
- for(const ok of regras)for(const c of [novas,pool]){const f=c.filter(e=>ok(e)&&!(pessoa(e)&&nomes.has(pessoa(e))));if(f.length)return pick(f)}
+ const anoSeguido=e=>doAno(e)&&perto.some(doAno);
+ const regras=[e=>limites(e)&&!igualFormato(e)&&!anoSeguido(e)&&!perto.some(v=>v.tema===e.tema),e=>limites(e)&&!igualFormato(e)&&!anoSeguido(e),
+  e=>!igualFormato(e)&&!anoSeguido(e),e=>!igualFormato(e),()=>true];
+ // a mesma pessoa não volta noutra pergunta da ronda, mesmo noutro formato (ex.: «Em que ano nasceu Germano Almeida?» e «Germano Almeida vence o Prémio Camões»)
+ const mesmaPessoa=e=>{const n=pessoa(e);return(n&&r.some(v=>v.q.includes(n)))||[...nomes].some(x=>e.q.includes(x))};
+ for(const ok of regras)for(const c of [novas,pool]){const f=c.filter(e=>ok(e)&&!mesmaPessoa(e));if(f.length)return pick(f)}
  return novas.length?pick(novas):null}
 const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 

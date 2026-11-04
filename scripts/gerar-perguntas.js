@@ -89,7 +89,8 @@ for (const r of D) {
   const pIlha = pista(desc, nome, { semLugar: true }), pIlhaEn = pista(descEn, nomeEn, { semLugar: true });
   if (cat === "nascimento" && ILHAS.includes(ilha) && !(atleta && !pIlha)) {
     const e = ilhasErradas(ilha, key);
-    gen.push(["h" + hash(key + "|ilha"), 2, t, `Em que ilha nasceu ${nome}?`, [ilha, ...e], expPt, fonte,
+    // nível: médio para as pessoas em destaque, difícil para as outras (dá ao nível difícil perguntas que não são de data)
+    gen.push(["h" + hash(key + "|ilha"), nivel, t, `Em que ilha nasceu ${nome}?`, [ilha, ...e], expPt, fonte,
       `On which island was ${nomeEn} born?`, [ilha, ...e], expEn, pIlha, pIlhaEn]);
   }
 }
