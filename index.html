@@ -249,6 +249,7 @@ main{position:relative;z-index:1}
 .foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
 .aboutlink{font:inherit;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .aboutlink:hover{color:var(--fg)}
+.apps{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}.apps>span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}.apps a{color:var(--muted);text-decoration:none}.apps a b{color:var(--fg);font-weight:600}.apps a:hover b{text-decoration:underline;text-underline-offset:3px}
 .sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(5,15,35,.55);display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--surface);color:var(--fg);width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
 .sheet h2{margin:0;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
@@ -350,7 +351,7 @@ main{position:relative;z-index:1}
       <button type="button" class="startbig" id="again"></button>
     </section>
 
-    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button></div>
+    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button><nav class="apps" id="apps"></nav></div>
   </div>
 </main>
 
@@ -422,7 +423,7 @@ secs:s=>`${s} segundos`,gain:g=>g.ajuda?`+${g.total} pontos: ajuda usada, sem b�
  repMot:{certa:"A resposta dada como certa está errada",outra:"Há mais do que uma opção certa",pergunta:"A pergunta é confusa ou ambígua",fonte:"A fonte não confirma a resposta",traducao:"Erro de português ou de tradução",ofensivo:"Conteúdo ofensivo"},
  cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tenta mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
  temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações",geografia:"Geografia"},
- foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",
+ foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas sobre Cabo Verde"},
  about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
   ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda: revelar a resposta uma vez, que conta como certa mas só com os pontos do nível."],
   ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes. Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema»."],
@@ -455,7 +456,7 @@ secs:s=>`${s} seconds`,gain:g=>g.ajuda?`+${g.total} points: help used, no speed 
  repMot:{certa:"The answer marked as right is wrong",outra:"More than one option is right",pergunta:"The question is confusing or ambiguous",fonte:"The source does not confirm the answer",traducao:"Language or translation error",ofensivo:"Offensive content"},
  cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
  temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations",geografia:"Geography"},
- foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",
+ foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz game about Cabo Verde"},
  about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
   ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) and you have one help: reveal the answer once, which counts as right but only with the level points."],
   ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”."],
@@ -466,6 +467,10 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const ls={get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(_){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
 let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
+// ?lang=pt|en (vem dos links «Mais apps»): abre na mesma língua da app de onde se veio
+{const q=/[?&]lang=(pt|en)(&|$)/.exec(location.search);if(q){LANG=q[1];ls.set("quizcv_lang",LANG)}}
+// Todas as apps do projeto (lista igual em todas; ao criar uma nova, acrescentá-la aqui e nas outras). O rodapé mostra as outras.
+const APPS=[["hojecv","Hoje CV","https://hojecv.vercel.app/"],["quizcv","Quiz CV","https://quizcv.vercel.app/"]],ESTA_APP="quizcv";
 const L=()=>I18N[LANG];
 const API=(window.QUIZCV_CONFIG||{}).API||"";
 const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, REVELAR=1, VALOR={1:10,2:20,3:30};
@@ -731,7 +736,7 @@ $("repSend").onclick=async()=>{const t=L(),e=ronda[idx],motivos=[...$("repOpts")
  $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;renderQ()};
 
 function applyLang(){const t=L();document.documentElement.lang=LANG;
- $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;
+ $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
  $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
