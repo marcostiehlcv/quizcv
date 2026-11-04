@@ -33,7 +33,7 @@ Cada pergunta é um array:
 - Atletas (nascimentos com tema `desporto`): sem «em que ano nasceu» (pelo nome é difícil de mais); só «em que ilha nasceu» e só se houver pista.
 - Nível: registos com `destaque` → médio; os outros → difícil (também nas perguntas «em que ilha»: assim o nível difícil tem perguntas que não são de data, precisas para nunca haver duas de data seguidas). Os anos errados ficam a ±4–20 anos (médio) ou ±1–8 (difícil), com semente fixa.
 - As fáceis vêm só do `perguntas-base.js`. Para ter mais variedade nas fáceis, acrescentar aí.
-- Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); nas perguntas «Em que ano? «acontecimento»», sem as frases que têm anos (dariam a resposta por aproximação, ex.: «fica no cargo até 2026»); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos).
+- Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); nas perguntas «Em que ano? «acontecimento»», sem as frases que têm anos (dariam a resposta por aproximação, ex.: «fica no cargo até 2026»); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos) e os nascimentos e mortes de presos políticos (descrição com «preso político», como os mortos no Tarrafal).
 - Depois de regenerar o `eventos.js` do Hoje CV, correr de novo o gerador e fazer commit.
 
 ## Código

@@ -72,6 +72,7 @@ for (const r of D) {
   if (cat === "falecimento") { nome = tit.replace(/^Morre /, ""); const x = /^(.+) dies$/.exec(titEn || ""); nomeEn = x ? x[1] : nome; }
   if (nome && nome === tit) continue; // título fora do padrão «Nasce X» / «Morre X»
   if (!nome && OBSCUROS.test(tit + " " + (titEn || ""))) continue; // nomeações pouco conhecidas: difíceis de mais sem contexto
+  if (nome && /preso político/i.test(desc)) continue; // presos mortos no Tarrafal: pouco conhecidos, difíceis de mais pelo nome
   const pAno = pista(desc, nome, { semAno: y, semAnos: !nome }), pAnoEn = pista(descEn, nomeEn, { semAno: y, semAnos: !nome });
   // 1) em que ano
   let q, qEn;
