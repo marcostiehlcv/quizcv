@@ -206,3 +206,4 @@ module.exports = [
    "Ponta do Sol lies at the northern tip of Santo Antão, in Ribeira Grande municipality."]
 ];
 module.exports.push(...require("./perguntas-base-2.js"));
+module.exports.push(...require("./perguntas-base-3.js"));

@@ -15,6 +15,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 | `index.html` | O site inteiro (HTML + CSS + JS) |
 | `perguntas-base.js` | Perguntas escritas à mão (fonte de verdade; módulo Node) |
 | `perguntas-base-2.js` | Segundo lote escrito à mão (b51–b150), juntado pelo `perguntas-base.js` |
+| `perguntas-base-3.js` | Terceiro lote escrito à mão (b151–b250), juntado pelo `perguntas-base.js` |
 | `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
 | `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |
 | `config.js` | `window.QUIZCV_CONFIG = { API: "<url /exec>" }` para os reportes (vazio = desligados) |
