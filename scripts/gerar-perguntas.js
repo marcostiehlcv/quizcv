@@ -42,9 +42,12 @@ const LUGARES = [...ILHAS, "Mindelo", "Praia", "São Filipe", "Assomada", "Ribei
   "Santa Catarina", "Santa Cruz", "Picos", "Mosteiros", "Pombas", "Ponta do Sol"];
 const reL = new RegExp(String.raw`\s*,?\s*\b(?:[Nn]atural d[aoe]s?|native of|d[aoe]s?|em|n[ao]s?|from|in|of|on)\s+(?:${LUGARES.join("|")})(?![\wÀ-ú])`, "g");
 const temLugar = (t) => LUGARES.some((l) => new RegExp(String.raw`(^|[^\wÀ-ú])${l}(?![\wÀ-ú])`).test(t));
-function pista(desc, nome, { semLugar, semAno }) {
+function pista(desc, nome, { semLugar, semAno, semAnos }) {
   if (!desc) return "";
   let frases = desc.split(/(?<=[.!?])\s+/).map((f) => f.replace(/,?\s*\b(nasce|nasceu|nascid[ao]|morre|morreu|is born|was born|born|dies|died)\b.*$/i, ".").replace(/^\.$/, "")).filter(Boolean);
+  // «Em que ano? «acontecimento»»: as frases com outros anos saem, porque dão a resposta por aproximação
+  // (ex.: «Fica no cargo até 2026», «O 50.º aniversário foi em 2024»); nos nascimentos e mortes ficam, porque dizem quem é a pessoa
+  if (semAnos) frases = frases.filter((f) => !/\b1[4-9]\d\d\b|\b20\d\d\b/.test(f));
   let t = frases.join(" ").trim();
   if (nome && t.startsWith(nome)) t = t.slice(nome.length).replace(/^,?\s*/, "");
   if (semLugar) { t = t.replace(reL, ""); if (temLugar(t)) return ""; }
@@ -69,7 +72,7 @@ for (const r of D) {
   if (cat === "falecimento") { nome = tit.replace(/^Morre /, ""); const x = /^(.+) dies$/.exec(titEn || ""); nomeEn = x ? x[1] : nome; }
   if (nome && nome === tit) continue; // título fora do padrão «Nasce X» / «Morre X»
   if (!nome && OBSCUROS.test(tit + " " + (titEn || ""))) continue; // nomeações pouco conhecidas: difíceis de mais sem contexto
-  const pAno = pista(desc, nome, { semAno: y }), pAnoEn = pista(descEn, nomeEn, { semAno: y });
+  const pAno = pista(desc, nome, { semAno: y, semAnos: !nome }), pAnoEn = pista(descEn, nomeEn, { semAno: y, semAnos: !nome });
   // 1) em que ano
   let q, qEn;
   if (cat === "nascimento") { q = `Em que ano nasceu ${nome}?`; qEn = `In which year was ${nomeEn} born?`; }

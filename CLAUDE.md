@@ -32,7 +32,7 @@ Cada pergunta é um array:
 - «Em que ano nasceu/morreu X?» (títulos «Nasce X» / «Morre X»), «Em que ano? «título»» (só se o título não tiver o ano) e «Em que ilha nasceu X?» (só ilhas habitadas).
 - Nível: registos com `destaque` → médio; os outros → difícil; «em que ilha» → médio. Os anos errados ficam a ±4–20 anos (médio) ou ±1–8 (difícil), com semente fixa.
 - As fáceis vêm só do `perguntas-base.js`. Para ter mais variedade nas fáceis, acrescentar aí.
-- Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos).
+- Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); nas perguntas «Em que ano? «acontecimento»», sem as frases que têm anos (dariam a resposta por aproximação, ex.: «fica no cargo até 2026»); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos).
 - Depois de regenerar o `eventos.js` do Hoje CV, correr de novo o gerador e fazer commit.
 
 ## Código
