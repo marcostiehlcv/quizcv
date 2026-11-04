@@ -81,13 +81,16 @@ for (const r of D) {
     if (/\b1[4-9]\d\d\b|\b20\d\d\b/.test(tit + " " + (titEn || ""))) continue; // o título já diz o ano
     q = `Em que ano? «${tit}»`; qEn = `In which year? “${titEn || tit}”`;
   }
-  const errados = anosErrados(y, nivel, key);
+  // atletas: o ano de nascimento de um jogador é difícil de mais só pelo nome; fica só «em que ilha nasceu», e só com pista
+  const atleta = cat === "nascimento" && t === "desporto";
+  const errados = atleta ? [] : anosErrados(y, nivel, key);
   if (errados.length === 3) gen.push(["h" + hash(key + "|ano"), nivel, t, q, [String(y), ...errados], expPt, fonte, qEn, [String(y), ...errados], expEn, pAno, pAno && pAnoEn ? pAnoEn : ""]);
   // 2) em que ilha nasceu (nível médio)
-  if (cat === "nascimento" && ILHAS.includes(ilha)) {
+  const pIlha = pista(desc, nome, { semLugar: true }), pIlhaEn = pista(descEn, nomeEn, { semLugar: true });
+  if (cat === "nascimento" && ILHAS.includes(ilha) && !(atleta && !pIlha)) {
     const e = ilhasErradas(ilha, key);
     gen.push(["h" + hash(key + "|ilha"), 2, t, `Em que ilha nasceu ${nome}?`, [ilha, ...e], expPt, fonte,
-      `On which island was ${nomeEn} born?`, [ilha, ...e], expEn, pista(desc, nome, { semLugar: true }), pista(descEn, nomeEn, { semLugar: true })]);
+      `On which island was ${nomeEn} born?`, [ilha, ...e], expEn, pIlha, pIlhaEn]);
   }
 }
 

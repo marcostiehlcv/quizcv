@@ -483,16 +483,24 @@ const SITE=/^(localhost|127\.|$)/.test(location.hostname)?"quizcv.vercel.app":lo
 
 // Perguntas já vistas (entre rondas), para não repetir até se esgotarem as de cada nível
 let vistas=new Set(ls.get("quizcv_vistas",[]));
-// Variedade: o tipo (nascimento, morte, outra) e a pessoa de cada pergunta, para não repetir seguido
-const tipo=e=>/\bnasceu\b/.test(e.q)?"nasc":/\bmorreu\b/.test(e.q)?"morte":"outro";
+// Variedade: o formato de cada pergunta (vida = em que ano nasceu/morreu; lugar = em que ilha/cidade nasceu;
+// ano = «Em que ano? «acontecimento»»; outro = escritas à mão), a pessoa e se é um atleta
+const formato=e=>/\b(ilha|cidade) nasceu\b/.test(e.q)?"lugar":/\b(nasceu|morreu)\b/.test(e.q)?"vida":/^Em que ano\? «/.test(e.q)?"ano":"outro";
 const pessoa=e=>{const m=/(?:nasceu|morreu) (.+)\?$/.exec(e.q);return m?m[1]:""};
-// vizinhas: as perguntas antes e depois do lugar a preencher; evita o mesmo tema e o mesmo tipo (nascimento/morte) ao lado,
-// e a mesma pessoa duas vezes na ronda. Se não houver nenhuma assim, vai aliviando as regras.
-function sorteia(nv,usadas,viz=[]){let pool=QS.filter(e=>e.nv===nv&&!usadas.has(e.id));let novas=pool.filter(e=>!vistas.has(e.id));
+const atleta=e=>e.tema==="desporto"&&!!pessoa(e);
+const MAXF={vida:4,lugar:3,ano:5},MAXATLETA=1; // máximo por ronda de 15
+// viz: as perguntas antes e depois do lugar a preencher; fora: a pergunta que vai ser trocada (ao saltar).
+// Regras: nem o mesmo tema nem o mesmo formato ao lado, limites por ronda (MAXF, MAXATLETA) e a mesma pessoa só uma vez.
+// Primeiro tenta as perguntas ainda não vistas e depois as já vistas (a variedade conta mais do que a novidade:
+// senão, com o tempo, as não vistas ficam quase só de um formato); só no fim alivia as regras.
+function sorteia(nv,usadas,viz=[],fora=null){let pool=QS.filter(e=>e.nv===nv&&!usadas.has(e.id));let novas=pool.filter(e=>!vistas.has(e.id));
  if(!novas.length){QS.filter(e=>e.nv===nv).forEach(e=>vistas.delete(e.id));novas=pool}
- const nomes=new Set(ronda.map(pessoa).filter(Boolean)),perto=viz.filter(Boolean);
- const regras=[e=>!perto.some(v=>v.tema===e.tema||(tipo(v)!=="outro"&&tipo(v)===tipo(e))),e=>!perto.some(v=>tipo(v)!=="outro"&&tipo(v)===tipo(e)),()=>true];
- for(const ok of regras){const c=novas.filter(e=>ok(e)&&!(pessoa(e)&&nomes.has(pessoa(e))));if(c.length)return pick(c)}
+ const r=ronda.filter(e=>e&&e!==fora),perto=viz.filter(Boolean),nomes=new Set(r.map(pessoa).filter(Boolean)),conta={};
+ let atletas=0;r.forEach(e=>{const f=formato(e);conta[f]=(conta[f]||0)+1;if(atleta(e))atletas++});
+ const igualFormato=e=>perto.some(v=>formato(v)!=="outro"&&formato(v)===formato(e));
+ const limites=e=>(conta[formato(e)]||0)<(MAXF[formato(e)]||99)&&!(atleta(e)&&atletas>=MAXATLETA);
+ const regras=[e=>limites(e)&&!igualFormato(e)&&!perto.some(v=>v.tema===e.tema),e=>limites(e)&&!igualFormato(e),e=>!igualFormato(e),()=>true];
+ for(const ok of regras)for(const c of [novas,pool]){const f=c.filter(e=>ok(e)&&!(pessoa(e)&&nomes.has(pessoa(e))));if(f.length)return pick(f)}
  return novas.length?pick(novas):null}
 const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 
@@ -612,7 +620,7 @@ $("reveal").onclick=()=>{if(!estado&&revelar>0)fecha("revelado",null)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>saltarAgora();
-const saltarAgora=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]]);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");estado="saltar";$("alerta").classList.remove("on");
+const saltarAgora=()=>{if(estado||!saltos)return;const e=ronda[idx];const n=sorteia(e.nv,usadas,[ronda[idx-1],ronda[idx+1]],e);if(!n)return;saltos--;usadas.add(n.id);clearInterval(tick);pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");estado="saltar";$("alerta").classList.remove("on");
  
  const sb=$("skip").querySelector(".n"),rr=(sb||$("skip")).getBoundingClientRect();
  if(!reduz()){const m=document.createElement("div");m.className="menos1";m.textContent="−1";m.style.left=(rr.left+rr.width/2)+"px";m.style.top=(rr.top-6)+"px";document.body.appendChild(m);setTimeout(()=>m.remove(),950)}

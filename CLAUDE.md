@@ -30,6 +30,7 @@ Cada pergunta é um array:
 ### Geração (`node scripts/gerar-perguntas.js`)
 - Do Hoje CV entram os registos com fonte, exceto presidentes de câmara e datas tradicionais.
 - «Em que ano nasceu/morreu X?» (títulos «Nasce X» / «Morre X»), «Em que ano? «título»» (só se o título não tiver o ano) e «Em que ilha nasceu X?» (só ilhas habitadas).
+- Atletas (nascimentos com tema `desporto`): sem «em que ano nasceu» (pelo nome é difícil de mais); só «em que ilha nasceu» e só se houver pista.
 - Nível: registos com `destaque` → médio; os outros → difícil; «em que ilha» → médio. Os anos errados ficam a ±4–20 anos (médio) ou ±1–8 (difícil), com semente fixa.
 - As fáceis vêm só do `perguntas-base.js`. Para ter mais variedade nas fáceis, acrescentar aí.
 - Pista (campos 11 e 12): contexto tirado da descrição do registo, sem as frases ou partes sobre nascimento/morte e, nas perguntas de ilha, sem nomes de lugares (`LUGARES`); nas perguntas «Em que ano? «acontecimento»», sem as frases que têm anos (dariam a resposta por aproximação, ex.: «fica no cargo até 2026»); se ainda revelar a resposta, fica vazia. Ficam de fora as nomeações pouco conhecidas (`OBSCUROS`: capitães, governadores, bispos).
@@ -40,7 +41,7 @@ Cada pergunta é um array:
 - `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
 - Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`); cores do anel: verde até 11 s, amarelo (`mid`) de 10 a 6 s, vermelho (`low`, a pulsar mais forte) abaixo de 6 s. Saltar: `#qbox` sai (`out`) e a nova entra (`in`). O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).
 - Alerta do tempo: a partir de `ALERTA=10` s, `#alerta` (camada fixa, sem cliques) pulsa nas margens da janela, a amarelo e depois a vermelho (abaixo de 6 s, como o anel), a cada segundo, cada vez mais forte (`--k` de 0 a 1). Desliga ao responder, saltar, pausar ou sair do jogo.
-- Variedade: `sorteia(nv, usadas, vizinhas)` evita o mesmo tema e o mesmo tipo (`tipo`: nascimento/morte) ao lado e a mesma pessoa (`pessoa`) duas vezes na ronda; se não houver candidatas, alivia as regras.
+- Variedade: `sorteia(nv, usadas, vizinhas, fora)` evita ao lado o mesmo tema e o mesmo `formato` (`vida` = em que ano nasceu/morreu, `lugar` = em que ilha/cidade nasceu, `ano` = «Em que ano? «acontecimento»», `outro` = escritas à mão), limita por ronda (`MAXF`: vida 4, lugar 3, ano 5; `MAXATLETA` = 1 pergunta sobre um atleta) e não repete a pessoa (`pessoa`). Tenta primeiro as não vistas e depois as já vistas, antes de aliviar as regras (senão, com o tempo, as não vistas ficavam quase só de um formato e apareciam 4 «em que ano morreu» seguidas). Ao saltar, `fora` é a pergunta trocada.
 - Cabeçalho: bandeira de fundo `.flagbg` (grande, inclinada e cortada, em degradê radial a partir da direita, ondular lento), igual à do Hoje CV.
 - Página inicial: botão `.startbig` amarelo sólido, simples (sem riscas, brilhos nem halos: o Marco achou que tiravam credibilidade); por baixo, o cartão «Como funciona» (`.how`) com 4 linhas de ícone monocromático + texto curto (`I18N.*.rules`) e a linha dos pontos (`ptsNote`).
 - Cartão de partilha: bandeira de fundo `drawFlagBg()` no canto superior direito (inclinada, em degradê), igual à do Hoje CV.
