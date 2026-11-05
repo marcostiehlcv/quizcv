@@ -560,7 +560,9 @@ let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
 // Todas as apps do projeto (lista igual em todas; ao criar uma nova, acrescentá-la aqui e nas outras). O rodapé mostra as outras.
 const APPS=[["hojecv","Hoje CV","https://hojecv.vercel.app/"],["quizcv","Quiz CV","https://quizcv.vercel.app/"]],ESTA_APP="quizcv";
 // Versão: "normal" (15 perguntas, 3 níveis, 20 s) ou "kids" (10 perguntas, níveis 1 e 2, 30 s, sem tensão, textos de I18N.*.k)
-let modo=ls.get("quizcv_modo","normal")==="kids"?"kids":"normal";
+// No URL: ?criancas (ou ?kids) abre na versão para crianças; sem nada, abre sempre na normal. Ao trocar de versão, o URL acompanha,
+// para se poder partilhar o link já com a versão escolhida (ex.: quizcv.vercel.app/?criancas&lang=en).
+let modo=/[?&](criancas|kids)(=[^&]*)?(&|$)/.test(location.search)?"kids":"normal";
 const KIDS=()=>modo==="kids";
 const LK={pt:{...I18N.pt,...I18N.pt.k},en:{...I18N.en,...I18N.en.k}};
 const L=()=>KIDS()?LK[LANG]:I18N[LANG];
@@ -573,7 +575,9 @@ const lerQ=a=>(a||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].leng
  .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9],p:r[10]||"",p_en:r[11]||""}));
 const QS_N=lerQ(window.QUIZCV_PERGUNTAS),QS_K=lerQ(window.QUIZCV_CRIANCAS);
 let QS=KIDS()?QS_K:QS_N;
-function mudaModo(m){modo=m==="kids"?"kids":"normal";ls.set("quizcv_modo",modo);NIVEIS=MODOS[modo].niveis;TEMPO=MODOS[modo].tempo;QS=KIDS()?QS_K:QS_N;applyLang()}
+function urlModo(){const q=location.search.slice(1).split("&").filter(x=>x&&!/^(criancas|kids)(=|$)/.test(x));if(KIDS())q.unshift("criancas");
+ try{history.replaceState(null,"",location.pathname+(q.length?"?"+q.join("&"):"")+location.hash)}catch(_){}}
+function mudaModo(m){modo=m==="kids"?"kids":"normal";urlModo();NIVEIS=MODOS[modo].niveis;TEMPO=MODOS[modo].tempo;QS=KIDS()?QS_K:QS_N;applyLang()}
 // pista de contexto (só nas perguntas geradas); em EN só aparece se houver tradução
 const PI=e=>LANG==="en"?e.p_en:e.p;
 const Q=e=>LANG==="en"&&e.q_en?e.q_en:e.q;
@@ -845,7 +849,8 @@ async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesqu
  const fb=H-150;ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
  ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
-const shareText=()=>L().shareText(certas(),ronda.length,pts,SITE);
+// na versão para crianças, o link partilhado abre já nessa versão
+const shareText=()=>L().shareText(certas(),ronda.length,pts,KIDS()?SITE+"/?criancas":SITE);
 const cardBlob=()=>new Promise(r=>$("fCv").toBlob(r,"image/png"));
 const shrMsg=m=>{$("shrMsg").textContent=m;$("shrMsg").hidden=false};
 $("shrNative").onclick=async()=>{try{const blob=await cardBlob();const f=new File([blob],"quizcv.png",{type:"image/png"});
