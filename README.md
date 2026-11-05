@@ -10,7 +10,7 @@
 - Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda 50/50 por ronda: tira duas opções erradas (o tempo continua, mas nunca fica abaixo de 10 segundos).
 - Depois de responder, aparece a explicação e a fonte, com um comentário bem-disposto.
 - «Reportar problema» assinala uma pergunta com erro (motivos fixos, sem texto livre).
-- No fim, o resultado pode ser partilhado como imagem ou texto. O melhor resultado fica guardado no navegador, e as perguntas já vistas só se repetem quando se esgotam.
+- No fim, o resultado pode ser partilhado como imagem ou texto, e «Ver perguntas e respostas» mostra cada pergunta com a resposta dada, a certa, a explicação e a fonte, com a opção de reportar um problema. O melhor resultado fica guardado no navegador, e as perguntas já vistas só se repetem quando se esgotam.
 - Som do temporizador que aumenta a tensão (verde, amarelo, vermelho), com botão para desligar.
 - Em português de Portugal (a tratar por «tu»), por defeito, e inglês, nos temas claro e escuro.
 

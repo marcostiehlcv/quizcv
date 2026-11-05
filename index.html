@@ -276,6 +276,25 @@ main{position:relative;z-index:1}
 #fCv{width:100%;height:auto;border-radius:18px;display:block;box-shadow:0 18px 40px -18px rgba(0,0,0,.6)}
 .fimacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .fimacts .btn{padding:11px 8px;font-size:14.5px}
+/* revisão no fim: perguntas, respostas, fonte e reporte */
+.revbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.revbtn svg{width:18px;height:18px;transition:transform .2s}.revbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.rev{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rev details{border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.rev summary{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;cursor:pointer;list-style:none}
+.rev summary::-webkit-details-marker{display:none}
+.rev .ic{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;display:grid;place-items:center;color:#fff;background:var(--ok)}
+.rev .ic svg{width:13px;height:13px}
+.rev .no .ic{background:var(--bad)}
+.rev .rn{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-right:4px}
+.rev .rq{font-weight:600;font-size:15px;line-height:1.4;min-width:0}
+.rev .rb{padding:0 14px 14px 46px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;line-height:1.5}
+.rev .rb p{margin:0}
+.rev .rok{color:var(--ok);font-weight:600}.rev .rbad{color:var(--bad);font-weight:600}
+.rev .rx{color:var(--muted)}
+.rev .racts{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.rrep{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;background:none;border:0;padding:0;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rrep:hover{color:var(--fg)}.rrep:disabled{cursor:default;text-decoration:none;opacity:.7}
 @media (min-width:900px){.fim{max-width:560px;margin:0 auto;width:100%}}
 @media (min-width:900px){
   .wrap{max-width:720px;padding-left:28px;padding-right:28px}
@@ -356,6 +375,8 @@ main{position:relative;z-index:1}
       </div>
       <p class="msg" id="shrMsg" hidden style="text-align:center"></p>
       <button type="button" class="startbig" id="again"></button>
+      <button type="button" class="btn revbtn" id="revBtn" aria-expanded="false" aria-controls="rev"></button>
+      <ol class="rev" id="rev" hidden></ol>
     </section>
 
     <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn"></button><nav class="apps" id="apps"></nav></div>
@@ -422,6 +443,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
  again:"Jogar outra vez",share:"Partilhar resultado",
+ revShow:"Ver perguntas e respostas",revHide:"Esconder perguntas e respostas",yours:a=>`A tua resposta: «${a}»`,noAns:"Sem resposta: acabou o tempo.",rightIs:a=>`Resposta certa: «${a}»`,
  shrTitle:"Partilhar resultado",native:"Partilhar…",save:"Guardar imagem",copy:"Copiar texto",close:"Fechar",
  copied:"Texto copiado.",saved:"Imagem guardada.",nativeFail:"Não foi possível abrir a partilha. Usa «Guardar imagem».",
  shareText:(s,n,p,u)=>`Quiz CV: acertei ${s} em ${n} perguntas sobre Cabo Verde (${p} pontos). Consegues fazer melhor? https://${u}`,
@@ -433,7 +455,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas sobre Cabo Verde"},
  about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
   ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda 50/50 por ronda: tira duas opções erradas. O tempo continua a contar, mas se tiveres menos de 10 segundos sobe para 10."],
-  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes. Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema»."],
+  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes e outra vez no fim, em «Ver perguntas e respostas». Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema», durante o jogo ou no fim."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -455,6 +477,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
  again:"Play again",share:"Share result",
+ revShow:"See questions and answers",revHide:"Hide questions and answers",yours:a=>`Your answer: “${a}”`,noAns:"No answer: time ran out.",rightIs:a=>`Right answer: “${a}”`,
  shrTitle:"Share result",native:"Share…",save:"Save image",copy:"Copy text",close:"Close",
  copied:"Text copied.",saved:"Image saved.",nativeFail:"Sharing could not be opened. Use “Save image”.",
  shareText:(s,n,p,u)=>`Quiz CV: I got ${s} out of ${n} questions about Cabo Verde right (${p} points). Can you beat it? https://${u}`,
@@ -466,7 +489,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz game about Cabo Verde"},
  about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
   ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) and you have one 50/50 help per round: it removes two wrong options. The clock keeps running, but if you have less than 10 seconds it goes back up to 10."],
-  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”."],
+  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer and again at the end, under “See questions and answers”. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”, during the game or at the end."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -523,6 +546,8 @@ function sorteia(nv,usadas,viz=[],fora=null){let pool=QS.filter(e=>e.nv===nv&&!u
 const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 
 // estado da ronda
+// escolhas[i] = opção escolhida na pergunta i (índice em O(e); null = acabou o tempo), para a revisão no fim
+let escolhas=[],repAlvo=null,revAberta=false;
 let fora=new Set(),ronda=[],idx=0,pts=0,saltos=SALTOS,meio=MEIO,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
 function show(v){vista=v;pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
@@ -536,7 +561,7 @@ function renderIni(){const t=L();
  const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
- idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];show("jogo");nova()}
+ idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;show("jogo");nova()}
 function nova(){resp=null;fora=new Set();estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
  const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
@@ -618,7 +643,7 @@ function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
 let ganhoAtual=null;
 function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;const e=ronda[idx],t=L();let ganho=0;
  if(est==="certo"){const bon=Math.ceil(restante);ganho=VALOR[e.nv]+bon;pts+=ganho;ganhoAtual={total:ganho,base:VALOR[e.nv],bonus:bon,nv:e.nv}}
- res.push(est==="certo"?"ok":"bad");
+ res.push(est==="certo"?"ok":"bad");escolhas.push(k);
  const fb=$("fb");fb.dataset.joke=est==="certo"?pick(t.jokesOk):est==="errado"?pick(t.jokesBad):est==="tempo"?pick(t.jokesTime):"";
  renderQ();
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
@@ -678,7 +703,20 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("again").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.again)}`;
  $("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrMsg").hidden=true;
  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
- $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":""}
+ $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":"";renderRev()}
+// revisão: cada pergunta respondida, com a resposta dada, a certa, a explicação, a fonte e «Reportar problema»
+const ICOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ ICNO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>';
+function renderRev(){const t=L(),n=res.length,rb=$("revBtn"),rv=$("rev");rb.hidden=!n;
+ rb.setAttribute("aria-expanded",String(revAberta));rb.innerHTML=`${esc(revAberta?t.revHide:t.revShow)}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+ rv.hidden=!revAberta||!n;if(rv.hidden)return;
+ const abertas=new Set([...rv.querySelectorAll("details[open]")].map(d=>d.dataset.i)),feitos=ls.get("quizcv_rep",[]);
+ rv.innerHTML=ronda.slice(0,n).map((e,i)=>{const ok=res[i]==="ok",ops=O(e),k=escolhas[i],rep=feitos.includes(e.id);
+  return `<li><details data-i="${i}"${abertas.has(String(i))?" open":""} class="${ok?"":"no"}"><summary><span class="ic" aria-label="${esc(ok?t.right:t.wrong)}">${ok?ICOK:ICNO}</span><span class="rq"><span class="rn">${i+1}.</span>${esc(Q(e))}</span></summary>
+   <div class="rb">${ok?`<p class="rok">${esc(t.rightIs(ops[0]))}</p>`:`<p class="rbad">${esc(k==null?t.noAns:t.yours(ops[k]))}</p><p class="rok">${esc(t.rightIs(ops[0]))}</p>`}
+   <p class="rx">${esc(X(e))}</p><div class="racts">${e.src?`<a class="src" href="${esc(e.src)}" target="_blank" rel="noopener">${t.source}</a>`:""}<button type="button" class="rrep" data-rep="${i}"${rep?" disabled":""}>${esc(rep?t.reported:t.report)}</button></div></div></details></li>`}).join("")}
+$("revBtn").onclick=()=>{revAberta=!revAberta;renderRev();if(revAberta)$("rev").scrollIntoView({behavior:reduz()?"auto":"smooth",block:"nearest"})};
+$("rev").addEventListener("click",ev=>{const b=ev.target.closest("[data-rep]");if(b)abreRep(ronda[+b.dataset.rep])});
 // contagem de 3 segundos antes de cada ronda
 function contagem(){audio();const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
  const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";if(i<3)bip(440,.18,.12,"triangle");else{bip(880,.35,.13,"triangle");bip(1320,.3,.06,"sine")}i++;setTimeout(passo,reduz()?450:900)};
@@ -735,18 +773,20 @@ $("shrSave").onclick=async()=>{const blob=await cardBlob();const a=document.crea
 $("shrCopy").onclick=async()=>{try{await navigator.clipboard.writeText(shareText());shrMsg(L().copied)}catch(_){shrMsg(shareText())}};
 
 // reportes: motivos fixos, sem texto livre; POST {id, motivos} para o Apps Script (config.js)
-$("report").onclick=()=>{const t=L(),e=ronda[idx];pausar();
+// a mesma janela serve durante o jogo (pergunta atual) e na revisão do fim (repAlvo = a pergunta escolhida)
+$("report").onclick=()=>abreRep(ronda[idx]);
+function abreRep(e){const t=L();repAlvo=e;if(vista==="jogo")pausar();$("repCancel").textContent=t.cancel;
  $("repQ").textContent=Q(e);$("repMsg").hidden=true;$("repSend").disabled=true;$("repSend").hidden=false;
  $("repOpts").innerHTML=Object.entries(t.repMot).map(([k,v])=>`<label class="ropt"><input type="checkbox" value="${k}"><span>${esc(v)}</span></label>`).join("");
- $("rep").hidden=false};
+ $("rep").hidden=false}
 $("repOpts").addEventListener("change",()=>{$("repSend").disabled=!$("repOpts").querySelector("input:checked")});
 const fechaRep=()=>{$("rep").hidden=true;if(vista==="jogo")retomar()};
 $("repCancel").onclick=fechaRep;
-$("repSend").onclick=async()=>{const t=L(),e=ronda[idx],motivos=[...$("repOpts").querySelectorAll("input:checked")].map(i=>i.value);
+$("repSend").onclick=async()=>{const t=L(),e=repAlvo,motivos=[...$("repOpts").querySelectorAll("input:checked")].map(i=>i.value);
  $("repSend").disabled=true;let m=t.repOff;
  if(API){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({id:e.id,motivos,lang:LANG})});const j=await r.json();m=j&&j.ok?t.repOk:t.repFail}catch(_){m=t.repFail}}
  if(m!==t.repFail){const s=ls.get("quizcv_rep",[]);s.push(e.id);ls.set("quizcv_rep",s)}
- $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;renderQ()};
+ $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;if(vista==="jogo")renderQ();else renderRev()};
 
 function applyLang(){const t=L();document.documentElement.lang=LANG;
  $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}

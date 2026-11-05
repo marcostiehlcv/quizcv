@@ -57,7 +57,8 @@ Cada pergunta é um array:
 - Estados de cada pergunta: `certo`, `errado`, `tempo` (`fecha()`). O temporizador pára com o reporte aberto ou o separador escondido.
 - Animações: `festa()` (confetes com as cores da bandeira e «+N») e `falha()` (clarão e vibração); respeitam `prefers-reduced-motion`. Comentários em `jokesOk`, `jokesBad`, `jokesTime` (PT e EN).
 - Resultado: o ecrã final mostra o próprio cartão de partilha (`drawCard()` no `#fCv`, 1080×1080), com a frase do resultado por cima, pontos/recorde por baixo e os botões Partilhar… (menu nativo), Guardar imagem e Copiar texto; «Jogar outra vez» no mesmo estilo do botão inicial.
-- Reportes: motivos fixos (`certa`, `outra`, `pergunta`, `fonte`, `traducao`, `ofensivo`), POST `{id, motivos, lang}`; já enviados em `quizcv_rep`.
+- Revisão no fim: por baixo de «Jogar outra vez», o botão «Ver perguntas e respostas» (`#revBtn`, textos `revShow`/`revHide`) abre a lista `#rev` (`renderRev()`): cada pergunta respondida num `<details>` com ✓/✗, a resposta dada (`escolhas[i]`, índice em `O(e)`; `null` = acabou o tempo, texto `noAns`), a certa (`rightIs`), a explicação, a fonte e «Reportar problema». As saltadas não aparecem; se se terminar a meio, só as respondidas.
+- Reportes: motivos fixos (`certa`, `outra`, `pergunta`, `fonte`, `traducao`, `ofensivo`), POST `{id, motivos, lang}`; já enviados em `quizcv_rep`. A janela serve durante o jogo e na revisão do fim: `abreRep(e)` guarda a pergunta em `repAlvo`.
 
 ## Critérios para as perguntas
 1. Só factos comprovados, com fonte consultável (de preferência fontes de confiança, como no Hoje CV).
