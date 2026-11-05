@@ -10,6 +10,7 @@ global.window = {};
 require(path.resolve(EVENTOS));
 const D = window.HOJECV_DADOS || [];
 const BASE = require(path.join(RAIZ, "perguntas-base.js"));
+const KIDS = require(path.join(RAIZ, "perguntas-criancas.js")); // versão para crianças (só níveis 1 e 2)
 
 const ILHAS = ["Santo Antão", "São Vicente", "São Nicolau", "Sal", "Boa Vista", "Maio", "Santiago", "Fogo", "Brava"];
 const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
@@ -98,7 +99,7 @@ for (const r of D) {
 
 // validação
 const todas = [...BASE, ...gen], ids = new Set(), erros = [];
-for (const p of todas) {
+for (const p of [...todas, ...KIDS]) {
   const [id, nivel, tema, q, o, x, f, qe, oe] = p;
   if (ids.has(id)) erros.push("id repetido: " + id); ids.add(id);
   if (![1, 2, 3].includes(nivel)) erros.push(id + ": nível inválido");
@@ -107,16 +108,21 @@ for (const p of todas) {
   if (!Array.isArray(o) || o.length !== 4 || new Set(o).size !== 4) erros.push(id + ": opções inválidas");
   if (!Array.isArray(oe) || oe.length !== 4 || new Set(oe).size !== 4) erros.push(id + ": opções EN inválidas");
 }
+for (const p of KIDS) if (![1, 2].includes(p[1]) || p[2] === "catastrofe") erros.push(p[0] + ": crianças só com nível 1 ou 2 e sem catástrofes");
 if (erros.length) { console.error(erros.join("\n")); process.exit(1); }
 
 const n = [1, 2, 3].map((k) => todas.filter((p) => p[1] === k).length);
 const agora = new Date(Date.now() - 3600e3).toISOString().slice(0, 16).replace("T", " "); // hora de Cabo Verde (UTC−1)
 const out = `// Gerado por scripts/gerar-perguntas.js — não editar à mão (editar perguntas-base.js ou o Hoje CV).
 // [id, nível, tema, pergunta, [certa, errada, errada, errada], explicação, fonte, pergunta_en, [opções_en], explicação_en, pista, pista_en]
+// QUIZCV_CRIANCAS: perguntas da versão para crianças (perguntas-criancas.js), no mesmo formato
 window.QUIZCV_ATUALIZADO = ${JSON.stringify(agora)};
 window.QUIZCV_PERGUNTAS = [
 ${todas.map((p) => JSON.stringify(p)).join(",\n")}
 ];
+window.QUIZCV_CRIANCAS = [
+${KIDS.map((p) => JSON.stringify(p)).join(",\n")}
+];
 `;
 fs.writeFileSync(path.join(RAIZ, "perguntas.js"), out);
-console.log(`perguntas.js: ${todas.length} perguntas (${BASE.length} escritas à mão, ${gen.length} do Hoje CV) · fáceis ${n[0]} · médias ${n[1]} · difíceis ${n[2]}`);
+console.log(`perguntas.js: ${todas.length} perguntas (${BASE.length} escritas à mão, ${gen.length} do Hoje CV) · fáceis ${n[0]} · médias ${n[1]} · difíceis ${n[2]} · crianças ${KIDS.length}`);

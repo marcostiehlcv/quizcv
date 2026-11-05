@@ -16,6 +16,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 | `perguntas-base.js` | Perguntas escritas à mão (fonte de verdade; módulo Node) |
 | `perguntas-base-2.js` | Segundo lote escrito à mão (b51–b150), juntado pelo `perguntas-base.js` |
 | `perguntas-base-3.js` | Terceiro lote escrito à mão (b151–b250), juntado pelo `perguntas-base.js` |
+| `perguntas-criancas.js` | Perguntas da versão para crianças, escritas à mão (ids `bk…`, só níveis 1 e 2; módulo Node). O gerador valida-as e escreve-as em `window.QUIZCV_CRIANCAS` |
 | `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
 | `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |
 | `config.js` | `window.QUIZCV_CONFIG = { API: "<url /exec>" }` para os reportes (vazio = desligados) |
@@ -37,6 +38,7 @@ Cada pergunta é um array:
 - Depois de regenerar o `eventos.js` do Hoje CV, correr de novo o gerador e fazer commit.
 
 ## Código
+- **Versão para crianças** (`modo` = `normal` | `kids`, guardado em `quizcv_modo`; seletor `.modo` / `#modo` por cima do botão «Começar», textos `modoLbl`/`modos`). `MODOS` define por versão `niveis`, `tempo` e a chave do melhor resultado (`quizcv_best` / `quizcv_best_kids`); `mudaModo()` troca `NIVEIS`, `TEMPO` e o conjunto de perguntas (`QS` = `QS_N` ou `QS_K`). Crianças: 10 perguntas (5×1, 5×2) só do `perguntas-criancas.js`, 30 s, sem alerta, drone, coração, número gigante, clarão vermelho, tremor nem véu (só tique suave e um som de erro suave). Os textos próprios estão em `I18N.*.k` (subtítulo, regras, pontos, «Muito bem!» / «Quase!» / «O tempo acabou!», resposta certa com «Agora já sabes!», `jokesOk`/`jokesBad`/`jokesTime` de incentivo, `verdict` sempre positivo, rodapé do cartão) e substituem os normais através de `LK` (o `L()` devolve `LK[LANG]` na versão para crianças). Regras para as perguntas de crianças: linguagem simples, a tratar por «tu», explicações curtas e educativas; nada de tragédias, mortes, guerras nem álcool (o gerador recusa o tema `catastrofe` e níveis fora de 1–2). O cartão de partilha só mostra os níveis que existem na ronda.
 - Ronda: `NIVEIS` (5×1, 5×2, 5×3), `TEMPO=20` s, `SALTOS=3`, pontos `VALOR` {10,20,30} + segundos que sobram.
 - `sorteia(nv, usadas)` escolhe ao acaso entre as não vistas (`quizcv_vistas`); quando se esgotam num nível, recomeça.
 - Temporizador: anel `#timer` com os segundos em grande, a pulsar a cada segundo (`beat`); cores do anel: verde até 11 s, amarelo (`mid`) de 10 a 6 s, vermelho (`low`, a pulsar mais forte) abaixo de 6 s. Saltar: `#qbox` sai (`out`) e a nova entra (`in`). O feedback mostra a conta dos pontos (`gain`: base do nível + segundos que sobram).

@@ -92,6 +92,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .how p b{color:var(--fg);font-weight:600}
 .best{text-align:center}
 .ini{display:flex;flex-direction:column;gap:18px}
+/* seletor de versão: normal / para crianças */
+.modo{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:14px}
+.modo button{font-family:var(--display);font-weight:600;font-size:15px;border:0;background:transparent;color:var(--muted);padding:10px 8px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.modo button svg{width:17px;height:17px;flex:none}
+.modo button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.15)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rules b{color:var(--sun)}}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
 /* contagem antes de começar: 3, 2, 1, já! em grande */
@@ -329,6 +334,7 @@ main{position:relative;z-index:1}
   <div class="wrap">
     <!-- início -->
     <section id="v-ini" class="ini">
+      <div class="modo" id="modo" role="group"><button type="button" data-m="normal" aria-pressed="true"></button><button type="button" data-m="kids" aria-pressed="false"></button></div>
       <button type="button" class="startbig" id="start"></button>
       <p class="msg" id="iniNone" hidden></p>
       <div class="how" id="how"><h2 id="howT"></h2><ul class="howl" id="rules"></ul><p id="ptsNote"></p></div>
@@ -442,6 +448,17 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  fLbl:"Resultado",of:"certas",
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
+ modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},
+ // versão para crianças: estes textos substituem os normais (ver LK)
+ k:{sub:"10 perguntas para conhecer Cabo Verde. Vamos aprender a brincar?",
+  rules:(n,t,sk,rv)=>[["q",`${n} perguntas`,"Para conhecer o país"],["t",`${t} segundos`,"Sem pressa"],["s",`${sk} saltos`,"Trocam a pergunta"],["a",`${rv} ajuda 50/50`,"Tira duas opções erradas"]],
+  ptsNote:"<b>Pontos:</b> 10 ou 20 por cada resposta certa, mais 1 por cada segundo que sobra. Errar também ensina!",
+  right:"Muito bem!",wrong:"Quase!",timeout:"O tempo acabou!",answer:a=>`A resposta certa é «${a}». Agora já sabes!`,
+  jokesOk:["Fantástico! Estás a aprender muito.","Isso mesmo! Continua assim.","Que bem! Já sabes mais sobre Cabo Verde.","Espetacular! Mereces uma estrela.","Acertaste em cheio!","Uau! Sabes mesmo muito.","Boa! Conheces as ilhas cada vez melhor."],
+  jokesBad:["Não faz mal, errar faz parte de aprender.","Foi por pouco! Na próxima vais conseguir.","Boa tentativa! Agora já ficas a saber.","Continua! Cada pergunta ensina uma coisa nova.","Não desistas, estás a ir muito bem."],
+  jokesTime:["Não faz mal! Agora já sabes a resposta.","O tempo voou! Na próxima vais mais depressa.","Sem problema, vamos à próxima!"],
+  verdict:(s,n)=>s===n?"Incrível! Acertaste todas! Sabes tudo sobre Cabo Verde.":s>=n*.7?"Muito bem! Sabes muito sobre Cabo Verde.":s>=n*.4?"Boa! Aprendeste muitas coisas novas hoje.":"Parabéns por jogares! Hoje aprendeste coisas novas. Queres tentar outra vez?",
+  card:{lbl:"O MEU RESULTADO",of:"certas",pts:p=>`${p} PONTOS`,foot:"QUIZ CV · VERSÃO PARA CRIANÇAS"}},
  again:"Jogar outra vez",share:"Partilhar resultado",
  revShow:"Ver perguntas e respostas",revHide:"Esconder perguntas e respostas",yours:a=>`A tua resposta: «${a}»`,noAns:"Sem resposta: acabou o tempo.",rightIs:a=>`Resposta certa: «${a}»`,
  shrTitle:"Partilhar resultado",native:"Partilhar…",save:"Guardar imagem",copy:"Copiar texto",close:"Fechar",
@@ -456,6 +473,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
   ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda 50/50 por ronda: tira duas opções erradas. O tempo continua a contar, mas se tiveres menos de 10 segundos sobe para 10."],
   ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes e outra vez no fim, em «Ver perguntas e respostas». Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema», durante o jogo ou no fim."],
+  ["Versão para crianças","Na página inicial podes escolher a versão para crianças: 10 perguntas simples para conhecer o país (as ilhas, a bandeira, a música, a comida, a natureza e a língua), com 30 segundos cada, sem sons de tensão e com mensagens de incentivo. Não tem perguntas sobre tragédias."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -476,6 +494,16 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  fLbl:"Result",of:"right",
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
+ modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},
+ k:{sub:"10 questions to get to know Cabo Verde. Shall we learn while we play?",
+  rules:(n,t,sk,rv)=>[["q",`${n} questions`,"Get to know the country"],["t",`${t} seconds`,"No rush"],["s",`${sk} skips`,"Swap the question"],["a",`${rv} 50/50 help`,"Removes two wrong options"]],
+  ptsNote:"<b>Points:</b> 10 or 20 for each right answer, plus 1 for every second left. Mistakes help you learn too!",
+  right:"Well done!",wrong:"Almost!",timeout:"Time's up!",answer:a=>`The right answer is “${a}”. Now you know!`,
+  jokesOk:["Fantastic! You are learning a lot.","That's it! Keep going.","Great! You know more about Cabo Verde now.","Amazing! You deserve a star.","Spot on!","Wow! You really know a lot.","Nice! You know the islands better and better."],
+  jokesBad:["Never mind, mistakes are part of learning.","So close! You'll get the next one.","Good try! Now you know.","Keep going! Every question teaches something new.","Don't give up, you are doing really well."],
+  jokesTime:["Never mind! Now you know the answer.","Time flew! You'll be quicker next time.","No problem, on to the next one!"],
+  verdict:(s,n)=>s===n?"Incredible! You got them all! You know everything about Cabo Verde.":s>=n*.7?"Well done! You know a lot about Cabo Verde.":s>=n*.4?"Nice! You learned lots of new things today.":"Well done for playing! You learned new things today. Want to try again?",
+  card:{lbl:"MY RESULT",of:"right",pts:p=>`${p} POINTS`,foot:"QUIZ CV · KIDS VERSION"}},
  again:"Play again",share:"Share result",
  revShow:"See questions and answers",revHide:"Hide questions and answers",yours:a=>`Your answer: “${a}”`,noAns:"No answer: time ran out.",rightIs:a=>`Right answer: “${a}”`,
  shrTitle:"Share result",native:"Share…",save:"Save image",copy:"Copy text",close:"Close",
@@ -490,6 +518,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
   ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) and you have one 50/50 help per round: it removes two wrong options. The clock keeps running, but if you have less than 10 seconds it goes back up to 10."],
   ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer and again at the end, under “See questions and answers”. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”, during the game or at the end."],
+  ["Kids version","On the start page you can choose the kids version: 10 simple questions to get to know the country (the islands, the flag, music, food, nature and language), with 30 seconds each, no tension sounds and encouraging messages. It has no questions about tragedies."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -501,12 +530,21 @@ let LANG=ls.get("quizcv_lang","pt");if(LANG!=="en")LANG="pt";
 {const q=/[?&]lang=(pt|en)(&|$)/.exec(location.search);if(q){LANG=q[1];ls.set("quizcv_lang",LANG)}}
 // Todas as apps do projeto (lista igual em todas; ao criar uma nova, acrescentá-la aqui e nas outras). O rodapé mostra as outras.
 const APPS=[["hojecv","Hoje CV","https://hojecv.vercel.app/"],["quizcv","Quiz CV","https://quizcv.vercel.app/"]],ESTA_APP="quizcv";
-const L=()=>I18N[LANG];
+// Versão: "normal" (15 perguntas, 3 níveis, 20 s) ou "kids" (10 perguntas, níveis 1 e 2, 30 s, sem tensão, textos de I18N.*.k)
+let modo=ls.get("quizcv_modo","normal")==="kids"?"kids":"normal";
+const KIDS=()=>modo==="kids";
+const LK={pt:{...I18N.pt,...I18N.pt.k},en:{...I18N.en,...I18N.en.k}};
+const L=()=>KIDS()?LK[LANG]:I18N[LANG];
 const API=(window.QUIZCV_CONFIG||{}).API||"";
-const NIVEIS=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3], TEMPO=20, SALTOS=3, MEIO=1, VALOR={1:10,2:20,3:30};
+const MODOS={normal:{niveis:[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3],tempo:20,best:"quizcv_best"},kids:{niveis:[1,1,1,1,1,2,2,2,2,2],tempo:30,best:"quizcv_best_kids"}};
+let NIVEIS=MODOS[modo].niveis, TEMPO=MODOS[modo].tempo;
+const SALTOS=3, MEIO=1, VALOR={1:10,2:20,3:30};
 // [id, nível, tema, pergunta, [certa, …], explicação, fonte, pergunta_en, [opções_en], explicação_en, pista, pista_en]; a certa é sempre a 1.ª
-const QS=(window.QUIZCV_PERGUNTAS||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].length===4&&[1,2,3].includes(r[1]))
+const lerQ=a=>(a||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].length===4&&[1,2,3].includes(r[1]))
  .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9],p:r[10]||"",p_en:r[11]||""}));
+const QS_N=lerQ(window.QUIZCV_PERGUNTAS),QS_K=lerQ(window.QUIZCV_CRIANCAS);
+let QS=KIDS()?QS_K:QS_N;
+function mudaModo(m){modo=m==="kids"?"kids":"normal";ls.set("quizcv_modo",modo);NIVEIS=MODOS[modo].niveis;TEMPO=MODOS[modo].tempo;QS=KIDS()?QS_K:QS_N;applyLang()}
 // pista de contexto (só nas perguntas geradas); em EN só aparece se houver tradução
 const PI=e=>LANG==="en"?e.p_en:e.p;
 const Q=e=>LANG==="en"&&e.q_en?e.q_en:e.q;
@@ -553,12 +591,14 @@ const usadas=new Set();
 function show(v){vista=v;pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
 const HOWI={q:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>',t:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',s:'<path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/>',a:'<circle cx="12" cy="12" r="9"/><path d="M12 3v18"/>'};
 function renderIni(){const t=L();
+ const MI={normal:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/>',kids:'<path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/>'};
+ $("modo").setAttribute("aria-label",t.modoLbl);$("modo").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-pressed",String(b.dataset.m===modo));b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${MI[b.dataset.m]}</svg>${esc(t.modos[b.dataset.m])}`});
  $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
  $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!QS.length;
  $("howT").textContent=t.howT;$("how").hidden=!QS.length;
  $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
  $("ptsNote").innerHTML=t.ptsNote;
- const b=ls.get("quizcv_best",0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
+ const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
  idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;show("jogo");nova()}
@@ -576,7 +616,7 @@ function bip(f,dur,vol,tipo="sine",f2=null,atraso=0){if(!som)return;const a=audi
  o.type=tipo;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+dur);
  g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+.008);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
  o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+dur+.03)}
-function somTique(s){if(s>10){bip(520,.05,.035);return}
+function somTique(s){if(s>10||KIDS()){bip(520,.05,.035);return}
  if(s>=6){bip(700,.06,.07,"triangle");bip(620,.05,.05,"triangle",null,.5);return}
  // vermelho: coração a bater duas vezes por segundo, cada vez mais forte, e tique agudo
  const v=Math.min(1,.6+(6-s)*.08);
@@ -604,16 +644,16 @@ function desenhaSom(){const b=$("somBtn");b.setAttribute("aria-pressed",String(s
 $("somBtn").onclick=()=>{som=!som;ls.set("quizcv_som",som);desenhaSom();if(som)audio();else pararTensao()};
 let ultSeg=null;
 const ALERTA=10,AMARELO=10,VERMELHO=6;
-function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!estado,low=s<VERMELHO&&!estado,tm=$("timer"),al=$("alerta");
+function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!estado&&!KIDS(),low=s<VERMELHO&&!estado,tm=$("timer"),al=$("alerta");
  tm.classList.toggle("mid",s<=AMARELO&&!low);
  al.classList.toggle("on",alerta&&vista==="jogo"&&!pausa);al.classList.toggle("mid",s>=VERMELHO);al.style.setProperty("--k",alerta?String(Math.min(1,(ALERTA-restante)/ALERTA)):"0");
  if(alerta&&s!==ultSeg){al.classList.remove("beat");void al.offsetWidth;al.classList.add("beat")}$("tNum").textContent=s;
  tm.classList.toggle("low",low);tm.classList.toggle("done",!!estado);$("tRing").style.strokeDashoffset=String(201*(1-restante/TEMPO));
  tm.setAttribute("aria-label",L().secs(s));
- const ativo=!estado&&!pausa&&vista==="jogo";tensaoVisual(s,ativo);
- if(ativo&&restante<=ALERTA)tensao(Math.min(1,(ALERTA-restante)/ALERTA));else pararTensao();
+ const ativo=!estado&&!pausa&&vista==="jogo";tensaoVisual(s,ativo&&!KIDS());
+ if(ativo&&!KIDS()&&restante<=ALERTA)tensao(Math.min(1,(ALERTA-restante)/ALERTA));else pararTensao();
  if(s!==ultSeg&&ativo&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat");somTique(s);
-  const fa=$("fantasma");if(s<=5&&s>0&&!reduz()){fa.textContent=s;fa.classList.remove("on");void fa.offsetWidth;fa.classList.add("on")}}
+  const fa=$("fantasma");if(s<=5&&s>0&&!reduz()&&!KIDS()){fa.textContent=s;fa.classList.remove("on");void fa.offsetWidth;fa.classList.add("on")}}
  if(!ativo||s>5)$("fantasma").classList.remove("on");ultSeg=s}
 const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on");pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on")}};
 const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
@@ -650,10 +690,10 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  // só a certa e a errada escolhida viram como cartas
  [btnOk,btnBad].forEach(b=>b&&b.classList.add("flip"));
  if(est==="certo"){somCerto();btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
- if(est==="errado"){somErrado();btnBad.classList.add("shake");falha()}
- if(est==="tempo"){somTempo();derrota()}
+ if(est==="errado"){if(KIDS())bip(440,.2,.06,"triangle",330);else{somErrado();btnBad.classList.add("shake");falha()}}
+ if(est==="tempo"){somTempo();if(!KIDS())derrota()}
  // o cartão do resultado aparece depois da viragem e dos confetes
- clearTimeout(resT);resT=setTimeout(()=>{if(!estado)return;$("resbg").hidden=false;$("next").focus({preventScroll:true})},reduz()?0:1100)}
+ clearTimeout(resT);resT=setTimeout(()=>{if(!estado||vista!=="jogo")return;$("resbg").hidden=false;$("next").focus({preventScroll:true})},reduz()?0:1100)}
 let resT=null;
 $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b||estado)return;const k=+b.dataset.k;fecha(k===0?"certo":"errado",k)});
 // Saltar e 50/50: ação imediata, sem confirmação
@@ -695,7 +735,7 @@ function falha(){if(reduz())return;const f=document.createElement("div");f.class
 
 // resultado
 let recorde=false;
-function fim(){clearInterval(tick);const b=ls.get("quizcv_best",0);recorde=pts>b;if(recorde)ls.set("quizcv_best",pts);show("fim");renderFim();scrollTo({top:0})}
+function fim(){clearInterval(tick);const kb=MODOS[modo].best,b=ls.get(kb,0);recorde=pts>b;if(recorde)ls.set(kb,pts);show("fim");renderFim();scrollTo({top:0})}
 const certas=()=>res.filter(x=>x==="ok").length;
 function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("fTxt").textContent=t.verdict(s,n);$("fPts").textContent=t.ptsTotal(pts,recorde);
@@ -721,6 +761,7 @@ $("rev").addEventListener("click",ev=>{const b=ev.target.closest("[data-rep]");i
 function contagem(){audio();const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
  const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";if(i<3)bip(440,.18,.12,"triangle");else{bip(880,.35,.13,"triangle");bip(1320,.3,.06,"sine")}i++;setTimeout(passo,reduz()?450:900)};
  n.className="";passo()}
+$("modo").addEventListener("click",ev=>{const b=ev.target.closest("button[data-m]");if(b&&b.dataset.m!==modo)mudaModo(b.dataset.m)});
 $("start").onclick=contagem;$("again").onclick=contagem;
 // confirmação (janela própria; o temporizador pára enquanto está aberta)
 function confirma(tit,txt,sim){return new Promise(res=>{const t=L();pausar();$("confTitle").textContent=tit;$("confTxt").textContent=txt;$("confYes").textContent=sim;$("confNo").textContent=t.keep;$("conf").hidden=false;$("confYes").focus();
@@ -759,7 +800,7 @@ async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesqu
  // um quadrado por pergunta
  y+=70;const sq=44,gap=12;res.forEach((r,i)=>{ctx.fillStyle=r==="ok"?"#2fa872":r==="rev"?"rgba(255,255,255,.35)":"#e0474f";ctx.beginPath();ctx.roundRect(P+i*(sq+gap),y,sq,sq,8);ctx.fill()});
  y+=sq+40;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
- for(const k of [1,2,3]){const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0),lab=`${t.lv[k].toUpperCase()} ${ii.filter(i=>res[i]==="ok").length}/${ii.length}`,tw=ctx.measureText(lab).width+40;
+ for(const k of [1,2,3]){const ii=ronda.map((e,i)=>e.nv===k?i:-1).filter(i=>i>=0);if(!ii.length)continue;const lab=`${t.lv[k].toUpperCase()} ${ii.filter(i=>res[i]==="ok").length}/${ii.length}`,tw=ctx.measureText(lab).width+40;
   ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(lab,x+20,y+35);x+=tw+14}
  const fb=H-150;ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
