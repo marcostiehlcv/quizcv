@@ -21,7 +21,7 @@
 <style>
 /* Mesmo sistema visual do Hoje CV: coluna estreita, cabeçalho azul da bandeira, superfície clara por baixo */
 :root{
-  --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
+  --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f; --mar:#0b7f91;
   --ok:#1f8a5b; --bad:#c8262f; --lv1:#1f8a5b; --lv2:#b07a00; --lv3:#c8262f;
   --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
   --display:"Bricolage Grotesque",system-ui,sans-serif;
@@ -54,7 +54,8 @@ header.mast .wrap{padding-block:18px 26px}
 .brand-l{display:flex;align-items:center;gap:10px;min-width:0}
 .vtag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:4px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:5px}
 .vtag svg{width:12px;height:12px}
-.vtag.kids{background:var(--sun);border-color:var(--sun);color:var(--ocean-deep);font-weight:600}
+.vtag.kids{background:var(--mar);border-color:var(--mar);color:#fff;font-weight:600}
+.vtag.kids svg{color:var(--sun)}
 .somb{display:grid;place-items:center;width:34px;height:34px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
 .somb svg{width:18px;height:18px}
 .somb[aria-pressed="false"]{color:rgba(255,255,255,.55)}
@@ -103,14 +104,14 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .modo button svg{width:17px;height:17px;flex:none}
 .modo button{transition:background .2s,color .2s,box-shadow .2s}
 .modo button:active{transform:scale(.97)}
-/* ativa: Normal a azul; Crianças a amarelo com estrela vermelha */
+/* ativa: Normal a azul; Crianças a azul-turquesa (mar) com estrela amarela (amarelo + estrela vermelha lembrava política) */
 .modo button[aria-pressed="true"]{box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
 .modo button[data-m="normal"][aria-pressed="true"]{background:var(--ocean);color:#fff}
 /* Crianças: sempre com a estrela amarela a cintilar, para se distinguir e convidar */
 .modo button[data-m="kids"]{color:var(--fg)}
 .modo button[data-m="kids"] svg{width:20px;height:20px;fill:var(--sun);stroke:var(--lv2);animation:brilha 2.4s ease-in-out infinite}
-.modo button[data-m="kids"][aria-pressed="true"]{background:var(--sun);color:var(--ocean-deep);font-weight:800}
-.modo button[data-m="kids"][aria-pressed="true"] svg{fill:var(--rubro);stroke:var(--rubro)}
+.modo button[data-m="kids"][aria-pressed="true"]{background:var(--mar);color:#fff;font-weight:800}
+.modo button[data-m="kids"][aria-pressed="true"] svg{fill:var(--sun);stroke:var(--sun)}
 @keyframes brilha{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.22) rotate(20deg)}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rules b{color:var(--sun)}}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
