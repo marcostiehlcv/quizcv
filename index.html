@@ -186,6 +186,13 @@ main{position:relative;z-index:1}
 .opt.bad .k{background:var(--bad);color:#fff}
 .opt.dim{opacity:.5}
 .opt.fora{opacity:.18;filter:grayscale(1);pointer-events:none}
+/* 50/50: as duas opções que saem brilham a amarelo, tremem e apagam-se; o botão do 50/50 dá um pulso */
+.opt.fora.sai{animation:sai .75s cubic-bezier(.3,.7,.3,1) backwards}
+@keyframes sai{0%{opacity:1;filter:none;transform:none}18%{opacity:1;filter:none;transform:scale(1.04);box-shadow:0 0 0 3px var(--sun),0 0 22px var(--sun)}
+ 30%{transform:scale(1.03) rotate(-1.2deg)}42%{transform:scale(1.02) rotate(1.2deg)}55%{opacity:.9;filter:none;transform:scale(1);box-shadow:0 0 0 2px var(--sun)}
+ 100%{opacity:.18;filter:grayscale(1) blur(.4px);transform:scale(.97);box-shadow:none}}
+.tool.big.pulso{animation:pulso .5s ease-out}
+@keyframes pulso{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
 .opt.ok.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
 .opt.bad.shake{animation:shake .45s}
 .opt.flip{animation:flip .7s cubic-bezier(.45,.05,.25,1) both}
@@ -235,7 +242,7 @@ main{position:relative;z-index:1}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.resbg,.rescard,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.resbg,.rescard,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar,.opt.fora.sai,.tool.big.pulso{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
@@ -629,7 +636,11 @@ $("opts").addEventListener("click",ev=>{const b=ev.target.closest(".opt");if(!b|
 // a resposta certa conta normalmente (base do nível + segundos que sobram)
 const MINMEIO=10;
 $("reveal").onclick=()=>{if(estado||meio<1||fora.size)return;meio--;fora=new Set(shuffle([1,2,3]).slice(0,2));
- if(restante<MINMEIO){restante=MINMEIO;t0=performance.now()-(TEMPO-restante)*1000;ultSeg=null}renderQ()};
+ if(restante<MINMEIO){restante=MINMEIO;t0=performance.now()-(TEMPO-restante)*1000;ultSeg=null}renderQ();
+ // efeito: as duas opções brilham, tremem e apagam-se, com um som curto a descer
+ $("opts").querySelectorAll(".opt.fora").forEach((b,i)=>{b.style.animationDelay=(i*.12)+"s";b.classList.add("sai");setTimeout(()=>b.classList.remove("sai"),900+i*120)});
+ const rb=$("reveal");rb.classList.remove("pulso");void rb.offsetWidth;rb.classList.add("pulso");
+ bip(880,.12,.06,"triangle",660);bip(660,.22,.05,"triangle",330,.14)};
 // saltar: a pergunta vira (flip) e entra outra do mesmo nível; RUNNER é o ícone do botão
 const RUNNER=`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="41" cy="9" r="6" fill="currentColor" stroke="none"/><path d="M38 18 29 34"/><path d="M36 21l10 7 8-3M36 21l-11 1-6 6"/><path d="M29 34l13 6 9-5M29 34l-10 9-10-2"/></svg>`;
 $("skip").onclick=()=>saltarAgora();
