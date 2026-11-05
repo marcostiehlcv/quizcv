@@ -98,10 +98,20 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .best{text-align:center}
 .ini{display:flex;flex-direction:column;gap:18px}
 /* seletor de versão: normal / para crianças */
-.modo{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:14px}
+.modo{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:14px;border:1px solid var(--line)}
 .modo button{font-family:var(--display);font-weight:600;font-size:15px;border:0;background:transparent;color:var(--muted);padding:10px 8px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
 .modo button svg{width:17px;height:17px;flex:none}
-.modo button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.modo button{transition:background .2s,color .2s,box-shadow .2s}
+.modo button:active{transform:scale(.97)}
+/* ativa: Normal a azul; Crianças a amarelo com estrela vermelha */
+.modo button[aria-pressed="true"]{box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+.modo button[data-m="normal"][aria-pressed="true"]{background:var(--ocean);color:#fff}
+/* Crianças: sempre com a estrela amarela a cintilar, para se distinguir e convidar */
+.modo button[data-m="kids"]{color:var(--fg)}
+.modo button[data-m="kids"] svg{width:20px;height:20px;fill:var(--sun);stroke:var(--lv2);animation:brilha 2.4s ease-in-out infinite}
+.modo button[data-m="kids"][aria-pressed="true"]{background:var(--sun);color:var(--ocean-deep);font-weight:800}
+.modo button[data-m="kids"][aria-pressed="true"] svg{fill:var(--rubro);stroke:var(--rubro)}
+@keyframes brilha{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.22) rotate(20deg)}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rules b{color:var(--sun)}}
 :root[data-theme="dark"] .rules b{color:var(--sun)}
 /* contagem antes de começar: 3, 2, 1, já! em grande */
@@ -261,7 +271,7 @@ main{position:relative;z-index:1}
 @keyframes velo{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .flash{position:fixed;inset:0;z-index:29;pointer-events:none;background:var(--bad);animation:flash .5s ease-out forwards}
 @keyframes flash{from{opacity:.18}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.resbg,.rescard,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar,.opt.fora.sai,.tool.big.pulso{animation:none!important}.fx{display:none}}
+@media (prefers-reduced-motion:reduce){.opt.ok.pop,.opt.bad.shake,.opt.flip,.plus,.flash,.fb,.timer b,.timer,#qbox,.resbg,.rescard,.contagem b,.menos1,.tool.big .n,#alerta,.velo,.nextbar,.opt.fora.sai,.tool.big.pulso,.modo button svg{animation:none!important}.fx{display:none}}
 /* fim */
 .score{font-family:var(--display);font-weight:800;font-size:clamp(64px,20vw,108px);line-height:.9;letter-spacing:-.03em;color:var(--ocean)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .score{color:var(--sun)}}
