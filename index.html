@@ -50,6 +50,11 @@ header.mast .wrap{padding-block:18px 26px}
 .logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none}
 .logo b{background:var(--sun);color:var(--ocean-deep);padding:0 7px;border-radius:6px}
 .brand-r{display:flex;align-items:center;gap:8px}
+/* etiqueta da versão no cabeçalho (normal / crianças) */
+.brand-l{display:flex;align-items:center;gap:10px;min-width:0}
+.vtag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:4px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:5px}
+.vtag svg{width:12px;height:12px}
+.vtag.kids{background:var(--sun);border-color:var(--sun);color:var(--ocean-deep);font-weight:600}
 .somb{display:grid;place-items:center;width:34px;height:34px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
 .somb svg{width:18px;height:18px}
 .somb[aria-pressed="false"]{color:rgba(255,255,255,.55)}
@@ -239,6 +244,9 @@ main{position:relative;z-index:1}
 .fx{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
 .fx i{position:absolute;width:9px;height:14px;border-radius:2px;will-change:transform,opacity}
 .plus{position:fixed;z-index:31;pointer-events:none;font-family:var(--display);font-weight:800;font-size:28px;color:var(--ok);animation:up 1.1s ease-out forwards}
+/* acerto: palavra grande ao centro do ecrã («Boa!», «Isso!»…) que salta, fica um instante e desaparece */
+.boa{position:fixed;left:50%;top:40%;z-index:32;pointer-events:none;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:clamp(52px,16vw,124px);letter-spacing:-.02em;line-height:1;color:var(--sun);text-shadow:0 4px 0 var(--ocean-deep),0 14px 34px rgba(0,0,0,.4);transform:translate(-50%,-50%);animation:boa 1s cubic-bezier(.2,.9,.3,1.25) forwards}
+@keyframes boa{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-10deg)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.14) rotate(3deg)}40%{transform:translate(-50%,-50%) scale(1) rotate(-1deg)}78%{opacity:1;transform:translate(-50%,-50%) scale(1.02) rotate(0)}100%{opacity:0;transform:translate(-50%,-64%) scale(1.06)}}
 @keyframes up{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
 /* fim do tempo: transição suave para a derrota (a pergunta perde a cor e encolhe um pouco, e volta) */
 #qbox.perdeu{animation:perdeu 1.1s ease-in-out}
@@ -320,7 +328,7 @@ main{position:relative;z-index:1}
   <svg class="flagbg" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" viewBox="0 0 1020 600"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg>
   <div class="wrap">
     <div class="brand">
-      <a class="logo" href="/" aria-label="Quiz CV">Quiz <b>CV</b></a>
+      <div class="brand-l"><a class="logo" href="/" aria-label="Quiz CV">Quiz <b>CV</b></a><span class="vtag" id="vtag"></span></div>
       <div class="brand-r"><button type="button" class="somb" id="somBtn" aria-pressed="true"></button><div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div></div>
     </div>
     <div class="hero" id="hero">
@@ -442,18 +450,20 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
 secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","média","difícil"][g.nv]}) + ${g.bonus} de rapidez`,reveal:"50/50",report:"Reportar problema",reported:"Reportado",
  right:"Certo!",wrong:"Errado.",timeout:"Acabou o tempo.",
  answer:a=>`A resposta certa é «${a}».`,source:"Fonte ↗",next:"Seguinte",finish:"Ver resultado",
+ boa:["Boa!","Isso!","Certíssimo!","Muito bem!"],
  jokesOk:["Sabura! Isto merece uma morna.","Nem o Pico do Fogo está tão em alta.","Conheces Cabo Verde como a palma da mão.","Djobe! Resposta de quem sabe.","Mais certo do que vento em São Vicente.","Isto é que é cabeça fresca."],
  jokesBad:["Precisas de comer uma cachupa para ganhar forças.","Um grogue daria jeito… ou talvez não.","Calma, até o Pico do Fogo tem dias nublados.","Morabeza: errar também faz parte.","Essa foi mais torta do que a estrada de Santo Antão.","Faz uma pausa para um pastel de milho e volta mais forte."],
  jokesTime:["O tempo voou como o vento de Barlavento.","Demoraste mais do que o barco para a Brava.","Leva leve, mas não tão leve!"],
  fLbl:"Resultado",of:"certas",
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
- modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},
+ modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},vtag:{normal:"Normal",kids:"Crianças"},
  // versão para crianças: estes textos substituem os normais (ver LK)
  k:{sub:"10 perguntas para conhecer Cabo Verde. Vamos aprender a brincar?",
   rules:(n,t,sk,rv)=>[["q",`${n} perguntas`,"Para conhecer o país"],["t",`${t} segundos`,"Sem pressa"],["s",`${sk} saltos`,"Trocam a pergunta"],["a",`${rv} ajuda 50/50`,"Tira duas opções erradas"]],
   ptsNote:"<b>Pontos:</b> 10 ou 20 por cada resposta certa, mais 1 por cada segundo que sobra. Errar também ensina!",
   right:"Muito bem!",wrong:"Quase!",timeout:"O tempo acabou!",answer:a=>`A resposta certa é «${a}». Agora já sabes!`,
+  boa:["Boa!","Uau!","Fantástico!","Isso mesmo!","Muito bem!","Espetacular!"],
   jokesOk:["Fantástico! Estás a aprender muito.","Isso mesmo! Continua assim.","Que bem! Já sabes mais sobre Cabo Verde.","Espetacular! Mereces uma estrela.","Acertaste em cheio!","Uau! Sabes mesmo muito.","Boa! Conheces as ilhas cada vez melhor."],
   jokesBad:["Não faz mal, errar faz parte de aprender.","Foi por pouco! Na próxima vais conseguir.","Boa tentativa! Agora já ficas a saber.","Continua! Cada pergunta ensina uma coisa nova.","Não desistas, estás a ir muito bem."],
   jokesTime:["Não faz mal! Agora já sabes a resposta.","O tempo voou! Na próxima vais mais depressa.","Sem problema, vamos à próxima!"],
@@ -488,17 +498,19 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
 secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","medium","hard"][g.nv]}) + ${g.bonus} for speed`,reveal:"50/50",report:"Report a problem",reported:"Reported",
  right:"Correct!",wrong:"Wrong.",timeout:"Time's up.",
  answer:a=>`The right answer is “${a}”.`,source:"Source ↗",next:"Next",finish:"See result",
+ boa:["Nice!","Yes!","Spot on!","Well done!"],
  jokesOk:["Sabura! That deserves a morna.","Not even Pico do Fogo stands this high.","You know Cabo Verde like the back of your hand.","Djobe! Spot on.","More certain than the wind on São Vicente.","A cool head, indeed."],
  jokesBad:["You need a plate of cachupa to get your strength back.","A grogue might help… or maybe not.","Easy — even Pico do Fogo has cloudy days.","Morabeza: getting it wrong is part of it.","That one was more crooked than the Santo Antão road.","Take a break for a pastel de milho and come back stronger."],
  jokesTime:["Time flew like the Barlavento wind.","Slower than the ferry to Brava.","Leva leve — but not that leve!"],
  fLbl:"Result",of:"right",
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
- modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},
+ modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},vtag:{normal:"Standard",kids:"Kids"},
  k:{sub:"10 questions to get to know Cabo Verde. Shall we learn while we play?",
   rules:(n,t,sk,rv)=>[["q",`${n} questions`,"Get to know the country"],["t",`${t} seconds`,"No rush"],["s",`${sk} skips`,"Swap the question"],["a",`${rv} 50/50 help`,"Removes two wrong options"]],
   ptsNote:"<b>Points:</b> 10 or 20 for each right answer, plus 1 for every second left. Mistakes help you learn too!",
   right:"Well done!",wrong:"Almost!",timeout:"Time's up!",answer:a=>`The right answer is “${a}”. Now you know!`,
+  boa:["Nice!","Wow!","Fantastic!","That's it!","Well done!","Amazing!"],
   jokesOk:["Fantastic! You are learning a lot.","That's it! Keep going.","Great! You know more about Cabo Verde now.","Amazing! You deserve a star.","Spot on!","Wow! You really know a lot.","Nice! You know the islands better and better."],
   jokesBad:["Never mind, mistakes are part of learning.","So close! You'll get the next one.","Good try! Now you know.","Keep going! Every question teaches something new.","Don't give up, you are doing really well."],
   jokesTime:["Never mind! Now you know the answer.","Time flew! You'll be quicker next time.","No problem, on to the next one!"],
@@ -689,7 +701,7 @@ function fecha(est,k){if(estado)return;clearInterval(tick);estado=est;resp=k;con
  const btnOk=$("opts").querySelector('.opt[data-k="0"]'),btnBad=k!==null&&k!==0?$("opts").querySelector(`.opt[data-k="${k}"]`):null;
  // só a certa e a errada escolhida viram como cartas
  [btnOk,btnBad].forEach(b=>b&&b.classList.add("flip"));
- if(est==="certo"){somCerto();btnOk.classList.add("pop");setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
+ if(est==="certo"){somCerto();btnOk.classList.add("pop");boa();setTimeout(()=>festa(btnOk,ganho),reduz()?0:650)}
  if(est==="errado"){if(KIDS())bip(440,.2,.06,"triangle",330);else{somErrado();btnBad.classList.add("shake");falha()}}
  if(est==="tempo"){somTempo();if(!KIDS())derrota()}
  // o cartão do resultado aparece depois da viragem e dos confetes
@@ -718,6 +730,8 @@ $("next").onclick=()=>{if(idx+1<ronda.length){idx++;nova();scrollTo({top:0,behav
 
 // animações: confetes com as cores da bandeira e «+N» no acerto; clarão e tremor no erro
 const reduz=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+// acerto: «Boa!» (ou outra palavra de I18N.*.boa; na versão para crianças, as de I18N.*.k.boa) em grande ao centro, durante 1 s
+function boa(){if(reduz())return;document.querySelectorAll(".boa").forEach(x=>x.remove());const b=document.createElement("div");b.className="boa";b.setAttribute("aria-hidden","true");b.textContent=pick(L().boa);document.body.appendChild(b);setTimeout(()=>b.remove(),1050)}
 function festa(el,ganho){if(reduz())return;const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
  const fx=document.createElement("div");fx.className="fx";document.body.appendChild(fx);
  const cores=["#003893","#f7d116","#cf2027","#ffffff","#2fa872"];
@@ -830,6 +844,7 @@ $("repSend").onclick=async()=>{const t=L(),e=repAlvo,motivos=[...$("repOpts").qu
  $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;if(vista==="jogo")renderQ();else renderRev()};
 
 function applyLang(){const t=L();document.documentElement.lang=LANG;
+ {const v=$("vtag");v.className="vtag"+(KIDS()?" kids":"");v.innerHTML=(KIDS()?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>':"")+esc(t.vtag[modo]);v.title=t.modoLbl+": "+t.modos[modo]}
  $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
