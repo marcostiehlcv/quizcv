@@ -71,7 +71,7 @@ Cada pergunta é um array:
 3. PT-PT com tradução EN.
 
 ## Reportes (Apps Script)
-Criar uma Google Sheet (ex.: «Quiz CV — Reportes»), Extensões → Apps Script, colar o `Code.gs`; Deploy → New deployment → Web app, Execute as **Me**, Who has access **Anyone**. Pôr o URL `/exec` em `config.js`.
+Criar uma Google Sheet (ex.: «Quiz CV — Reportes»), Extensões → Apps Script, colar o `Code.gs`; Deploy → New deployment → Web app, Execute as **Me**, Who has access **Anyone**. Pôr o URL `/exec` em `config.js`. Já está ligado: Sheet própria do Quiz CV, separada da do Hoje CV.
 
 **Contador público** (página inicial, `#conta`, `renderConta`, textos `I18N.*.conta`): mostra quantas pessoas já jogaram a versão normal e a versão para crianças. Ao abrir, o site lê `GET ?acao=contador` (`{ok, normal, kids}`, cache de 60 s no Apps Script). Na primeira ronda de cada versão, `contaJogo()` envia `POST {acao:"jogo", modo}` uma só vez por browser (marca `quizcv_contei_normal` / `quizcv_contei_kids` em `localStorage`). Os totais ficam na folha `contador` (B2 = normal, B3 = crianças, criada sozinha) e podem ser corrigidos à mão. Limite de 3000 pessoas novas por hora (`LIMITE_JOGOS_HORA`). Conta browsers, não pessoas exatas. Sem `API`, ou se o pedido falhar, a linha não aparece. Depois de mudar o `Code.gs`: Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
 
