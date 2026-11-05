@@ -498,12 +498,11 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tenta mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
  temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações",geografia:"Geografia"},
  foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas sobre Cabo Verde"},
- about:[["O que é","Um jogo de perguntas sobre Cabo Verde: a história, a cultura, o desporto e as ilhas. Cada ronda tem 15 perguntas, 5 fáceis, 5 médias e 5 difíceis, escolhidas ao acaso e sempre a subir de nível."],
-  ["Como se joga","Cada pergunta tem quatro opções e um temporizador. Uma resposta certa vale 10 pontos nas fáceis, 20 nas médias e 30 nas difíceis, mais um bónus pelos segundos que sobram. Podes saltar até 3 perguntas por ronda (entra outra do mesmo nível) e tens uma ajuda 50/50 por ronda: tira duas opções erradas. O tempo continua a contar, mas se tiveres menos de 10 segundos sobe para 10."],
-  ["Critérios","Todas as perguntas assentam em factos comprovados e têm uma fonte consultável, mostrada depois de responderes e outra vez no fim, em «Ver perguntas e respostas». Muitas vêm dos registos do Hoje CV. Se encontrares um erro, usa «Reportar problema», durante o jogo ou no fim."],
-  ["Versão para crianças","Na página inicial podes escolher a versão para crianças: 10 perguntas simples para conhecer o país (as ilhas, a bandeira, a música, a comida, a natureza e a língua), com 30 segundos cada, sem sons de tensão e com mensagens de incentivo. Não tem perguntas sobre tragédias."],
-  ["Hoje CV","É um projeto irmão do Hoje CV, que mostra, para cada dia do ano, o que aconteceu na história de Cabo Verde."],
-  ["","Um projeto de Marco Stiehl."]]},
+ about:[["O que é","Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde."],
+  ["Como se joga","15 perguntas, do fácil ao difícil, com 20 segundos cada. Tens 3 saltos e uma ajuda 50/50."],
+  ["Para crianças","10 perguntas simples para conhecer o país, com mais tempo e sem tragédias."],
+  ["Fontes","Só factos comprovados, cada um com fonte. Viste um erro? Usa «Reportar problema»."],
+  ["","Um projeto de Marco Stiehl, irmão do Hoje CV."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
  howT:"How it works",rules:(n,t,sk,rv)=>[["q",`${n} questions`,"From easy to hard"],["t",`${t} seconds`,"Per question"],["s",`${sk} skips`,"Swap the question"],["a",`${rv} 50/50 help`,"Removes two wrong options"]],
  ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
@@ -546,12 +545,11 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
  temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations",geografia:"Geography"},
  foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz game about Cabo Verde"},
- about:[["What it is","A quiz about Cabo Verde: its history, culture, sport and islands. Each round has 15 questions, 5 easy, 5 medium and 5 hard, chosen at random and always getting harder."],
-  ["How to play","Each question has four options and a timer. A right answer is worth 10 points for easy questions, 20 for medium and 30 for hard, plus a bonus for the seconds left. You can skip up to 3 questions per round (another one of the same level comes in) and you have one 50/50 help per round: it removes two wrong options. The clock keeps running, but if you have less than 10 seconds it goes back up to 10."],
-  ["Criteria","Every question is based on proven facts and has a source you can check, shown after you answer and again at the end, under “See questions and answers”. Many come from Hoje CV's records. If you find a mistake, use “Report a problem”, during the game or at the end."],
-  ["Kids version","On the start page you can choose the kids version: 10 simple questions to get to know the country (the islands, the flag, music, food, nature and language), with 30 seconds each, no tension sounds and encouraging messages. It has no questions about tragedies."],
-  ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
-  ["","A project by Marco Stiehl."]]}
+ about:[["What it is","A quiz about Cabo Verde's history, culture, sport and islands."],
+  ["How to play","15 questions, from easy to hard, with 20 seconds each. You have 3 skips and one 50/50 help."],
+  ["For kids","10 simple questions to get to know the country, with more time and no tragedies."],
+  ["Sources","Only proven facts, each with a source. Spotted a mistake? Use “Report a problem”."],
+  ["","A project by Marco Stiehl, sister to Hoje CV."]]}
 };
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
