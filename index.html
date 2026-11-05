@@ -97,6 +97,11 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .how p{margin:0;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);line-height:1.5}
 .how p b{color:var(--fg);font-weight:600}
 .best{text-align:center}
+/* contador público na página inicial: quantas pessoas já jogaram cada versão */
+.conta{margin:0;text-align:center;font-size:13px;color:var(--muted);line-height:1.5;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px}
+.conta span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.conta b{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
+.conta svg{width:14px;height:14px;flex:none}
 .ini{display:flex;flex-direction:column;gap:18px}
 /* seletor de versão: normal / para crianças */
 .modo{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:14px;border:1px solid var(--line)}
@@ -364,6 +369,7 @@ main{position:relative;z-index:1}
       <p class="msg" id="iniNone" hidden></p>
       <div class="how" id="how"><h2 id="howT"></h2><ul class="howl" id="rules"></ul><p id="ptsNote"></p></div>
       <p class="best" id="best"></p>
+      <p class="conta" id="conta" hidden></p>
     </section>
 
     <!-- pergunta -->
@@ -460,6 +466,7 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  ptsNote:"<b>Pontos:</b> 10, 20 ou 30 por resposta certa, conforme o nível, mais 1 por cada segundo que sobra.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
+ conta:{normal:n=>[n,n===1?"pessoa já jogou a versão normal":"pessoas já jogaram a versão normal"],kids:n=>[n,n===1?"pessoa já jogou a versão para crianças":"pessoas já jogaram a versão para crianças"]},
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
  skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",somOn:"Ligar o som",somOff:"Desligar o som",keep:"Continuar a jogar",quit:"Terminar",
@@ -509,6 +516,7 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
+ conta:{normal:n=>[n,n===1?"person has played the standard version":"people have played the standard version"],kids:n=>[n,n===1?"person has played the kids version":"people have played the kids version"]},
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
  skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",somOn:"Turn sound on",somOff:"Turn sound off",keep:"Keep playing",quit:"End quiz",
@@ -569,6 +577,15 @@ const KIDS=()=>modo==="kids";
 const LK={pt:{...I18N.pt,...I18N.pt.k},en:{...I18N.en,...I18N.en.k}};
 const L=()=>KIDS()?LK[LANG]:I18N[LANG];
 const API=(window.QUIZCV_CONFIG||{}).API||"";
+// contador público (Code.gs, folha «contador»): lido ao abrir; cada browser soma-se uma vez por versão ao começar a 1.ª ronda
+let CONTA=null;
+function lerConta(j){if(j&&typeof j.normal==="number"&&typeof j.kids==="number"){CONTA={normal:j.normal,kids:j.kids};if(vista==="ini")renderConta()}}
+function renderConta(){const el=$("conta");if(!CONTA){el.hidden=true;return}const t=L(),f=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT");
+ const IC={normal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>',kids:'<svg viewBox="0 0 24 24" fill="var(--sun)" stroke="var(--lv2)" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>'};
+ el.innerHTML=["normal","kids"].map(m=>{const[n,txt]=t.conta[m](CONTA[m]);return`<span>${IC[m]}<span><b>${f(n)}</b> ${esc(txt)}</span></span>`}).join("");el.hidden=false}
+function contaJogo(){const k="quizcv_contei_"+modo;if(!API||ls.get(k,0))return;ls.set(k,1);
+ fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({acao:"jogo",modo})}).then(r=>r.json()).then(lerConta).catch(()=>{})}
+if(API)fetch(API+(API.includes("?")?"&":"?")+"acao=contador").then(r=>r.json()).then(lerConta).catch(()=>{});
 const MODOS={normal:{niveis:[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3],tempo:20,best:"quizcv_best"},kids:{niveis:[1,1,1,1,1,2,2,2,2,2],tempo:30,best:"quizcv_best_kids"}};
 let NIVEIS=MODOS[modo].niveis, TEMPO=MODOS[modo].tempo;
 const SALTOS=3, MEIO=1, VALOR={1:10,2:20,3:30};
@@ -633,10 +650,10 @@ function renderIni(){const t=L();
  $("howT").textContent=t.howT;$("how").hidden=!QS.length;
  $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
  $("ptsNote").innerHTML=t.ptsNote;
- const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}
+ const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b;renderConta()}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
- idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;show("jogo");nova()}
+ idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;if(ronda.length)contaJogo();show("jogo");nova()}
 function nova(){resp=null;fora=new Set();estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
  const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
