@@ -538,7 +538,7 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  rankPos:p=>`Estás em ${p}.º lugar esta semana!`,rankSaved:"Guardado no ranking.",rankBest:b=>`O teu melhor desta semana: ${b} pontos.`,
  rankTu:"Tu",rankEnds:d=>d<=0?"A semana termina hoje":d===1?"A semana termina amanhã":`A semana termina em ${d} dias`,rankOther:"Outro nome",rankDev:"O nome só vale neste dispositivo e navegador. Noutro, terás outro nome.",rankVer:"Ver ranking",rankMe:"O teu nome:",rankEmpty:"Ainda ninguém entrou no ranking. Podes ser o primeiro!",rankLoad:"A carregar…",
  rankFail:"Não foi possível ligar ao ranking. Tenta mais tarde.",rankPts:"pts",
- rankShr:"Partilhar ranking",rankShrOk:"Imagem guardada e texto copiado.",rankShrImg:"Imagem guardada.",rankLugar:(p,n)=>`${p}.º lugar · ${n} pontos`,
+ rankShr:"Partilhar ranking",rankEu:"Eu",rankShrOk:"Imagem guardada e texto copiado.",rankShrImg:"Imagem guardada.",rankLugar:(p,n)=>`${p}.º lugar · ${n} pontos`,
  rankShrTxt:(p,n,per,u)=>`Quiz CV: estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":"de sempre"}, com ${n} pontos. Consegues passar-me? https://${u}`,
  rankNote:"Não guardamos dados pessoais: só um nome gerado pelo jogo e os pontos. O ranking da semana recomeça à segunda-feira.",
  conta:{normal:n=>[n,n===1?"jogo na versão normal":"jogos na versão normal"],kids:n=>[n,n===1?"jogo na versão para crianças":"jogos na versão para crianças"]},
@@ -596,7 +596,7 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  rankPos:p=>`You are ${ordEN(p)} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
  rankTu:"You",rankEnds:d=>d<=0?"The week ends today":d===1?"The week ends tomorrow":`The week ends in ${d} days`,rankOther:"Another name",rankDev:"This name only works on this device and browser. On another one, you will get a different name.",rankVer:"See leaderboard",rankMe:"Your name:",rankEmpty:"Nobody has joined the leaderboard yet. You can be the first!",rankLoad:"Loading…",
  rankFail:"Could not reach the leaderboard. Please try later.",rankPts:"pts",
- rankShr:"Share leaderboard",rankShrOk:"Image saved and text copied.",rankShrImg:"Image saved.",rankLugar:(p,n)=>`${ordEN(p)} place · ${n} points`,
+ rankShr:"Share leaderboard",rankEu:"Me",rankShrOk:"Image saved and text copied.",rankShrImg:"Image saved.",rankLugar:(p,n)=>`${ordEN(p)} place · ${n} points`,
  rankShrTxt:(p,n,per,u)=>`Quiz CV: I am ${ordEN(p)} on the ${per==="semana"?"weekly":"all-time"} leaderboard with ${n} points. Can you beat me? https://${u}`,
  rankNote:"We do not store personal data: only a name made up by the game and the points. The weekly leaderboard restarts on Monday.",
  conta:{normal:n=>[n,n===1?"game in the standard version":"games in the standard version"],kids:n=>[n,n===1?"game in the kids version":"games in the kids version"]},
@@ -748,8 +748,8 @@ async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotes
   const px=P+40;if(med[x.pos]){ctx.fillStyle=med[x.pos];ctx.beginPath();ctx.arc(px,cy,rh*.36,0,7);ctx.fill();ctx.fillStyle="#1a1300"}else ctx.fillStyle=x.eu?"#002566":"rgba(255,255,255,.7)";
   ctx.font=`800 ${Math.round(fs*.9)}px ${BG}`;ctx.textAlign="center";ctx.fillText(String(x.pos),px,cy+1);ctx.textAlign="left";
   ctx.font=`${x.eu?800:600} ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.fillText(x.nome,P+88,cy+1);
-  if(x.eu){const nx=P+88+ctx.measureText(x.nome).width+16;ctx.font=`500 ${Math.round(fs*.62)}px ${MO}`;const tw=ctx.measureText(t.rankTu.toUpperCase()).width+24,th=Math.round(fs*1.05);
-   ctx.fillStyle="#002566";ctx.beginPath();ctx.roundRect(nx,cy-th/2,tw,th,th/2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.rankTu.toUpperCase(),nx+12,cy+1)}
+  if(x.eu){const nx=P+88+ctx.measureText(x.nome).width+16;ctx.font=`500 ${Math.round(fs*.62)}px ${MO}`;const tw=ctx.measureText(t.rankEu.toUpperCase()).width+24,th=Math.round(fs*1.05);
+   ctx.fillStyle="#002566";ctx.beginPath();ctx.roundRect(nx,cy-th/2,tw,th,th/2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.rankEu.toUpperCase(),nx+12,cy+1)}
   ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.textAlign="right";ctx.fillText(`${f(x.pontos)} ${t.rankPts}`,W-P-24,cy+1);ctx.textAlign="left";y+=rh+gap}
  ctx.textBaseline="alphabetic";ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
  ctx.font="500 23px "+MO;ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
