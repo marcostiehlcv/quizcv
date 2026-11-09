@@ -20,7 +20,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 | `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
 | `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |
 | `config.js` | `window.QUIZCV_CONFIG = { API: "<url /exec>" }` para os reportes e o contador (vazio = desligados) |
-| `Code.gs` | Apps Script dos reportes (folha `reportes`, estado `pendente`) e do contador público (folha `contador`) |
+| `Code.gs` | Apps Script dos reportes (folha `reportes`, estado `pendente`) e do contador público (folha `contador`) e do ranking (folha `ranking`) |
 
 Cada pergunta é um array:
 `[id, nível, tema, pergunta, [certa, errada, errada, errada], explicação, fonte, pergunta_en, [opções_en], explicação_en]`
@@ -74,6 +74,11 @@ Cada pergunta é um array:
 Criar uma Google Sheet (ex.: «Quiz CV — Reportes»), Extensões → Apps Script, colar o `Code.gs`; Deploy → New deployment → Web app, Execute as **Me**, Who has access **Anyone**. Pôr o URL `/exec` em `config.js`. Já está ligado: Sheet própria do Quiz CV, separada da do Hoje CV.
 
 **Contador público** (página inicial, `#conta`, `renderConta`, textos `I18N.*.conta`): mostra quantas pessoas já jogaram a versão normal e a versão para crianças. Ao abrir, o site lê `GET ?acao=contador` (`{ok, normal, kids}`, cache de 60 s no Apps Script). Na primeira ronda de cada versão, `contaJogo()` envia `POST {acao:"jogo", modo}` uma só vez por browser (marca `quizcv_contei_normal` / `quizcv_contei_kids` em `localStorage`). Os totais ficam na folha `contador` (B2 = normal, B3 = crianças, criada sozinha) e podem ser corrigidos à mão. Limite de 3000 pessoas novas por hora (`LIMITE_JOGOS_HORA`). Conta browsers, não pessoas exatas. Sem `API`, ou se o pedido falhar, a linha não aparece. Depois de mudar o `Code.gs`: Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
+
+**Ranking** (só na versão normal; a versão para crianças não tem ranking, para nunca desanimar):
+- **Sem dados pessoais:** o nome é gerado pelo jogo (`novoNome()`: animal + ilha + número de 2 dígitos, ex. «Cagarra do Fogo 27»), nunca texto livre. `ANIMAIS` e `ILHAS_N` existem no `index.html` e no `Code.gs` e **têm de ser iguais** (o servidor recusa nomes fora das listas). O browser guarda `quizcv_jogador` = `{id (16 hex aleatórios), nome}`; «Outro nome» (`outroNome()`) muda só o nome. O nome só vale nesse dispositivo e navegador (texto `rankDev`). O «Sobre» tem um bloco «Ranking».
+- **Fluxo:** `start()` chama `pedeToken()` (`POST {acao:"inicio"}` → token na cache do Apps Script, 45 min). No fim, a caixa `#rkBox` (`renderRk`) mostra «Entrar no ranking como …» (só com um toque; escondida se a ronda durou menos de 61 s). `enviaPontos()` envia `POST {acao:"pontos", token, jogador, nome, pontos}` e mostra a posição na semana (se estiver no top 10). Janela `#rank` (`abreRank`/`renderRank`): separadores «Esta semana» / «Sempre», top 10, linha própria destacada; abre pelo link «Ver ranking» na página inicial (`#rkHome`) e no fim.
+- **Servidor** (`pontos_` / `validaPontos_`): token de uso único, ≥ 60 s desde o início, `jogador` = `^[a-f0-9]{16}$`, nome das listas, pontos inteiros 0–600 (máximo teórico), 20 envios por jogador por hora. Folha `ranking` (`data | jogador | nome | pontos | semana`): uma linha por jogador e semana ISO (hora de Cabo Verde, recomeça à segunda), só com o melhor resultado; «Outro nome» passa a todas as linhas do jogador no envio seguinte. `GET ?acao=ranking&eu=<id>` devolve `{semana, sempre}` (top 10, cache de 60 s) sem ids, só com `eu:true` na linha de quem pede. Linhas com mais de 8 semanas fora do top de sempre são apagadas quando a folha passa de 1500 linhas. Batota ou nome indesejado: apagar a linha à mão na Sheet.
 
 ## Publicar
 Testar localmente (`python -m http.server 8000`), commit para o repositório, Vercel republica.

@@ -102,6 +102,30 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .conta span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .conta b{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
 .conta svg{width:14px;height:14px;flex:none}
+/* ranking (só versão normal) */
+.rkhome{margin:-8px 0 0;text-align:center;font-size:13px}
+.rkbox{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.rkbox .btn{width:100%;font-weight:700}
+.rkmsg{margin:0;text-align:center;font-family:var(--display);font-weight:700;font-size:17px;color:var(--fg)}
+.rkmsg.erro{font-family:inherit;font-weight:400;font-size:14px;color:var(--muted)}
+.rklinks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;font-size:13.5px}
+.rktabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:12px}
+.rktabs button{font:inherit;font-family:var(--display);font-weight:600;font-size:15px;border:0;border-radius:9px;padding:9px;background:none;color:var(--muted);cursor:pointer}
+.rktabs button[aria-pressed="true"]{background:var(--ocean);color:#fff}
+.rklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;min-height:60px}
+.rklist li{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:15px}
+.rklist li:nth-child(odd){background:var(--chip)}
+.rklist li .p{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
+.rklist li .n{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rklist li .s{font-weight:700;font-variant-numeric:tabular-nums}
+.rklist li.eu{background:var(--ocean);color:#fff}.rklist li.eu .p{color:rgba(255,255,255,.8)}
+.rklist .vazio{display:block;text-align:center;color:var(--muted);background:none!important;padding:16px 8px}
+.rkme{margin:0;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.rkme b{color:var(--fg)}
+.rkdev{margin:0;text-align:center;font-size:12px;color:var(--muted);line-height:1.4}
+.rkme .rkdev{flex-basis:100%;text-align:left}
+.rkre{display:inline-flex;align-items:center;gap:5px}.rkre svg{width:13px;height:13px;flex:none}
+.rknote{margin:0!important;font-size:13px}
 .ini{display:flex;flex-direction:column;gap:18px}
 /* seletor de versão: normal / para crianças */
 .modo{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:14px;border:1px solid var(--line)}
@@ -370,6 +394,7 @@ main{position:relative;z-index:1}
       <div class="how" id="how"><h2 id="howT"></h2><ul class="howl" id="rules"></ul><p id="ptsNote"></p></div>
       <p class="best" id="best"></p>
       <p class="conta" id="conta" hidden></p>
+      <p class="rkhome" id="rkHomeP" hidden><button type="button" class="aboutlink" id="rkHome"></button></p>
     </section>
 
     <!-- pergunta -->
@@ -411,6 +436,13 @@ main{position:relative;z-index:1}
         <button type="button" class="btn" id="shrCopy"></button>
       </div>
       <p class="msg" id="shrMsg" hidden style="text-align:center"></p>
+      <!-- ranking (só versão normal): envio só com um toque; nome gerado, sem dados pessoais -->
+      <div class="rkbox" id="rkBox" hidden>
+        <button type="button" class="btn primary" id="rkJoin"></button>
+        <p class="rkmsg" id="rkMsg" hidden aria-live="polite"></p>
+        <div class="rklinks"><button type="button" class="aboutlink" id="rkOther"></button><button type="button" class="aboutlink" id="rkVer"></button></div>
+        <p class="rkdev" id="rkDev"></p>
+      </div>
       <button type="button" class="startbig" id="again"></button>
       <button type="button" class="btn revbtn" id="revBtn" aria-expanded="false" aria-controls="rev"></button>
       <ol class="rev" id="rev" hidden></ol>
@@ -448,6 +480,17 @@ main{position:relative;z-index:1}
   </div>
 </div>
 
+<div class="sheet-bg" id="rank" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
+    <h2 id="rankTitle"></h2>
+    <div class="rktabs" id="rkTabs" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
+    <ol class="rklist" id="rkList"></ol>
+    <p class="rkme" id="rkMe"></p>
+    <p class="ev rknote" id="rkNote"></p>
+    <div class="acts"><button type="button" class="btn" id="rankClose"></button></div>
+  </div>
+</div>
+
 <div class="sheet-bg" id="rep" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="repTitle">
     <h2 id="repTitle"></h2>
@@ -466,6 +509,11 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  ptsNote:"<b>Pontos:</b> 10, 20 ou 30 por resposta certa, conforme o nível, mais 1 por cada segundo que sobra.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
+ rankT:"Ranking",rankWeek:"Esta semana",rankAll:"Sempre",rankJoin:n=>`Entrar no ranking como ${n}`,rankSending:"A enviar…",
+ rankPos:p=>`Estás em ${p}.º lugar esta semana!`,rankSaved:"Guardado no ranking.",rankBest:b=>`O teu melhor desta semana: ${b} pontos.`,
+ rankOther:"Outro nome",rankDev:"O nome só vale neste dispositivo e navegador. Noutro, terás outro nome.",rankVer:"Ver ranking",rankMe:"O teu nome:",rankEmpty:"Ainda ninguém entrou no ranking. Podes ser o primeiro!",rankLoad:"A carregar…",
+ rankFail:"Não foi possível ligar ao ranking. Tenta mais tarde.",rankPts:"pts",
+ rankNote:"Não guardamos dados pessoais: só um nome gerado pelo jogo e os pontos. O ranking da semana recomeça à segunda-feira.",
  conta:{normal:n=>[n,n===1?"pessoa já jogou a versão normal":"pessoas já jogaram a versão normal"],kids:n=>[n,n===1?"pessoa já jogou a versão para crianças":"pessoas já jogaram a versão para crianças"]},
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
@@ -509,6 +557,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
   ["Como se joga","15 perguntas, do fácil ao difícil, com 20 segundos cada. Tens 3 saltos e uma ajuda 50/50. Depois de cada resposta aparece uma explicação curta, porque o mais importante é aprender."],
   ["Para crianças","Uma versão com 10 perguntas simples, mais tempo e mensagens de incentivo, pensada para as crianças descobrirem o essencial: as ilhas, a bandeira, a língua, a música, a comida e a natureza."],
   ["Fontes","Todas as perguntas assentam em factos comprovados e têm uma fonte que podes consultar. Se encontrares um erro, usa «Reportar problema»."],
+  ["Ranking","Na versão normal podes entrar no ranking da semana e no de sempre, com um nome gerado pelo jogo. Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra o que aconteceu na história de Cabo Verde em cada dia do ano."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -516,6 +565,11 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
+ rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankJoin:n=>`Join the leaderboard as ${n}`,rankSending:"Sending…",
+ rankPos:p=>`You are ${p}${p%10===1&&p%100!==11?"st":p%10===2&&p%100!==12?"nd":p%10===3&&p%100!==13?"rd":"th"} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
+ rankOther:"Another name",rankDev:"This name only works on this device and browser. On another one, you will get a different name.",rankVer:"See leaderboard",rankMe:"Your name:",rankEmpty:"Nobody has joined the leaderboard yet. You can be the first!",rankLoad:"Loading…",
+ rankFail:"Could not reach the leaderboard. Please try later.",rankPts:"pts",
+ rankNote:"We do not store personal data: only a name made up by the game and the points. The weekly leaderboard restarts on Monday.",
  conta:{normal:n=>[n,n===1?"person has played the standard version":"people have played the standard version"],kids:n=>[n,n===1?"person has played the kids version":"people have played the kids version"]},
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
@@ -558,6 +612,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
   ["How to play","15 questions, from easy to hard, with 20 seconds each. You have 3 skips and one 50/50 help. After each answer there is a short explanation, because learning is what matters most."],
   ["For kids","A version with 10 simple questions, more time and encouraging messages, made for children to discover the essentials: the islands, the flag, the language, music, food and nature."],
   ["Sources","Every question is based on proven facts and has a source you can check. If you find a mistake, use “Report a problem”."],
+  ["Leaderboard","In the standard version you can join the weekly and all-time leaderboards with a name made up by the game. We do not store personal data: not your name, email or phone."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -585,6 +640,44 @@ function renderConta(){const el=$("conta");if(!CONTA){el.hidden=true;return}cons
  el.innerHTML=["normal","kids"].map(m=>{const[n,txt]=t.conta[m](CONTA[m]);return`<span>${IC[m]}<span><b>${f(n)}</b> ${esc(txt)}</span></span>`}).join("");el.hidden=false}
 function contaJogo(){const k="quizcv_contei_"+modo;if(!API||ls.get(k,0))return;ls.set(k,1);
  fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({acao:"jogo",modo})}).then(r=>r.json()).then(lerConta).catch(()=>{})}
+// ranking (só versão normal): nome gerado = animal + ilha + número, sem texto livre nem dados pessoais.
+// ANIMAIS e ILHAS_N têm de ser iguais às do Code.gs (o servidor recusa outros nomes).
+const ANIMAIS=["Cagarra","Tartaruga","Baleia","Garoupa","Golfinho","Tubarão","Calhandra","Lagosta","Polvo","Garça","Falcão","Lagartixa","Moreia","Atum"];
+const ILHAS_N=["de Santo Antão","de São Vicente","de Santa Luzia","de São Nicolau","do Sal","da Boa Vista","do Maio","de Santiago","do Fogo","da Brava"];
+const rndN=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
+const novoNome=()=>`${ANIMAIS[rndN(ANIMAIS.length)]} ${ILHAS_N[rndN(ILHAS_N.length)]} ${String(rndN(100)).padStart(2,"0")}`;
+const nomeOk=n=>{const m=/^(.+) ((?:de|do|da) .+) (\d{2})$/.exec(n||"");return !!m&&ANIMAIS.includes(m[1])&&ILHAS_N.includes(m[2])};
+const ICRE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M19 3v4.5h-4.5M5 21v-4.5h4.5"/></svg>';
+let JOG=null;
+function jogador(){if(JOG)return JOG;let j=ls.get("quizcv_jogador",null);
+ if(!j||!/^[a-f0-9]{16}$/.test(j.id||"")||!nomeOk(j.nome)){const a=new Uint8Array(8);crypto.getRandomValues(a);j={id:(j&&/^[a-f0-9]{16}$/.test(j.id||""))?j.id:[...a].map(b=>b.toString(16).padStart(2,"0")).join(""),nome:novoNome()};ls.set("quizcv_jogador",j)}
+ return JOG=j}
+function outroNome(){const j=jogador();let n;do n=novoNome();while(n===j.nome);j.nome=n;ls.set("quizcv_jogador",j);if(vista==="fim")renderRk();if(!$("rank").hidden)renderRank()}
+// estado da ronda: token pedido no início (o servidor exige 1 min entre o início e o envio), e resultado do envio
+let rkTok=null,rkT0=0,rkEnv=null,rkDados=null,rkPer="semana";
+const rkPost=o=>fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
+function pedeToken(){rkTok=null;rkEnv=null;rkT0=Date.now();if(!API||KIDS())return;rkPost({acao:"inicio"}).then(j=>{if(j&&j.ok&&j.token)rkTok=j.token}).catch(()=>{})}
+function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!API||!res.length||(!rkTok&&!rkEnv)||(!rkEnv&&Date.now()-rkT0<61000);if(box.hidden)return;
+ const env=rkEnv&&rkEnv.ok;$("rkJoin").hidden=!!env||(!rkTok&&rkEnv!=="a");$("rkJoin").disabled=rkEnv==="a";$("rkJoin").textContent=rkEnv==="a"?t.rankSending:t.rankJoin(j.nome);
+ const m=$("rkMsg");m.className="rkmsg";
+ if(env){m.textContent=(rkEnv.pos>0&&rkEnv.pos<=10?t.rankPos(rkEnv.pos):t.rankSaved)+(rkEnv.melhor>pts?" "+t.rankBest(rkEnv.melhor):"");m.hidden=false}
+ else if(rkEnv&&rkEnv.erro){m.textContent=t.rankFail;m.classList.add("erro");m.hidden=false}else m.hidden=true;
+ $("rkOther").innerHTML=`<span class="rkre">${ICRE}${esc(t.rankOther)}</span>`;$("rkOther").hidden=!!env;$("rkVer").textContent=t.rankVer;$("rkDev").textContent=t.rankDev;$("rkDev").hidden=!!env}
+function enviaPontos(){if(!rkTok||rkEnv==="a")return;const j=jogador(),tok=rkTok;rkEnv="a";renderRk();
+ rkPost({acao:"pontos",token:tok,jogador:j.id,nome:j.nome,pontos:pts}).then(r=>{rkEnv=r&&r.ok?{ok:true,pos:r.pos,melhor:r.melhor}:{erro:(r&&r.erro)||"x"};rkTok=null;if(r&&r.ok)rkDados=null})
+  .catch(()=>{rkEnv={erro:"rede"};rkTok=null}).then(()=>{if(vista==="fim")renderRk()})}
+function abreRank(){$("rank").hidden=false;rkPer="semana";renderRank();$("rankClose").focus();
+ fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+jogador().id).then(r=>r.json()).then(j=>{rkDados=j&&j.ok?j:{erro:1}}).catch(()=>{rkDados={erro:1}}).then(()=>{if(!$("rank").hidden)renderRank()})}
+function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=t.rankT;$("rankClose").textContent=t.close;$("rkNote").textContent=t.rankNote;
+ $("rkTabs").querySelectorAll("button").forEach(b=>{b.textContent=b.dataset.p==="semana"?t.rankWeek:t.rankAll;b.setAttribute("aria-pressed",String(b.dataset.p===rkPer))});
+ const L0=$("rkList"),f=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT");
+ if(!rkDados)L0.innerHTML=`<li class="vazio">${esc(t.rankLoad)}</li>`;else if(rkDados.erro)L0.innerHTML=`<li class="vazio">${esc(t.rankFail)}</li>`;
+ else{const l=rkDados[rkPer]||[];L0.innerHTML=l.length?l.map((x,i)=>`<li${x.eu?' class="eu"':""}><span class="p">${i+1}</span><span class="n">${esc(x.nome)}</span><span class="s">${f(x.pontos)} ${esc(t.rankPts)}</span></li>`).join(""):`<li class="vazio">${esc(t.rankEmpty)}</li>`}
+ $("rkMe").innerHTML=`<span>${esc(t.rankMe)} <b>${esc(j.nome)}</b></span><button type="button" class="aboutlink" id="rkOther2"><span class="rkre">${ICRE}${esc(t.rankOther)}</span></button><span class="rkdev">${esc(t.rankDev)}</span>`;$("rkOther2").onclick=outroNome}
+$("rkTabs").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRank()});
+$("rkJoin").onclick=enviaPontos;$("rkOther").onclick=outroNome;$("rkVer").onclick=abreRank;$("rkHome").onclick=abreRank;
+$("rankClose").onclick=()=>{$("rank").hidden=true};
+$("rank").addEventListener("click",ev=>{if(ev.target.id==="rank")$("rank").hidden=true});
 if(API)fetch(API+(API.includes("?")?"&":"?")+"acao=contador").then(r=>r.json()).then(lerConta).catch(()=>{});
 const MODOS={normal:{niveis:[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3],tempo:20,best:"quizcv_best"},kids:{niveis:[1,1,1,1,1,2,2,2,2,2],tempo:30,best:"quizcv_best_kids"}};
 let NIVEIS=MODOS[modo].niveis, TEMPO=MODOS[modo].tempo;
@@ -650,10 +743,11 @@ function renderIni(){const t=L();
  $("howT").textContent=t.howT;$("how").hidden=!QS.length;
  $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
  $("ptsNote").innerHTML=t.ptsNote;
- const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b;renderConta()}
+ const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b;renderConta();
+ $("rkHomeP").hidden=KIDS()||!API;$("rkHome").textContent=t.rankVer}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
- idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;if(ronda.length)contaJogo();show("jogo");nova()}
+ idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;if(ronda.length){contaJogo();pedeToken()}show("jogo");nova()}
 function nova(){resp=null;fora=new Set();estado="";ganhoAtual=null;ordem=shuffle([0,1,2,3]);marcaVista(ronda[idx]);restante=TEMPO;ultSeg=null;renderQ();
  const b=$("qbox");b.classList.remove("out","in");void b.offsetWidth;b.classList.add("in");arranca()}
 
@@ -806,7 +900,7 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
  $("again").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.again)}`;
  $("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrMsg").hidden=true;
  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
- $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":"";renderRev()}
+ $("shrNative").hidden=!ok&&!navigator.share;document.querySelector(".fimacts").style.gridTemplateColumns=$("shrNative").hidden?"1fr 1fr":"";renderRk();renderRev()}
 // revisão: cada pergunta respondida, com a resposta dada, a certa, a explicação, a fonte e «Reportar problema»
 const ICOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
  ICNO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>';
@@ -900,13 +994,13 @@ function applyLang(){const t=L();document.documentElement.lang=LANG;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
  $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
- desenhaSom();renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim()}
+ desenhaSom();renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim();if(!$("rank").hidden)renderRank()}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;ls.set("quizcv_lang",LANG);applyLang()});
 $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
 for(const id of ["about"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
 $("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
-addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;if(!$("rep").hidden)fechaRep()});
+addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("rank").hidden=true;if(!$("rep").hidden)fechaRep()});
 applyLang();show("ini");
 </script>
 </body>
