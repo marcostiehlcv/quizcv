@@ -7,7 +7,7 @@
 // Os totais ficam na folha «contador» (B2 = normal, B3 = crianças) e podem ser corrigidos à mão.
 // Ranking (só versão normal, sem dados pessoais): POST {acao:"inicio"} devolve um token de ronda;
 // POST {acao:"pontos", token, jogador, nome, pontos} guarda o melhor resultado da semana desse jogador;
-// GET ?acao=ranking&eu=<id> devolve o top 10 da semana e o de sempre. O nome é gerado pelo jogo a partir
+// GET ?acao=ranking&eu=<id> devolve o top 10 da semana e o de sempre (e «meu» = a minha posição na semana, se ficar fora do top 10). O nome é gerado pelo jogo a partir
 // de ANIMAIS + ILHAS_N (iguais às do index.html) e o servidor recusa qualquer outro texto.
 // Folha «ranking»: data | jogador (id aleatório do browser) | nome | pontos | semana. Uma linha pode ser apagada à mão.
 
@@ -105,9 +105,15 @@ function criar_(ss) {
 }
 
 // ── ranking ──
+// nome = animal + ilha + 2 dígitos, tudo junto (ex.: TartarugaDoFogo10), como no novoNome() do index.html
+function junta_(a, i) {
+  return a + i.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join("");
+}
 function nomeValido_(n) {
-  const m = /^(.+) ((?:de|do|da) .+) (\d{2})$/.exec(String(n || ""));
-  return !!m && ANIMAIS.indexOf(m[1]) >= 0 && ILHAS_N.indexOf(m[2]) >= 0;
+  const m = /^(.+)(\d{2})$/.exec(String(n || ""));
+  if (!m) return false;
+  for (let a = 0; a < ANIMAIS.length; a++) for (let i = 0; i < ILHAS_N.length; i++) if (junta_(ANIMAIS[a], ILHAS_N[i]) === m[1]) return true;
+  return false;
 }
 
 // semana ISO (segunda a domingo) na hora de Cabo Verde (UTC−1), ex.: "2026-W46"
@@ -194,7 +200,10 @@ function dadosRank_() {
 
 function ranking_(eu) {
   const r = dadosRank_(), pub = (x) => ({ nome: x.nome, pontos: x.pontos, eu: !!eu && x.jogador === eu });
-  return { semana: r.semanaTodos.slice(0, RANK_TOP).map(pub), sempre: r.sempre.map(pub) };
+  const o = { semana: r.semanaTodos.slice(0, RANK_TOP).map(pub), sempre: r.sempre.map(pub) };
+  const i = eu ? r.semanaTodos.findIndex((x) => x.jogador === eu) : -1;
+  if (i >= RANK_TOP) o.meu = { pos: i + 1, nome: r.semanaTodos[i].nome, pontos: r.semanaTodos[i].pontos };
+  return o;
 }
 
 // apaga linhas com mais de RANK_SEMANAS semanas, menos as do top de sempre
