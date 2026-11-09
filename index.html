@@ -129,6 +129,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .rklist li.sep{display:block;background:none;border:0;padding:0;text-align:center;color:var(--muted);line-height:.6;letter-spacing:.3em}
 .rklist .vazio{display:block;text-align:center;color:var(--muted);background:none!important;border:0!important;padding:16px 8px}
 #rank .sheet>*{flex:none}
+.rkshr{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600}
+.rkshr svg{width:17px;height:17px;flex:none}
 .rkfim{margin:-2px 0 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
 .rkfim svg{width:13px;height:13px}
 @media (prefers-reduced-motion:no-preference){.rklist li:not(.vazio):not(.sep){animation:rkin .45s cubic-bezier(.2,.9,.3,1.2) backwards;animation-delay:calc(var(--i,0)*45ms)}
@@ -461,6 +463,7 @@ main{position:relative;z-index:1}
         <div class="rktabs" id="rkTabsF" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
         <p class="rkfim" id="rkFimF"></p>
         <ol class="rklist" id="rkListF"></ol>
+        <button type="button" class="btn rkshr" id="rkShrF" hidden></button>
       </div>
       <button type="button" class="startbig" id="again"></button>
       <button type="button" class="btn revbtn" id="revBtn" aria-expanded="false" aria-controls="rev"></button>
@@ -505,6 +508,7 @@ main{position:relative;z-index:1}
     <div class="rktabs" id="rkTabs" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
     <p class="rkfim" id="rkFim"></p>
     <ol class="rklist" id="rkList"></ol>
+    <button type="button" class="btn rkshr" id="rkShr" hidden></button>
     <p class="rkme" id="rkMe"></p>
     <p class="ev rknote" id="rkNote"></p>
     <div class="acts"><button type="button" class="btn" id="rankClose"></button></div>
@@ -523,6 +527,7 @@ main{position:relative;z-index:1}
 </div>
 
 <script>
+const ordEN=p=>p+(p%10===1&&p%100!==11?"st":p%10===2&&p%100!==12?"nd":p%10===3&&p%100!==13?"rd":"th");
 const I18N={
 pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Quantas consegues acertar?",
  howT:"Como funciona",rules:(n,t,sk,rv)=>[["q",`${n} perguntas`,"Do fácil ao difícil"],["t",`${t} segundos`,"Por pergunta"],["s",`${sk} saltos`,"Trocam a pergunta"],["a",`${rv} ajuda 50/50`,"Tira duas opções erradas"]],
@@ -533,6 +538,8 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  rankPos:p=>`Estás em ${p}.º lugar esta semana!`,rankSaved:"Guardado no ranking.",rankBest:b=>`O teu melhor desta semana: ${b} pontos.`,
  rankTu:"Tu",rankEnds:d=>d<=0?"A semana termina hoje":d===1?"A semana termina amanhã":`A semana termina em ${d} dias`,rankOther:"Outro nome",rankDev:"O nome só vale neste dispositivo e navegador. Noutro, terás outro nome.",rankVer:"Ver ranking",rankMe:"O teu nome:",rankEmpty:"Ainda ninguém entrou no ranking. Podes ser o primeiro!",rankLoad:"A carregar…",
  rankFail:"Não foi possível ligar ao ranking. Tenta mais tarde.",rankPts:"pts",
+ rankShr:"Partilhar ranking",rankShrOk:"Imagem guardada e texto copiado.",rankShrImg:"Imagem guardada.",rankLugar:(p,n)=>`${p}.º lugar · ${n} pontos`,
+ rankShrTxt:(p,n,per,u)=>`Quiz CV: estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":"de sempre"}, com ${n} pontos. Consegues passar-me? https://${u}`,
  rankNote:"Não guardamos dados pessoais: só um nome gerado pelo jogo e os pontos. O ranking da semana recomeça à segunda-feira.",
  conta:{normal:n=>[n,n===1?"jogo na versão normal":"jogos na versão normal"],kids:n=>[n,n===1?"jogo na versão para crianças":"jogos na versão para crianças"]},
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
@@ -586,9 +593,11 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
  rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankJoin:n=>`Join the leaderboard as ${n}`,rankSending:"Sending…",
- rankPos:p=>`You are ${p}${p%10===1&&p%100!==11?"st":p%10===2&&p%100!==12?"nd":p%10===3&&p%100!==13?"rd":"th"} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
+ rankPos:p=>`You are ${ordEN(p)} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
  rankTu:"You",rankEnds:d=>d<=0?"The week ends today":d===1?"The week ends tomorrow":`The week ends in ${d} days`,rankOther:"Another name",rankDev:"This name only works on this device and browser. On another one, you will get a different name.",rankVer:"See leaderboard",rankMe:"Your name:",rankEmpty:"Nobody has joined the leaderboard yet. You can be the first!",rankLoad:"Loading…",
  rankFail:"Could not reach the leaderboard. Please try later.",rankPts:"pts",
+ rankShr:"Share leaderboard",rankShrOk:"Image saved and text copied.",rankShrImg:"Image saved.",rankLugar:(p,n)=>`${ordEN(p)} place · ${n} points`,
+ rankShrTxt:(p,n,per,u)=>`Quiz CV: I am ${ordEN(p)} on the ${per==="semana"?"weekly":"all-time"} leaderboard with ${n} points. Can you beat me? https://${u}`,
  rankNote:"We do not store personal data: only a name made up by the game and the points. The weekly leaderboard restarts on Monday.",
  conta:{normal:n=>[n,n===1?"game in the standard version":"games in the standard version"],kids:n=>[n,n===1?"game in the kids version":"games in the kids version"]},
  lv:{1:"Easy",2:"Medium",3:"Hard"},
@@ -693,7 +702,7 @@ function listaRank(tabs,lista,fim){const t=L(),f=n=>n.toLocaleString(LANG==="en"
 function carregaRank(){fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+jogador().id).then(r=>r.json()).then(j=>{rkDados=j&&j.ok?j:{erro:1}}).catch(()=>{rkDados={erro:1}})
  .then(()=>{if(!$("rank").hidden)renderRank();if(vista==="fim")renderRk();rkNovo=false})}
 function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!API||!res.length;if(box.hidden)return;
- $("rkH").textContent=t.rankT;listaRank($("rkTabsF"),$("rkListF"),$("rkFimF"));
+ $("rkH").textContent=t.rankT;listaRank($("rkTabsF"),$("rkListF"),$("rkFimF"));botaoShr($("rkShrF"));
  const pode=!!rkTok&&Date.now()-rkT0>=61000,env=rkEnv&&rkEnv.ok;$("rkJoin").hidden=!!env||(!pode&&rkEnv!=="a");$("rkLinks").hidden=$("rkDev").hidden=$("rkJoin").hidden;$("rkJoin").disabled=rkEnv==="a";$("rkJoin").textContent=rkEnv==="a"?t.rankSending:t.rankJoin(j.nome);
  const m=$("rkMsg");m.className="rkmsg";
  if(env){m.textContent=(rkEnv.pos>0&&rkEnv.pos<=10?t.rankPos(rkEnv.pos):t.rankSaved)+(rkEnv.melhor>pts?" "+t.rankBest(rkEnv.melhor):"");m.hidden=false}
@@ -704,8 +713,48 @@ function enviaPontos(){if(!rkTok||rkEnv==="a")return;const j=jogador(),tok=rkTok
   .catch(()=>{rkEnv={erro:"rede"};rkTok=null}).then(()=>{if(vista==="fim")renderRk()})}
 function abreRank(){$("rank").hidden=false;rkPer="semana";rkDados=null;renderRank();$("rankClose").focus();carregaRank()}
 function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=t.rankT;$("rankClose").textContent=t.close;$("rkNote").textContent=t.rankNote;
- listaRank($("rkTabs"),$("rkList"),$("rkFim"));
+ listaRank($("rkTabs"),$("rkList"),$("rkFim"));botaoShr($("rkShr"));
  $("rkMe").innerHTML=`<span>${esc(t.rankMe)} <b>${esc(j.nome)}</b></span><button type="button" class="aboutlink" id="rkOther2"><span class="rkre">${ICRE}${esc(t.rankOther)}</span></button><span class="rkdev">${esc(t.rankDev)}</span>`;$("rkOther2").onclick=outroNome}
+// partilhar o ranking: cartão 1080×1080 com o top 10 do separador aberto e a minha linha destacada (só se eu lá estiver).
+// A imagem é preparada antes do toque, para o menu de partilha abrir logo (o Safari exige-o).
+const ICSH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
+function rankLinhas(){if(!rkDados||rkDados.erro)return null;const l=(rkDados[rkPer]||[]).map((x,i)=>({...x,pos:i+1}));
+ const meu=rkPer==="semana"&&rkDados.meu&&rkDados.meu.pos>l.length?{...rkDados.meu,eu:true,sep:true}:null;if(meu)l.push(meu);
+ const eu=l.find(x=>x.eu);return eu?{l,eu}:null}
+let rkCard={k:"",blob:null},rkShrT=0;
+function botaoShr(b){const d=rankLinhas();b.hidden=!d;if(!d)return;if(Date.now()>rkShrT)b.innerHTML=ICSH+esc(L().rankShr);
+ const k=[LANG,rkPer,jogador().nome,JSON.stringify(d.l)].join("|");if(rkCard.k===k)return;rkCard={k,blob:null};
+ const cv=document.createElement("canvas");cv.width=cv.height=1080;drawRank(cv,d).then(()=>cv.toBlob(bl=>{if(rkCard.k===k)rkCard.blob=bl},"image/png"))}
+async function partilhaRank(ev){const b=ev.currentTarget,d=rankLinhas(),t=L();if(!d||!rkCard.blob)return;
+ const txt=t.rankShrTxt(d.eu.pos,d.eu.pontos,rkPer,SITE),file=new File([rkCard.blob],"quizcv-ranking.png",{type:"image/png"});
+ try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:txt});return}}catch(err){if(err&&err.name==="AbortError")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+ let cop=false;try{await navigator.clipboard.writeText(txt);cop=true}catch(_){}
+ b.textContent=cop?t.rankShrOk:t.rankShrImg;rkShrT=Date.now()+2500;setTimeout(()=>{if(!b.hidden)b.innerHTML=ICSH+esc(L().rankShr)},2600)}
+async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotesque"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
+ const W=1080,H=1080,ctx=cv.getContext("2d"),t=L(),P=88,f=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT"),fb=H-150;
+ const BG='"Bricolage Grotesque", system-ui, sans-serif',MO='"JetBrains Mono", ui-monospace, monospace';
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);drawFlagBg(ctx,W,H,.1);
+ let y=84;ctx.textBaseline="alphabetic";ctx.font="800 56px "+BG;ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
+ ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
+ y=222;ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(`${t.rankT} · ${rkPer==="semana"?t.rankWeek:t.rankAll}`.toUpperCase(),P,y);
+ y+=72;ctx.font="800 60px "+BG;ctx.fillStyle="#f7d116";ctx.fillText(t.rankLugar(d.eu.pos,f(d.eu.pontos)),P,y);
+ // linhas: altura ajustada ao número de linhas, entre o título e a faixa do rodapé
+ const n=d.l.length,sepH=d.l.some(x=>x.sep)?30:0,y0=y+36,gap=8,rh=Math.min(58,Math.floor((fb-24-y0-sepH)/n)-gap),med={1:"#f2c230",2:"#b9c2cf",3:"#cd8a52"};
+ y=y0;ctx.textBaseline="middle";
+ for(const x of d.l){if(x.sep){ctx.font="800 28px "+BG;ctx.fillStyle="rgba(255,255,255,.55)";ctx.textAlign="center";ctx.fillText("· · ·",W/2,y+sepH/2-4);ctx.textAlign="left";y+=sepH}
+  const cy=y+rh/2,fs=Math.round(rh*.5);ctx.fillStyle=x.eu?"#f7d116":"rgba(255,255,255,.1)";ctx.beginPath();ctx.roundRect(P,y,W-2*P,rh,14);ctx.fill();
+  if(x.pos===1&&!x.eu){ctx.strokeStyle=med[1];ctx.lineWidth=3;ctx.stroke()}
+  const px=P+40;if(med[x.pos]){ctx.fillStyle=med[x.pos];ctx.beginPath();ctx.arc(px,cy,rh*.36,0,7);ctx.fill();ctx.fillStyle="#1a1300"}else ctx.fillStyle=x.eu?"#002566":"rgba(255,255,255,.7)";
+  ctx.font=`800 ${Math.round(fs*.9)}px ${BG}`;ctx.textAlign="center";ctx.fillText(String(x.pos),px,cy+1);ctx.textAlign="left";
+  ctx.font=`${x.eu?800:600} ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.fillText(x.nome,P+88,cy+1);
+  if(x.eu){const nx=P+88+ctx.measureText(x.nome).width+16;ctx.font=`500 ${Math.round(fs*.62)}px ${MO}`;const tw=ctx.measureText(t.rankTu.toUpperCase()).width+24,th=Math.round(fs*1.05);
+   ctx.fillStyle="#002566";ctx.beginPath();ctx.roundRect(nx,cy-th/2,tw,th,th/2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.rankTu.toUpperCase(),nx+12,cy+1)}
+  ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.textAlign="right";ctx.fillText(`${f(x.pontos)} ${t.rankPts}`,W-P-24,cy+1);ctx.textAlign="left";y+=rh+gap}
+ ctx.textBaseline="alphabetic";ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
+ ctx.font="500 23px "+MO;ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
+ ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
+$("rkShr").onclick=$("rkShrF").onclick=partilhaRank;
 $("rkTabs").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRank()});
 $("rkTabsF").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRk()});
 $("rkJoin").onclick=enviaPontos;$("rkOther").onclick=outroNome;$("rkHome").onclick=abreRank;
