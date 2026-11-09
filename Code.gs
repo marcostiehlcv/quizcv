@@ -2,8 +2,8 @@
 // Colar numa Google Sheet (Extensões → Apps Script) e implementar como Web app
 // (Execute as: Me · Who has access: Anyone). Pôr o URL /exec em config.js.
 // Cada reporte entra na folha «reportes» como «pendente»; a revisão é manual.
-// Contador público: POST {acao:"jogo", modo:"normal"|"kids"} soma 1 pessoa (o site só envia
-// uma vez por browser e por versão); GET ?acao=contador devolve {ok, normal, kids}.
+// Contador público: POST {acao:"jogo", modo:"normal"|"kids"} soma 1 jogo (o site envia
+// um por cada ronda começada); GET ?acao=contador devolve {ok, normal, kids}.
 // Os totais ficam na folha «contador» (B2 = normal, B3 = crianças) e podem ser corrigidos à mão.
 // Ranking (só versão normal, sem dados pessoais): POST {acao:"inicio"} devolve um token de ronda;
 // POST {acao:"pontos", token, jogador, nome, pontos} guarda o melhor resultado da semana desse jogador;
@@ -13,7 +13,7 @@
 
 const MOTIVOS = ["certa", "outra", "pergunta", "fonte", "traducao", "ofensivo"];
 const LIMITE_HORA = 30; // reportes por pergunta por hora
-const LIMITE_JOGOS_HORA = 3000; // novas pessoas por hora, no total (trava abusos)
+const LIMITE_JOGOS_HORA = 3000; // jogos por hora, no total (trava abusos)
 // ranking — listas iguais às do index.html (ANIMAIS / ILHAS_N); se mudarem, mudar nos dois sítios
 const ANIMAIS = ["Cagarra", "Tartaruga", "Baleia", "Garoupa", "Golfinho", "Tubarão", "Calhandra", "Lagosta", "Polvo", "Garça", "Falcão", "Lagartixa", "Moreia", "Atum"];
 const ILHAS_N = ["de Santo Antão", "de São Vicente", "de Santa Luzia", "de São Nicolau", "do Sal", "da Boa Vista", "do Maio", "de Santiago", "do Fogo", "da Brava"];

@@ -11,7 +11,7 @@
 - Ao acertar, aparece em grande no ecrã uma palavra de motivação («Boa!», «Isso!», «Muito bem!»).
 - Depois de responder, aparece a explicação e a fonte, com um comentário bem-disposto.
 - «Reportar problema» assinala uma pergunta com erro (motivos fixos, sem texto livre).
-- A página inicial mostra quantas pessoas já jogaram cada versão (normal e para crianças).
+- A página inicial mostra quantos jogos já houve em cada versão (normal e para crianças).
 - Na versão normal há um ranking da semana e de sempre, em estilo de liga (medalhas, a tua posição destacada), que aparece já aberto no fim da ronda. O nome é gerado pelo jogo (ex.: TartarugaDoFogo10), sem dados pessoais, e só vale nesse dispositivo e navegador.
 - No fim, o resultado pode ser partilhado como imagem ou texto, e «Ver perguntas e respostas» mostra cada pergunta com a resposta dada, a certa, a explicação e a fonte, com a opção de reportar um problema. O melhor resultado fica guardado no navegador, e as perguntas já vistas só se repetem quando se esgotam.
 - Som do temporizador que aumenta a tensão (verde, amarelo, vermelho), com botão para desligar.
