@@ -16,6 +16,7 @@ Projeto: **Quiz CV**, de Marco Stiehl. Jogo de perguntas sobre Cabo Verde (uma p
 | `perguntas-base.js` | Perguntas escritas à mão (fonte de verdade; módulo Node) |
 | `perguntas-base-2.js` | Segundo lote escrito à mão (b51–b150), juntado pelo `perguntas-base.js` |
 | `perguntas-base-3.js` | Terceiro lote escrito à mão (b151–b250), juntado pelo `perguntas-base.js` |
+| `perguntas-base-4.js` | Quarto lote escrito à mão (b251–b368: geografia, sociedade, música, história, política, desporto — Mundial 2026 —, religião, catástrofes), juntado pelo `perguntas-base.js` |
 | `perguntas-criancas.js` | Perguntas da versão para crianças, escritas à mão (ids `bk…`, só níveis 1 e 2; módulo Node). O gerador valida-as e escreve-as em `window.QUIZCV_CRIANCAS` |
 | `scripts/gerar-perguntas.js` | Gera o `perguntas.js` = base + perguntas tiradas do `../hojecv/eventos.js`, com validação |
 | `perguntas.js` | Gerado; **não editar à mão**. `window.QUIZCV_ATUALIZADO` e `window.QUIZCV_PERGUNTAS` |

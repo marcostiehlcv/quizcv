@@ -207,3 +207,4 @@ module.exports = [
 ];
 module.exports.push(...require("./perguntas-base-2.js"));
 module.exports.push(...require("./perguntas-base-3.js"));
+module.exports.push(...require("./perguntas-base-4.js"));
