@@ -104,7 +104,12 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .conta b{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
 .conta svg{width:14px;height:14px;flex:none}
 /* ranking (só versão normal) */
-.rkhome{margin:-8px 0 0;text-align:center;font-size:13px}
+.rkhome{margin:0}
+.rkhbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:var(--display);font-weight:700;font-size:17px;color:var(--ocean);background:var(--surface);border:2px solid var(--ocean);border-radius:14px;padding:12px 18px;cursor:pointer;transition:background .15s,color .15s}
+.rkhbtn:hover{background:var(--ocean);color:#fff}
+.rkhbtn svg{width:22px;height:22px;flex:none;color:var(--ouro)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rkhbtn{color:var(--fg)}}
+:root[data-theme="dark"] .rkhbtn{color:var(--fg)}
 .rkh{margin:0;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em}
 .rkbox{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 .rkbox .btn{width:100%;font-weight:700}
@@ -408,11 +413,11 @@ main{position:relative;z-index:1}
     <section id="v-ini" class="ini">
       <div class="modo" id="modo" role="group"><button type="button" data-m="normal" aria-pressed="true"></button><button type="button" data-m="kids" aria-pressed="false"></button></div>
       <button type="button" class="startbig" id="start"></button>
+      <p class="rkhome" id="rkHomeP" hidden><button type="button" class="rkhbtn" id="rkHome"></button></p>
       <p class="msg" id="iniNone" hidden></p>
       <div class="how" id="how"><h2 id="howT"></h2><ul class="howl" id="rules"></ul><p id="ptsNote"></p></div>
       <p class="best" id="best"></p>
       <p class="conta" id="conta" hidden></p>
-      <p class="rkhome" id="rkHomeP" hidden><button type="button" class="aboutlink" id="rkHome"></button></p>
     </section>
 
     <!-- pergunta -->
@@ -678,6 +683,7 @@ const junta=(a,i)=>a+i.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).j
 const PREF=new Set(ANIMAIS.flatMap(a=>ILHAS_N.map(i=>junta(a,i))));
 const novoNome=()=>junta(ANIMAIS[rndN(ANIMAIS.length)],ILHAS_N[rndN(ILHAS_N.length)])+String(rndN(100)).padStart(2,"0");
 const nomeOk=n=>{const m=/^(.+)(\d{2})$/.exec(n||"");return !!m&&PREF.has(m[1])};
+const ICTROF='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v2h3a1 1 0 0 1 1 1v2a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3a1 1 0 0 1 1 1v2H7v-2a1 1 0 0 1 1-1h3v-2.1A5 5 0 0 1 7.6 13 5 5 0 0 1 3 8V6a1 1 0 0 1 1-1h3V3zm10 4v3.8A3 3 0 0 0 19 8V7h-2zM5 7v1a3 3 0 0 0 2 2.8V7H5z"/></svg>';
 const ICRE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M19 3v4.5h-4.5M5 21v-4.5h4.5"/></svg>';
 let JOG=null;
 function jogador(){if(JOG)return JOG;let j=ls.get("quizcv_jogador",null);
@@ -835,7 +841,7 @@ function renderIni(){const t=L();
  $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
  $("ptsNote").innerHTML=t.ptsNote;
  const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b;renderConta();
- $("rkHomeP").hidden=KIDS()||!API;$("rkHome").textContent=t.rankVer}
+ $("rkHomeP").hidden=KIDS()||!API;$("rkHome").innerHTML=ICTROF+esc(t.rankVer)}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
  idx=0;pts=0;saltos=SALTOS;meio=MEIO;res=[];escolhas=[];revAberta=false;if(ronda.length){contaJogo();pedeToken()}show("jogo");nova()}
