@@ -221,21 +221,21 @@ function dadosRank_() {
   todas.forEach((x) => { const b = best[x.jogador]; if (!b || ord(x, b) < 0) best[x.jogador] = x; });
   const st = folhaTotais_(), nt = st.getLastRow() - 1;
   const totalTodos = (nt > 0 ? st.getRange(2, 1, nt, 5).getValues() : []).filter((r) => r[0] && r[1])
-    .map((r) => ({ jogador: String(r[0]), nome: String(r[1]), pontos: Number(r[2]) || 0, t: new Date(r[4]).getTime() || 0 })).sort(ord)
-    .map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos }));
+    .map((r) => ({ jogador: String(r[0]), nome: String(r[1]), pontos: Number(r[2]) || 0, rondas: Number(r[3]) || 0, t: new Date(r[4]).getTime() || 0 })).sort(ord)
+    .map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos, rondas: x.rondas }));
   const o = { totalTodos: totalTodos, semanaTodos: semanaTodos.map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })), sempre: Object.keys(best).map((k) => best[k]).sort(ord).slice(0, RANK_TOP).map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })) };
   try { cache.put("rank", JSON.stringify(o), 60); } catch (err) {}
   return o;
 }
 
 function ranking_(eu) {
-  const r = dadosRank_(), pub = (x) => ({ nome: x.nome, pontos: x.pontos, eu: !!eu && x.jogador === eu });
+  const r = dadosRank_(), pub = (x) => Object.assign({ nome: x.nome, pontos: x.pontos, eu: !!eu && x.jogador === eu }, x.rondas ? { rondas: x.rondas } : {});
   const tt = r.totalTodos || [];
   const o = { semana: r.semanaTodos.slice(0, RANK_TOP).map(pub), sempre: r.sempre.map(pub), total: tt.slice(0, RANK_TOP).map(pub) };
   const i = eu ? r.semanaTodos.findIndex((x) => x.jogador === eu) : -1;
   if (i >= RANK_TOP) o.meu = { pos: i + 1, nome: r.semanaTodos[i].nome, pontos: r.semanaTodos[i].pontos };
   const k = eu ? tt.findIndex((x) => x.jogador === eu) : -1;
-  if (k >= RANK_TOP) o.meuTotal = { pos: k + 1, nome: tt[k].nome, pontos: tt[k].pontos };
+  if (k >= RANK_TOP) o.meuTotal = { pos: k + 1, nome: tt[k].nome, pontos: tt[k].pontos, rondas: tt[k].rondas };
   return o;
 }
 
