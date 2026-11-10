@@ -112,7 +112,7 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .rkmsg.erro{font-family:inherit;font-weight:400;font-size:14px;color:var(--muted)}
 .rklinks{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px;font-size:13.5px;color:var(--muted)}
 .rklinks b{color:var(--fg)}
-.rktabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:12px}
+.rktabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:12px}
 .rktabs button{font:inherit;font-family:var(--display);font-weight:600;font-size:15px;border:0;border-radius:9px;padding:9px;background:none;color:var(--muted);cursor:pointer}
 .rktabs button[aria-pressed="true"]{background:var(--ocean);color:#fff}
 .rklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;min-height:60px}
@@ -460,7 +460,7 @@ main{position:relative;z-index:1}
         <p class="rkmsg" id="rkMsg" hidden aria-live="polite"></p>
         <div class="rklinks" id="rkLinks"><span id="rkNome"></span><button type="button" class="aboutlink" id="rkOther"></button></div>
         <p class="rkdev" id="rkDev"></p>
-        <div class="rktabs" id="rkTabsF" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
+        <div class="rktabs" id="rkTabsF" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button><button type="button" data-p="total" aria-pressed="false"></button></div>
         <p class="rkfim" id="rkFimF"></p>
         <ol class="rklist" id="rkListF"></ol>
         <button type="button" class="btn rkshr" id="rkShrF" hidden></button>
@@ -505,7 +505,7 @@ main{position:relative;z-index:1}
 <div class="sheet-bg" id="rank" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
     <h2 id="rankTitle"></h2>
-    <div class="rktabs" id="rkTabs" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
+    <div class="rktabs" id="rkTabs" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button><button type="button" data-p="total" aria-pressed="false"></button></div>
     <p class="rkfim" id="rkFim"></p>
     <ol class="rklist" id="rkList"></ol>
     <button type="button" class="btn rkshr" id="rkShr" hidden></button>
@@ -534,12 +534,12 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  ptsNote:"<b>Pontos:</b> 10, 20 ou 30 por resposta certa, conforme o nível, mais 1 por cada segundo que sobra.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
- rankT:"Ranking",rankWeek:"Esta semana",rankAll:"Sempre",rankSending:"A entrar no ranking…",
+ rankT:"Ranking",rankWeek:"Esta semana",rankAll:"Sempre",rankTot:"Total",rankAllH:"A melhor ronda de cada jogador",rankTotH:"A soma dos pontos de todas as rondas",rankSending:"A entrar no ranking…",
  rankPos:p=>`Estás em ${p}.º lugar esta semana!`,rankSaved:"Guardado no ranking.",rankBest:b=>`O teu melhor desta semana: ${b} pontos.`,
  rankTu:"Tu",rankEnds:d=>d<=0?"A semana termina hoje":d===1?"A semana termina amanhã":`A semana termina em ${d} dias`,rankOther:"Outro nome",rankDev:"O nome só vale neste dispositivo e navegador. Noutro, terás outro nome.",rankVer:"Ver ranking",rankMe:"O teu nome:",rankEmpty:"Ainda ninguém entrou no ranking. Podes ser o primeiro!",rankLoad:"A carregar…",
  rankFail:"Não foi possível ligar ao ranking. Tenta mais tarde.",rankPts:"pts",
  rankShr:"Partilhar ranking",rankEu:"Eu",rankShrOk:"Imagem guardada e texto copiado.",rankShrImg:"Imagem guardada.",rankLugar:(p,n)=>`${p}.º lugar · ${n} pontos`,
- rankShrTxt:(p,n,per,u)=>`Quiz CV: estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":"de sempre"}, com ${n} pontos. Consegues passar-me? https://${u}`,
+ rankShrTxt:(p,n,per,u)=>`Quiz CV: estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":per==="total"?"de pontos acumulados":"de sempre"}, com ${n} pontos. Consegues passar-me? https://${u}`,
  rankNote:"Não guardamos dados pessoais: só um nome gerado pelo jogo e os pontos. O ranking da semana recomeça à segunda-feira.",
  conta:{normal:n=>[n,n===1?"jogo na versão normal":"jogos na versão normal"],kids:n=>[n,n===1?"jogo na versão para crianças":"jogos na versão para crianças"]},
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
@@ -584,7 +584,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
   ["Como se joga","15 perguntas, do fácil ao difícil, com 20 segundos cada. Tens 3 saltos e uma ajuda 50/50. Depois de cada resposta aparece uma explicação curta, porque o mais importante é aprender."],
   ["Para crianças","Uma versão com 10 perguntas simples, mais tempo e mensagens de incentivo, pensada para as crianças descobrirem o essencial: as ilhas, a bandeira, a língua, a música, a comida e a natureza."],
   ["Fontes","Todas as perguntas assentam em factos comprovados e têm uma fonte que podes consultar. Se encontrares um erro, usa «Reportar problema»."],
-  ["Ranking","Na versão normal, cada ronda entra sozinha no ranking da semana e no de sempre, com um nome gerado pelo jogo (podes trocá-lo por outro). Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
+  ["Ranking","Na versão normal, cada ronda entra sozinha no ranking da semana, no de sempre e no total de pontos acumulados, com um nome gerado pelo jogo (podes trocá-lo por outro). Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra o que aconteceu na história de Cabo Verde em cada dia do ano."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -592,12 +592,12 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
- rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankSending:"Joining the leaderboard…",
+ rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankTot:"Total",rankAllH:"Each player's best round",rankTotH:"Points added up over every round",rankSending:"Joining the leaderboard…",
  rankPos:p=>`You are ${ordEN(p)} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
  rankTu:"You",rankEnds:d=>d<=0?"The week ends today":d===1?"The week ends tomorrow":`The week ends in ${d} days`,rankOther:"Another name",rankDev:"This name only works on this device and browser. On another one, you will get a different name.",rankVer:"See leaderboard",rankMe:"Your name:",rankEmpty:"Nobody has joined the leaderboard yet. You can be the first!",rankLoad:"Loading…",
  rankFail:"Could not reach the leaderboard. Please try later.",rankPts:"pts",
  rankShr:"Share leaderboard",rankEu:"Me",rankShrOk:"Image saved and text copied.",rankShrImg:"Image saved.",rankLugar:(p,n)=>`${ordEN(p)} place · ${n} points`,
- rankShrTxt:(p,n,per,u)=>`Quiz CV: I am ${ordEN(p)} on the ${per==="semana"?"weekly":"all-time"} leaderboard with ${n} points. Can you beat me? https://${u}`,
+ rankShrTxt:(p,n,per,u)=>`Quiz CV: I am ${ordEN(p)} on the ${per==="semana"?"weekly":per==="total"?"total points":"all-time"} leaderboard with ${n} points. Can you beat me? https://${u}`,
  rankNote:"We do not store personal data: only a name made up by the game and the points. The weekly leaderboard restarts on Monday.",
  conta:{normal:n=>[n,n===1?"game in the standard version":"games in the standard version"],kids:n=>[n,n===1?"game in the kids version":"games in the kids version"]},
  lv:{1:"Easy",2:"Medium",3:"Hard"},
@@ -641,7 +641,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
   ["How to play","15 questions, from easy to hard, with 20 seconds each. You have 3 skips and one 50/50 help. After each answer there is a short explanation, because learning is what matters most."],
   ["For kids","A version with 10 simple questions, more time and encouraging messages, made for children to discover the essentials: the islands, the flag, the language, music, food and nature."],
   ["Sources","Every question is based on proven facts and has a source you can check. If you find a mistake, use “Report a problem”."],
-  ["Leaderboard","In the standard version, every round joins the weekly and all-time leaderboards on its own, with a name made up by the game (you can switch it for another). We do not store personal data: not your name, email or phone."],
+  ["Leaderboard","In the standard version, every round joins the weekly, all-time and total-points leaderboards on its own, with a name made up by the game (you can switch it for another). We do not store personal data: not your name, email or phone."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -689,16 +689,20 @@ function outroNome(){const j=jogador();let n;do n=novoNome();while(n===j.nome);j
 let rkTok=null,rkT0=0,rkEnv=null,rkDados=null,rkPer="semana",rkNovo=false;
 const rkPost=o=>fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
 function pedeToken(){rkTok=null;rkEnv=null;rkT0=Date.now();if(!API||KIDS())return;rkPost({acao:"inicio"}).then(j=>{if(j&&j.ok&&j.token)rkTok=j.token}).catch(()=>{})}
+// três separadores: semana (melhor ronda da semana), sempre (melhor ronda de sempre) e total (soma de todas as rondas)
+const perNome=p=>{const t=L();return p==="semana"?t.rankWeek:p==="total"?t.rankTot:t.rankAll};
+// a minha posição quando fico fora do top 10 (o servidor só a dá para a semana e para o total)
+const meuDe=()=>rkPer==="semana"?rkDados.meu:rkPer==="total"?rkDados.meuTotal:null;
 // lista do ranking (separadores + top 10), usada na janela #rank e na caixa do fim #rkBox
 function listaRank(tabs,lista,fim){const t=L(),f=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT");
- tabs.querySelectorAll("button").forEach(b=>{b.textContent=b.dataset.p==="semana"?t.rankWeek:t.rankAll;b.setAttribute("aria-pressed",String(b.dataset.p===rkPer))});
+ tabs.querySelectorAll("button").forEach(b=>{b.textContent=perNome(b.dataset.p);b.setAttribute("aria-pressed",String(b.dataset.p===rkPer))});
  // dias até à próxima segunda-feira 00:00 na hora de Cabo Verde (UTC−1)
- if(fim){const cv=new Date(Date.now()-3600000),dw=cv.getUTCDay()||7;fim.hidden=rkPer!=="semana";
-  fim.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/></svg>${esc(t.rankEnds(7-dw))}`}
+ if(fim){const cv=new Date(Date.now()-3600000),dw=cv.getUTCDay()||7;fim.hidden=false;
+  fim.innerHTML=rkPer==="semana"?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/></svg>${esc(t.rankEnds(7-dw))}`:esc(rkPer==="total"?t.rankTotH:t.rankAllH)}
  const linha=(x,pos,i)=>{const a=ANIMAIS.find(n=>x.nome.startsWith(n))||x.nome,ai=Math.max(0,ANIMAIS.indexOf(a)),cores=["var(--ocean)","var(--mar)","var(--lv1)","var(--rubro)","var(--lv2)","var(--ocean-deep)"];
   return `<li class="${[x.eu?"eu":"",pos===1?"top1":"",x.eu&&rkNovo?"novo":""].join(" ").trim()}" style="--i:${i}"><span class="p${pos<=3?" m m"+pos:""}">${pos}</span><span class="av" style="background:${cores[ai%cores.length]}" aria-hidden="true">${esc(a.charAt(0))}</span><span class="n"><span>${esc(x.nome).replace(/([a-zà-ÿ])(?=[A-ZÀ-Þ])/g,"$1<wbr>").replace(/(\D)(?=\d{2}$)/,"$1<wbr>")}</span>${x.eu?`<b class="tu">${esc(t.rankTu)}</b>`:""}</span><span class="s">${f(x.pontos)} ${esc(t.rankPts)}</span></li>`};
  if(!rkDados)lista.innerHTML=`<li class="vazio">${esc(t.rankLoad)}</li>`;else if(rkDados.erro)lista.innerHTML=`<li class="vazio">${esc(t.rankFail)}</li>`;
- else{const l=rkDados[rkPer]||[],meu=rkPer==="semana"&&rkDados.meu&&rkDados.meu.pos>l.length?rkDados.meu:null;
+ else{const l=rkDados[rkPer]||[],mm=meuDe(),meu=mm&&mm.pos>l.length?mm:null;
   lista.innerHTML=l.length?l.map((x,i)=>linha(x,i+1,i)).join("")+(meu?`<li class="sep" aria-hidden="true">···</li>`+linha({...meu,eu:true},meu.pos,l.length+1):""):`<li class="vazio">${esc(t.rankEmpty)}</li>`}}
 function carregaRank(){fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+jogador().id).then(r=>r.json()).then(j=>{rkDados=j&&j.ok?j:{erro:1}}).catch(()=>{rkDados={erro:1}})
  .then(()=>{if(!$("rank").hidden)renderRank();if(vista==="fim")renderRk();rkNovo=false})}
@@ -724,7 +728,7 @@ function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=t.rankT
 // A imagem é preparada antes do toque, para o menu de partilha abrir logo (o Safari exige-o).
 const ICSH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
 function rankLinhas(){if(!rkDados||rkDados.erro)return null;const l=(rkDados[rkPer]||[]).map((x,i)=>({...x,pos:i+1}));
- const meu=rkPer==="semana"&&rkDados.meu&&rkDados.meu.pos>l.length?{...rkDados.meu,eu:true,sep:true}:null;if(meu)l.push(meu);
+ const mm=meuDe(),meu=mm&&mm.pos>l.length?{...mm,eu:true,sep:true}:null;if(meu)l.push(meu);
  const eu=l.find(x=>x.eu);return eu?{l,eu}:null}
 let rkCard={k:"",blob:null},rkShrT=0;
 function botaoShr(b){const d=rankLinhas();b.hidden=!d;if(!d)return;if(Date.now()>rkShrT)b.innerHTML=ICSH+esc(L().rankShr);
@@ -742,7 +746,7 @@ async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotes
  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);drawFlagBg(ctx,W,H,.1);
  let y=84;ctx.textBaseline="alphabetic";ctx.font="800 56px "+BG;ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
- y=222;ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(`${t.rankT} · ${rkPer==="semana"?t.rankWeek:t.rankAll}`.toUpperCase(),P,y);
+ y=222;ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(`${t.rankT} · ${perNome(rkPer)}`.toUpperCase(),P,y);
  y+=72;ctx.font="800 60px "+BG;ctx.fillStyle="#f7d116";ctx.fillText(t.rankLugar(d.eu.pos,f(d.eu.pontos)),P,y);
  // linhas: altura ajustada ao número de linhas, entre o título e a faixa do rodapé
  const n=d.l.length,sepH=d.l.some(x=>x.sep)?30:0,y0=y+36,gap=8,rh=Math.min(58,Math.floor((fb-24-y0-sepH)/n)-gap),med={1:"#f2c230",2:"#b9c2cf",3:"#cd8a52"};

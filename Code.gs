@@ -8,9 +8,10 @@
 // Ranking (só versão normal, sem dados pessoais): POST {acao:"inicio"} devolve um token de ronda;
 // POST {acao:"pontos", token, jogador, nome, pontos} guarda o melhor resultado da semana desse jogador
 // (o site envia sozinho no fim de cada ronda); POST {acao:"nome", jogador, nome} muda o nome em todas as linhas dele;
-// GET ?acao=ranking&eu=<id> devolve o top 10 da semana e o de sempre (e «meu» = a minha posição na semana, se ficar fora do top 10). O nome é gerado pelo jogo a partir
+// GET ?acao=ranking&eu=<id> devolve o top 10 da semana, o de sempre e o total acumulado (e «meu» / «meuTotal» = a minha posição, se ficar fora do top 10). O nome é gerado pelo jogo a partir
 // de ANIMAIS + ILHAS_N (iguais às do index.html) e o servidor recusa qualquer outro texto.
 // Folha «ranking»: data | jogador (id aleatório do browser) | nome | pontos | semana. Uma linha pode ser apagada à mão.
+// Folha «totais»: jogador | nome | total | rondas | data — uma linha por jogador, soma de todas as rondas (nunca é limpa).
 
 const MOTIVOS = ["certa", "outra", "pergunta", "fonte", "traducao", "ofensivo"];
 const LIMITE_HORA = 30; // reportes por pergunta por hora
@@ -175,6 +176,7 @@ function pontos_(d) {
     if (linha < 0) sh.appendRow([new Date(), d.jogador, d.nome, d.pontos, sem]);
     else if (d.pontos > Number(rows[linha][3])) sh.getRange(linha + 2, 1, 1, 5).setValues([[new Date(), d.jogador, d.nome, d.pontos, sem]]);
     else melhor = Number(rows[linha][3]);
+    somaTotal_(d.jogador, d.nome, d.pontos);
     SpreadsheetApp.flush();
     if (n > 1500) limpaRank_(sh);
     cache.remove("rank");
@@ -197,6 +199,9 @@ function nome_(d) {
     const sh = folhaRank_(), n = sh.getLastRow() - 1;
     const rows = n > 0 ? sh.getRange(2, 2, n, 2).getValues() : [];
     rows.forEach((r, i) => { if (String(r[0]) === d.jogador && r[1] !== d.nome) sh.getRange(i + 2, 3).setValue(d.nome); });
+    const st = folhaTotais_(), nt = st.getLastRow() - 1;
+    const tr = nt > 0 ? st.getRange(2, 1, nt, 2).getValues() : [];
+    tr.forEach((r, i) => { if (String(r[0]) === d.jogador && r[1] !== d.nome) st.getRange(i + 2, 2).setValue(d.nome); });
     SpreadsheetApp.flush();
     cache.remove("rank");
   } finally { lock.releaseLock(); }
@@ -214,16 +219,23 @@ function dadosRank_() {
   const semanaTodos = todas.filter((x) => x.semana === sem).sort(ord);
   const best = {};
   todas.forEach((x) => { const b = best[x.jogador]; if (!b || ord(x, b) < 0) best[x.jogador] = x; });
-  const o = { semanaTodos: semanaTodos.map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })), sempre: Object.keys(best).map((k) => best[k]).sort(ord).slice(0, RANK_TOP).map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })) };
+  const st = folhaTotais_(), nt = st.getLastRow() - 1;
+  const totalTodos = (nt > 0 ? st.getRange(2, 1, nt, 5).getValues() : []).filter((r) => r[0] && r[1])
+    .map((r) => ({ jogador: String(r[0]), nome: String(r[1]), pontos: Number(r[2]) || 0, t: new Date(r[4]).getTime() || 0 })).sort(ord)
+    .map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos }));
+  const o = { totalTodos: totalTodos, semanaTodos: semanaTodos.map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })), sempre: Object.keys(best).map((k) => best[k]).sort(ord).slice(0, RANK_TOP).map((x) => ({ jogador: x.jogador, nome: x.nome, pontos: x.pontos })) };
   try { cache.put("rank", JSON.stringify(o), 60); } catch (err) {}
   return o;
 }
 
 function ranking_(eu) {
   const r = dadosRank_(), pub = (x) => ({ nome: x.nome, pontos: x.pontos, eu: !!eu && x.jogador === eu });
-  const o = { semana: r.semanaTodos.slice(0, RANK_TOP).map(pub), sempre: r.sempre.map(pub) };
+  const tt = r.totalTodos || [];
+  const o = { semana: r.semanaTodos.slice(0, RANK_TOP).map(pub), sempre: r.sempre.map(pub), total: tt.slice(0, RANK_TOP).map(pub) };
   const i = eu ? r.semanaTodos.findIndex((x) => x.jogador === eu) : -1;
   if (i >= RANK_TOP) o.meu = { pos: i + 1, nome: r.semanaTodos[i].nome, pontos: r.semanaTodos[i].pontos };
+  const k = eu ? tt.findIndex((x) => x.jogador === eu) : -1;
+  if (k >= RANK_TOP) o.meuTotal = { pos: k + 1, nome: tt[k].nome, pontos: tt[k].pontos };
   return o;
 }
 
@@ -239,6 +251,27 @@ function limpaRank_(sh) {
   if (ficam.length === rows.length) return;
   sh.getRange(2, 1, n, 5).clearContent();
   if (ficam.length) sh.getRange(2, 1, ficam.length, 5).setValues(ficam);
+}
+
+// soma os pontos da ronda ao total acumulado do jogador (chamada dentro do lock de pontos_)
+function somaTotal_(jogador, nome, pontos) {
+  const st = folhaTotais_(), n = st.getLastRow() - 1;
+  const ids = n > 0 ? st.getRange(2, 1, n, 1).getValues() : [];
+  const i = ids.findIndex((r) => String(r[0]) === jogador);
+  if (i < 0) { st.appendRow([jogador, nome, pontos, 1, new Date()]); return; }
+  const c = st.getRange(i + 2, 1, 1, 5), v = c.getValues()[0];
+  c.setValues([[jogador, nome, (Number(v[2]) || 0) + pontos, (Number(v[3]) || 0) + 1, new Date()]]);
+}
+
+function folhaTotais_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName("totais");
+  if (!sh) {
+    sh = ss.insertSheet("totais");
+    sh.appendRow(["jogador", "nome", "total", "rondas", "data"]);
+    sh.setFrozenRows(1);
+  }
+  return sh;
 }
 
 function folhaRank_() {
