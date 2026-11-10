@@ -110,7 +110,8 @@ main .wrap{display:flex;flex-direction:column;gap:20px;padding-block:24px 40px}
 .rkbox .btn{width:100%;font-weight:700}
 .rkmsg{margin:0;text-align:center;font-family:var(--display);font-weight:700;font-size:17px;color:var(--fg)}
 .rkmsg.erro{font-family:inherit;font-weight:400;font-size:14px;color:var(--muted)}
-.rklinks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;font-size:13.5px}
+.rklinks{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px;font-size:13.5px;color:var(--muted)}
+.rklinks b{color:var(--fg)}
 .rktabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--chip);padding:4px;border-radius:12px}
 .rktabs button{font:inherit;font-family:var(--display);font-weight:600;font-size:15px;border:0;border-radius:9px;padding:9px;background:none;color:var(--muted);cursor:pointer}
 .rktabs button[aria-pressed="true"]{background:var(--ocean);color:#fff}
@@ -453,12 +454,11 @@ main{position:relative;z-index:1}
         <button type="button" class="btn" id="shrCopy"></button>
       </div>
       <p class="msg" id="shrMsg" hidden style="text-align:center"></p>
-      <!-- ranking (só versão normal), já aberto no fim: envio só com um toque; nome gerado, sem dados pessoais -->
+      <!-- ranking (só versão normal), já aberto no fim: os pontos entram sozinhos; nome gerado, sem dados pessoais -->
       <div class="rkbox" id="rkBox" hidden>
         <h3 class="rkh" id="rkH"></h3>
-        <button type="button" class="btn primary" id="rkJoin"></button>
         <p class="rkmsg" id="rkMsg" hidden aria-live="polite"></p>
-        <div class="rklinks" id="rkLinks"><button type="button" class="aboutlink" id="rkOther"></button></div>
+        <div class="rklinks" id="rkLinks"><span id="rkNome"></span><button type="button" class="aboutlink" id="rkOther"></button></div>
         <p class="rkdev" id="rkDev"></p>
         <div class="rktabs" id="rkTabsF" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button></div>
         <p class="rkfim" id="rkFimF"></p>
@@ -534,7 +534,7 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  ptsNote:"<b>Pontos:</b> 10, 20 ou 30 por resposta certa, conforme o nível, mais 1 por cada segundo que sobra.",
  none:"Ainda não há perguntas. Volta em breve.",
  start:"Começar a jogar",best:b=>`Melhor resultado: ${b} pontos`,
- rankT:"Ranking",rankWeek:"Esta semana",rankAll:"Sempre",rankJoin:n=>`Entrar no ranking como ${n}`,rankSending:"A enviar…",
+ rankT:"Ranking",rankWeek:"Esta semana",rankAll:"Sempre",rankSending:"A entrar no ranking…",
  rankPos:p=>`Estás em ${p}.º lugar esta semana!`,rankSaved:"Guardado no ranking.",rankBest:b=>`O teu melhor desta semana: ${b} pontos.`,
  rankTu:"Tu",rankEnds:d=>d<=0?"A semana termina hoje":d===1?"A semana termina amanhã":`A semana termina em ${d} dias`,rankOther:"Outro nome",rankDev:"O nome só vale neste dispositivo e navegador. Noutro, terás outro nome.",rankVer:"Ver ranking",rankMe:"O teu nome:",rankEmpty:"Ainda ninguém entrou no ranking. Podes ser o primeiro!",rankLoad:"A carregar…",
  rankFail:"Não foi possível ligar ao ranking. Tenta mais tarde.",rankPts:"pts",
@@ -584,7 +584,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
   ["Como se joga","15 perguntas, do fácil ao difícil, com 20 segundos cada. Tens 3 saltos e uma ajuda 50/50. Depois de cada resposta aparece uma explicação curta, porque o mais importante é aprender."],
   ["Para crianças","Uma versão com 10 perguntas simples, mais tempo e mensagens de incentivo, pensada para as crianças descobrirem o essencial: as ilhas, a bandeira, a língua, a música, a comida e a natureza."],
   ["Fontes","Todas as perguntas assentam em factos comprovados e têm uma fonte que podes consultar. Se encontrares um erro, usa «Reportar problema»."],
-  ["Ranking","Na versão normal podes entrar no ranking da semana e no de sempre, com um nome gerado pelo jogo. Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
+  ["Ranking","Na versão normal, cada ronda entra sozinha no ranking da semana e no de sempre, com um nome gerado pelo jogo (podes trocá-lo por outro). Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra o que aconteceu na história de Cabo Verde em cada dia do ano."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -592,7 +592,7 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  ptsNote:"<b>Points:</b> 10, 20 or 30 per right answer, by level, plus 1 for every second left.",
  none:"There are no questions yet. Please come back soon.",
  start:"Start playing",best:b=>`Best score: ${b} points`,
- rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankJoin:n=>`Join the leaderboard as ${n}`,rankSending:"Sending…",
+ rankT:"Leaderboard",rankWeek:"This week",rankAll:"All time",rankSending:"Joining the leaderboard…",
  rankPos:p=>`You are ${ordEN(p)} this week!`,rankSaved:"Saved to the leaderboard.",rankBest:b=>`Your best this week: ${b} points.`,
  rankTu:"You",rankEnds:d=>d<=0?"The week ends today":d===1?"The week ends tomorrow":`The week ends in ${d} days`,rankOther:"Another name",rankDev:"This name only works on this device and browser. On another one, you will get a different name.",rankVer:"See leaderboard",rankMe:"Your name:",rankEmpty:"Nobody has joined the leaderboard yet. You can be the first!",rankLoad:"Loading…",
  rankFail:"Could not reach the leaderboard. Please try later.",rankPts:"pts",
@@ -641,7 +641,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
   ["How to play","15 questions, from easy to hard, with 20 seconds each. You have 3 skips and one 50/50 help. After each answer there is a short explanation, because learning is what matters most."],
   ["For kids","A version with 10 simple questions, more time and encouraging messages, made for children to discover the essentials: the islands, the flag, the language, music, food and nature."],
   ["Sources","Every question is based on proven facts and has a source you can check. If you find a mistake, use “Report a problem”."],
-  ["Leaderboard","In the standard version you can join the weekly and all-time leaderboards with a name made up by the game. We do not store personal data: not your name, email or phone."],
+  ["Leaderboard","In the standard version, every round joins the weekly and all-time leaderboards on its own, with a name made up by the game (you can switch it for another). We do not store personal data: not your name, email or phone."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -683,7 +683,8 @@ let JOG=null;
 function jogador(){if(JOG)return JOG;let j=ls.get("quizcv_jogador",null);
  if(!j||!/^[a-f0-9]{16}$/.test(j.id||"")||!nomeOk(j.nome)){const a=new Uint8Array(8);crypto.getRandomValues(a);j={id:(j&&/^[a-f0-9]{16}$/.test(j.id||""))?j.id:[...a].map(b=>b.toString(16).padStart(2,"0")).join(""),nome:novoNome()};ls.set("quizcv_jogador",j)}
  return JOG=j}
-function outroNome(){const j=jogador();let n;do n=novoNome();while(n===j.nome);j.nome=n;ls.set("quizcv_jogador",j);if(vista==="fim")renderRk();if(!$("rank").hidden)renderRank()}
+function outroNome(){const j=jogador();let n;do n=novoNome();while(n===j.nome);j.nome=n;ls.set("quizcv_jogador",j);if(vista==="fim")renderRk();if(!$("rank").hidden)renderRank();
+ if(API&&ls.get("quizcv_no_rank",0))rkPost({acao:"nome",jogador:j.id,nome:n}).then(r=>{if(r&&r.ok){rkDados=null;carregaRank()}}).catch(()=>{})}
 // estado da ronda: token pedido no início (o servidor exige 1 min entre o início e o envio), e resultado do envio
 let rkTok=null,rkT0=0,rkEnv=null,rkDados=null,rkPer="semana",rkNovo=false;
 const rkPost=o=>fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
@@ -703,13 +704,17 @@ function carregaRank(){fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+
  .then(()=>{if(!$("rank").hidden)renderRank();if(vista==="fim")renderRk();rkNovo=false})}
 function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!API||!res.length;if(box.hidden)return;
  $("rkH").textContent=t.rankT;listaRank($("rkTabsF"),$("rkListF"),$("rkFimF"));botaoShr($("rkShrF"));
- const pode=!!rkTok&&Date.now()-rkT0>=61000,env=rkEnv&&rkEnv.ok;$("rkJoin").hidden=!!env||(!pode&&rkEnv!=="a");$("rkLinks").hidden=$("rkDev").hidden=$("rkJoin").hidden;$("rkJoin").disabled=rkEnv==="a";$("rkJoin").textContent=rkEnv==="a"?t.rankSending:t.rankJoin(j.nome);
+ const env=rkEnv&&rkEnv.ok;$("rkNome").innerHTML=`${esc(t.rankMe)} <b>${esc(j.nome)}</b>`;
  const m=$("rkMsg");m.className="rkmsg";
- if(env){m.textContent=(rkEnv.pos>0&&rkEnv.pos<=10?t.rankPos(rkEnv.pos):t.rankSaved)+(rkEnv.melhor>pts?" "+t.rankBest(rkEnv.melhor):"");m.hidden=false}
+ if(rkEnv==="a"){m.textContent=t.rankSending;m.classList.add("erro");m.hidden=false}
+ else if(env){m.textContent=(rkEnv.pos>0&&rkEnv.pos<=10?t.rankPos(rkEnv.pos):t.rankSaved)+(rkEnv.melhor>pts?" "+t.rankBest(rkEnv.melhor):"");m.hidden=false}
  else if(rkEnv&&rkEnv.erro){m.textContent=t.rankFail;m.classList.add("erro");m.hidden=false}else m.hidden=true;
  $("rkOther").innerHTML=`<span class="rkre">${ICRE}${esc(t.rankOther)}</span>`;$("rkDev").textContent=t.rankDev}
+// no fim de cada ronda da versão normal, os pontos entram sozinhos no ranking (o token pode ainda estar a chegar: tenta outra vez)
+function autoEnvia(n=0){if(KIDS()||!API||!res.length||rkEnv)return;if(Date.now()-rkT0<61000)return;
+ if(rkTok)enviaPontos();else if(n<5)setTimeout(()=>{if(vista==="fim")autoEnvia(n+1)},1500)}
 function enviaPontos(){if(!rkTok||rkEnv==="a")return;const j=jogador(),tok=rkTok;rkEnv="a";renderRk();
- rkPost({acao:"pontos",token:tok,jogador:j.id,nome:j.nome,pontos:pts}).then(r=>{rkEnv=r&&r.ok?{ok:true,pos:r.pos,melhor:r.melhor}:{erro:(r&&r.erro)||"x"};rkTok=null;if(r&&r.ok){rkDados=null;rkNovo=true;rkPer="semana";carregaRank()}})
+ rkPost({acao:"pontos",token:tok,jogador:j.id,nome:j.nome,pontos:pts}).then(r=>{rkEnv=r&&r.ok?{ok:true,pos:r.pos,melhor:r.melhor}:{erro:(r&&r.erro)||"x"};rkTok=null;if(r&&r.ok){ls.set("quizcv_no_rank",1);rkDados=null;rkNovo=true;rkPer="semana";carregaRank()}})
   .catch(()=>{rkEnv={erro:"rede"};rkTok=null}).then(()=>{if(vista==="fim")renderRk()})}
 function abreRank(){$("rank").hidden=false;rkPer="semana";rkDados=null;renderRank();$("rankClose").focus();carregaRank()}
 function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=t.rankT;$("rankClose").textContent=t.close;$("rkNote").textContent=t.rankNote;
@@ -757,7 +762,7 @@ async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotes
 $("rkShr").onclick=$("rkShrF").onclick=partilhaRank;
 $("rkTabs").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRank()});
 $("rkTabsF").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRk()});
-$("rkJoin").onclick=enviaPontos;$("rkOther").onclick=outroNome;$("rkHome").onclick=abreRank;
+$("rkOther").onclick=outroNome;$("rkHome").onclick=abreRank;
 $("rankClose").onclick=()=>{$("rank").hidden=true};
 $("rank").addEventListener("click",ev=>{if(ev.target.id==="rank")$("rank").hidden=true});
 if(API)fetch(API+(API.includes("?")?"&":"?")+"acao=contador").then(r=>r.json()).then(lerConta).catch(()=>{});
@@ -965,7 +970,7 @@ function falha(){if(reduz())return;const f=document.createElement("div");f.class
 
 // resultado
 let recorde=false;
-function fim(){clearInterval(tick);const kb=MODOS[modo].best,b=ls.get(kb,0);recorde=pts>b;if(recorde)ls.set(kb,pts);if(!KIDS()&&API&&res.length){rkDados=null;rkPer="semana";carregaRank()}show("fim");renderFim();scrollTo({top:0});if(KIDS()&&res.length)parabens()}
+function fim(){clearInterval(tick);const kb=MODOS[modo].best,b=ls.get(kb,0);recorde=pts>b;if(recorde)ls.set(kb,pts);if(!KIDS()&&API&&res.length){rkDados=null;rkPer="semana";carregaRank()}show("fim");renderFim();autoEnvia();scrollTo({top:0});if(KIDS()&&res.length)parabens()}
 // fim da versão para crianças: fanfarra curta, «Parabéns!» / «Chegaste ao fim!» ao centro e chuva de confetes e estrelas com as cores da bandeira.
 // Aparece sempre, seja qual for o resultado (nunca desanimar). Sem animação com movimento reduzido.
 function parabens(){const t=L();[523,659,784,1047].forEach((f,i)=>bip(f,i===3?.5:.16,.08,"triangle",null,i*.13));if(reduz())return;

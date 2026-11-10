@@ -6,7 +6,8 @@
 // um por cada ronda começada); GET ?acao=contador devolve {ok, normal, kids}.
 // Os totais ficam na folha «contador» (B2 = normal, B3 = crianças) e podem ser corrigidos à mão.
 // Ranking (só versão normal, sem dados pessoais): POST {acao:"inicio"} devolve um token de ronda;
-// POST {acao:"pontos", token, jogador, nome, pontos} guarda o melhor resultado da semana desse jogador;
+// POST {acao:"pontos", token, jogador, nome, pontos} guarda o melhor resultado da semana desse jogador
+// (o site envia sozinho no fim de cada ronda); POST {acao:"nome", jogador, nome} muda o nome em todas as linhas dele;
 // GET ?acao=ranking&eu=<id> devolve o top 10 da semana e o de sempre (e «meu» = a minha posição na semana, se ficar fora do top 10). O nome é gerado pelo jogo a partir
 // de ANIMAIS + ILHAS_N (iguais às do index.html) e o servidor recusa qualquer outro texto.
 // Folha «ranking»: data | jogador (id aleatório do browser) | nome | pontos | semana. Uma linha pode ser apagada à mão.
@@ -78,6 +79,7 @@ function doPost(e) {
     if (d.acao === "jogo") return jogo_(d);
     if (d.acao === "inicio") return inicio_();
     if (d.acao === "pontos") return pontos_(d);
+    if (d.acao === "nome") return nome_(d);
     const id = String(d.id || "");
     if (!/^[bh][a-z0-9]{1,14}$/.test(id)) return json_({ ok: false, erro: "id" });
     const motivos = (Array.isArray(d.motivos) ? d.motivos : []).map(String).filter((m) => MOTIVOS.indexOf(m) >= 0);
@@ -180,6 +182,25 @@ function pontos_(d) {
   const r = dadosRank_();
   const pos = r.semanaTodos.findIndex((x) => x.jogador === d.jogador) + 1;
   return json_({ ok: true, pos: pos, melhor: melhor });
+}
+
+// «Outro nome»: muda o nome em todas as linhas do jogador (o id só existe no browser dele)
+function nome_(d) {
+  if (!/^[a-f0-9]{16}$/.test(String(d.jogador || ""))) return json_({ ok: false, erro: "jogador" });
+  if (!nomeValido_(d.nome)) return json_({ ok: false, erro: "nome" });
+  const cache = CacheService.getScriptCache(), kj = "rn_" + d.jogador, nj = Number(cache.get(kj) || 0);
+  if (nj >= RANK_JOGADOR_HORA) return json_({ ok: false, erro: "limite" });
+  cache.put(kj, String(nj + 1), 3600);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sh = folhaRank_(), n = sh.getLastRow() - 1;
+    const rows = n > 0 ? sh.getRange(2, 2, n, 2).getValues() : [];
+    rows.forEach((r, i) => { if (String(r[0]) === d.jogador && r[1] !== d.nome) sh.getRange(i + 2, 3).setValue(d.nome); });
+    SpreadsheetApp.flush();
+    cache.remove("rank");
+  } finally { lock.releaseLock(); }
+  return json_({ ok: true });
 }
 
 // lê a folha e calcula o ranking (com cache de 60 s); os ids nunca saem do servidor
