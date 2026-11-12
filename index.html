@@ -55,6 +55,9 @@ header.mast .wrap{padding-block:18px 26px}
 .brand-l{display:flex;align-items:center;gap:10px;min-width:0}
 .vtag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:4px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:5px}
 .vtag svg{width:12px;height:12px}
+/* ecrãs estreitos: a etiqueta («Quiz Crianças») cabe na linha do logótipo, do som e da língua */
+@media (max-width:420px){.vtag{font-size:10px;letter-spacing:.02em;padding:4px 7px;gap:4px}.brand-l{gap:7px}}
+@media (max-width:374px){.vtag .vq{display:none}} /* a palavra «Quiz» já está no logótipo */
 .vtag.kids{background:var(--mar);border-color:var(--mar);color:#fff;font-weight:600}
 .vtag.kids svg{color:var(--sun)}
 .somb{display:grid;place-items:center;width:34px;height:34px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
@@ -418,7 +421,15 @@ main{position:relative;z-index:1}
 .malvo{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;min-height:78px}
 .malvo .q{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
 .malvo b{font-family:var(--display);font-weight:800;font-size:clamp(22px,6.4vw,30px);line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
-.malvo img{height:62px;width:auto;max-width:120px;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 6px 14px -8px rgba(0,0,0,.5);background:#fff}
+.malvo img{display:block;height:62px;width:auto;max-width:120px;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 6px 14px -8px rgba(0,0,0,.5);background:#fff}
+/* bandeira: um toque abre-a em grande (#mZoomF) */
+.mflagb{position:relative;padding:0;border:0;background:none;cursor:zoom-in;border-radius:4px}
+.mflagb .lupa{position:absolute;right:-8px;bottom:-8px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--ocean);color:#fff;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.mflagb .lupa svg{width:15px;height:15px}
+.mzoom{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:20px;background:rgba(5,15,35,.82);cursor:zoom-out;-webkit-tap-highlight-color:transparent}
+.mzoom img{max-width:min(92vw,720px);max-height:72vh;width:auto;height:auto;border-radius:8px;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+@media (prefers-reduced-motion:no-preference){.mzoom img{animation:mzin .22s ease-out}}
+@keyframes mzin{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 .mpips{display:flex;gap:5px;flex:none}
 .mpips i{width:10px;height:10px;border-radius:50%;background:var(--ok)}
 .mpips i.x{background:var(--line)}
@@ -536,7 +547,7 @@ main{position:relative;z-index:1}
     <section id="v-mapa" hidden class="mjogo">
       <div class="mprog"><span class="label" id="mNum"></span><span class="tm" id="mTime" role="timer"></span></div>
       <div class="mbar" aria-hidden="true"><i id="mBar"></i></div>
-      <div class="malvo" id="mAlvo" aria-live="polite"><div class="q"><span class="label" id="mLbl"></span><b id="mNome"></b><img id="mFlag" alt="" hidden></div><div class="mpips" id="mPips" role="img"></div></div>
+      <div class="malvo" id="mAlvo" aria-live="polite"><div class="q"><span class="label" id="mLbl"></span><b id="mNome"></b><button type="button" class="mflagb" id="mFlagB" hidden><img id="mFlag" alt=""><span class="lupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg></span></button></div><div class="mpips" id="mPips" role="img"></div></div>
       <div class="mapbox" id="mapbox"><svg id="mSvg" preserveAspectRatio="xMidYMid meet" role="img"></svg><button type="button" class="mback" id="mBack" hidden></button></div>
       <p class="minfo" id="mInfo" aria-live="polite"></p>
       <div class="tools"><button type="button" class="tool big" id="mSkip"></button><button type="button" class="tool" id="mQuit"></button></div>
@@ -593,6 +604,9 @@ main{position:relative;z-index:1}
 </div>
 
 <div class="contagem" id="cd" hidden aria-live="assertive"><b id="cdN"></b></div>
+
+<!-- Mapa CV: bandeira em grande (o cronómetro continua) -->
+<div class="mzoom" id="mZoomF" hidden role="dialog" aria-modal="true"><img id="mZoomImg" alt=""></div>
 
 <div class="sheet-bg" id="conf" hidden>
   <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="confTitle" aria-describedby="confTxt">
@@ -657,7 +671,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  fLbl:"Resultado",of:"certas",
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
- modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},vtag:{normal:"Normal",kids:"Crianças",mapa:"Mapa"},
+ modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},vtag:{normal:"Quiz Normal",kids:"Quiz Crianças",mapa:"Mapa"},
  jogoLbl:"Jogo",jogos:{quiz:["Perguntas","15 perguntas sobre Cabo Verde"],mapa:["Mapa","Encontra os sítios no mapa"]},
  // Mapa CV
  m:{title:"Conheces o mapa de Cabo Verde?",sub:"Ilhas, concelhos, sedes, freguesias e bandeiras. Encontra cada um no mapa.",
@@ -666,7 +680,7 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
   rules:(n,tot,cat)=>[["m",`${n} ${{ilhas:"ilhas",concelhos:"concelhos",sedes:"sedes",freguesias:"freguesias",bandeiras:"bandeiras"}[cat]}`,n<tot?`Ao acaso, entre ${tot}`:"Toca no sítio certo do mapa"],["o","3 tentativas","30, 20 ou 10 pontos"],["t","Cronómetro","Ganha quem faz mais pontos em menos tempo"],cat==="ilhas"?["s","Saltar","Deixa para o fim"]:["z","Toca numa ilha","Para a veres de perto"]],
   ptsNote:"<b>Pontos:</b> 30 se acertares à primeira, 20 à segunda e 10 à terceira. À terceira falhada, o sítio certo pisca a vermelho.",
   best:(p,s)=>`Melhor resultado: ${p}% em ${s}`,
-  toca:"Toca em",tocaB:"Toca no concelho desta bandeira",flagAlt:"Bandeira de um concelho",mapAria:"Mapa de Cabo Verde",
+  toca:"Toca em",tocaB:"Toca no concelho desta bandeira",flagZoom:"Ver a bandeira maior",flagAlt:"Bandeira de um concelho",mapAria:"Mapa de Cabo Verde",
   num:(i,n)=>`${i} de ${n}`,tries:n=>`${n===1?"Resta":"Restam"} ${n} ${n===1?"tentativa":"tentativas"}`,back:"Arquipélago",
   semAlvo:n=>`${n}: aqui não há nada para encontrar`,
   infoIlha:(n,k)=>`<b>${n}</b> · ${k} ${k===1?"concelho":"concelhos"}`,
@@ -744,7 +758,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  fLbl:"Result",of:"right",
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
- modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},vtag:{normal:"Standard",kids:"Kids",mapa:"Map"},
+ modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},vtag:{normal:"Standard Quiz",kids:"Kids Quiz",mapa:"Map"},
  jogoLbl:"Game",jogos:{quiz:["Questions","15 questions about Cabo Verde"],mapa:["Map","Find the places on the map"]},
  m:{title:"Do you know the map of Cabo Verde?",sub:"Islands, municipalities, seats, parishes and flags. Find each one on the map.",
   cats:{ilhas:"Islands",concelhos:"Municipalities",sedes:"Municipal seats",freguesias:"Parishes",bandeiras:"Flags"},catLbl:"Category",
@@ -752,7 +766,7 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
   rules:(n,tot,cat)=>[["m",`${n} ${{ilhas:"islands",concelhos:"municipalities",sedes:"seats",freguesias:"parishes",bandeiras:"flags"}[cat]}`,n<tot?`Picked at random from ${tot}`:"Tap the right place on the map"],["o","3 tries","30, 20 or 10 points"],["t","Stopwatch","Most points in the least time wins"],cat==="ilhas"?["s","Skip","Leave it for the end"]:["z","Tap an island","To see it up close"]],
   ptsNote:"<b>Points:</b> 30 if you get it first time, 20 on the second try and 10 on the third. After the third miss, the right place flashes red.",
   best:(p,s)=>`Best score: ${p}% in ${s}`,
-  toca:"Tap",tocaB:"Tap the municipality with this flag",flagAlt:"Flag of a municipality",mapAria:"Map of Cabo Verde",
+  toca:"Tap",tocaB:"Tap the municipality with this flag",flagZoom:"See the flag larger",flagAlt:"Flag of a municipality",mapAria:"Map of Cabo Verde",
   num:(i,n)=>`${i} of ${n}`,tries:n=>`${n} ${n===1?"try":"tries"} left`,back:"Archipelago",
   semAlvo:n=>`${n}: nothing to find here`,
   infoIlha:(n,k)=>`<b>${n}</b> · ${k} ${k===1?"municipality":"municipalities"}`,
@@ -1323,7 +1337,7 @@ function renderAlvo(troca){const t=L(),a=mFila[0],tot=mItens.length,feitos=Objec
  $("mBack").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>${esc(t.m.back)}`;
  $("mSvg").setAttribute("aria-label",t.m.mapAria);
  if(!a)return;const fl=mCat==="bandeiras",im=$("mFlag");
- $("mLbl").textContent=fl?t.m.tocaB:t.m.toca;$("mNome").textContent=fl?"":a.n;$("mNome").hidden=fl;im.hidden=!fl;if(fl&&im.getAttribute("src")!==a.img)im.src=a.img;im.alt=fl?t.m.flagAlt:"";
+ $("mLbl").textContent=fl?t.m.tocaB:t.m.toca;$("mNome").textContent=fl?"":a.n;$("mNome").hidden=fl;$("mFlagB").hidden=!fl;$("mFlagB").setAttribute("aria-label",t.m.flagZoom);if(fl&&im.getAttribute("src")!==a.img)im.src=a.img;im.alt=fl?t.m.flagAlt:"";
  const k=mTent[a.id]||0;$("mPips").innerHTML=[0,1,2].map(i=>`<i class="${i>=3-k?"x":""}"></i>`).join("");$("mPips").setAttribute("aria-label",t.m.tries(3-k));
  if(troca&&!reduz()){const b=$("mAlvo");b.classList.remove("troca");void b.offsetWidth;b.classList.add("troca")}}
 // depois de cada resposta: uma linha curta sobre o sítio (ilha, sede, concelho)
@@ -1349,13 +1363,16 @@ function mResponde(id,ev){const a=mFila[0];if(!a||mLock)return;
  if(mCat!=="ilhas"&&mZoom!==a.ilha&&mPorIlha(a.ilha).length>1)zoom(a.ilha);
  const ce=mEl(a.id);if(ce){ce.classList.remove("erro");ce.classList.add("c0","rev")}
  mInfo(a,true);renderAlvo();mDepois(mProximo,reduz()?700:1800)}
-function mProximo(){mFila.shift();mLock=false;if(!mFila.length){mFim();return}renderAlvo(true)}
+function mProximo(){mFila.shift();mLock=false;$("mZoomF").hidden=true;if(!mFila.length){mFim();return}renderAlvo(true)}
 $("mSvg").addEventListener("click",ev=>{if(vista!=="mapa"||mLock||!mFila.length)return;const el=ev.target.closest("[data-id],[data-ilha]");if(!el)return;
  const ilha=el.dataset.ilha,id=el.dataset.id;
  if(mCat==="ilhas"){mResponde(id||ilha,ev);return}
  if(ilha!==mZoom){const al=mPorIlha(ilha);if(al.length===1)mResponde(al[0].id,ev);else if(al.length)zoom(ilha);else mTip(L().m.semAlvo(mIlhaN(ilha)),ev);return}
  if(id)mResponde(id,ev)});
 $("mBack").onclick=()=>zoom(null);
+// bandeira em grande: um toque abre, outro fecha (também com Esc ou ao passar ao seguinte)
+$("mFlagB").onclick=()=>{const z=$("mZoomF");$("mZoomImg").src=$("mFlag").src;$("mZoomImg").alt=L().m.flagAlt;z.setAttribute("aria-label",L().m.flagZoom);z.hidden=false};
+$("mZoomF").onclick=()=>{$("mZoomF").hidden=true};
 // saltar: o elemento passa para o fim da fila (as tentativas gastas ficam)
 $("mSkip").onclick=()=>{if(mLock||mFila.length<2)return;mFila.push(mFila.shift());renderAlvo(true);bip(660,.1,.04,"triangle",440)};
 $("mQuit").onclick=async()=>{const t=L();if(await confirma(t.m.quitQ,t.m.quitTxt,t.quitYes))mFim()};
@@ -1405,7 +1422,7 @@ async function drawMapCard(cv){try{await Promise.all(['800 80px "Bricolage Grote
 $("mOutra").onclick=()=>{show("ini");renderIni();scrollTo({top:0})};
 
 function applyLang(){const t=L();document.documentElement.lang=LANG;
- {const v=$("vtag");v.className="vtag"+(KIDS()?" kids":"");v.innerHTML=(KIDS()?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>':"")+esc(t.vtag[MAPA()?"mapa":modo]);v.title=MAPA()?t.jogos.mapa[0]:t.modoLbl+": "+t.modos[modo]}
+ {const v=$("vtag");v.className="vtag"+(KIDS()?" kids":"");v.innerHTML=(KIDS()?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>':"")+esc(t.vtag[MAPA()?"mapa":modo]).replace(/ ?Quiz ?/,m=>`<span class="vq">${m}</span>`);v.title=MAPA()?t.jogos.mapa[0]:t.modoLbl+": "+t.modos[modo]}
  $("hTitle").textContent=MAPA()?t.m.title:t.title;$("hSub").textContent=MAPA()?t.m.sub:t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
@@ -1417,7 +1434,7 @@ $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
 for(const id of ["about"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
 $("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
-addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("rank").hidden=true;if(!$("rep").hidden)fechaRep()});
+addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("mZoomF").hidden){$("mZoomF").hidden=true;return}if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("rank").hidden=true;if(!$("rep").hidden)fechaRep()});
 applyLang();show("ini");if(MAPA())carregaMapa().catch(()=>{});
 </script>
 </body>
