@@ -839,7 +839,7 @@ if(MAPA())modo="normal";
 // categorias do mapa: MTOT = quantos há no mapa.js (o gerador confirma); cada ronda tem MR elementos ao acaso
 // (MR igual a MAPA_RONDA no Code.gs: o servidor valida os pontos com ele)
 const MCATS=["ilhas","concelhos","sedes","freguesias","bandeiras"],MTOT={ilhas:10,concelhos:22,sedes:22,freguesias:32,bandeiras:16},MR=10;
-let mCat=ls.get("quizcv_mcat","ilhas");if(!MTOT[mCat])mCat="ilhas";
+let mCat="ilhas"; // abre sempre nas ilhas (pedido do Marco); a escolha só vale durante a visita
 const API=(window.QUIZCV_CONFIG||{}).API||"";
 // contador público (Code.gs, folha «contador»): lido ao abrir; cada ronda começada soma 1 jogo à sua versão
 let CONTA=null;
@@ -1210,7 +1210,7 @@ $("modo").addEventListener("click",ev=>{const b=ev.target.closest("button[data-m
 const comeca=()=>{if(!MAPA()){contagem();return}carregaMapa().then(()=>contagem(),()=>{const m=$("iniNone");m.textContent=L().m.loadFail;m.hidden=false;if(vista!=="ini")show("ini")})};
 $("start").onclick=comeca;$("again").onclick=comeca;
 $("jogos").addEventListener("click",ev=>{const b=ev.target.closest("button[data-j]");if(!b||b.dataset.j===JOGO)return;JOGO=b.dataset.j;if(MAPA()){carregaMapa().catch(()=>{});if(KIDS()){mudaModo("normal");return}}urlModo();applyLang()});
-$("mcats").addEventListener("click",ev=>{const b=ev.target.closest("button[data-c]");if(!b||b.dataset.c===mCat)return;mCat=b.dataset.c;ls.set("quizcv_mcat",mCat);renderIni()});
+$("mcats").addEventListener("click",ev=>{const b=ev.target.closest("button[data-c]");if(!b||b.dataset.c===mCat)return;mCat=b.dataset.c;renderIni()});
 // confirmação (janela própria; o temporizador pára enquanto está aberta)
 function confirma(tit,txt,sim){return new Promise(res=>{const t=L();pausar();$("confTitle").textContent=tit;$("confTxt").textContent=txt;$("confYes").textContent=sim;$("confNo").textContent=t.keep;$("conf").hidden=false;$("confYes").focus();
  const fecha=v=>{$("conf").hidden=true;$("confYes").onclick=$("confNo").onclick=null;$("conf").onclick=null;if(vista==="jogo"||vista==="mapa")retomar();res(v)};
