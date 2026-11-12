@@ -1,6 +1,6 @@
 # Quiz CV
 
-**Quem quer ser cabo-verdiano?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
+**Quem quer ser cabo-verdiano?** Um jogo de perguntas sobre a história, a cultura, o desporto e as ilhas de Cabo Verde, e o **Mapa CV**, um jogo de mapas. Um projeto de Marco Stiehl, irmão do [Hoje CV](https://hojecv.vercel.app).
 
 ## Como funciona
 
@@ -17,6 +17,15 @@
 - Som do temporizador que aumenta a tensão (verde, amarelo, vermelho), com botão para desligar.
 - **Versão para crianças**, a escolher na página inicial ou a abrir diretamente com o link [quizcv.vercel.app/?criancas](https://quizcv.vercel.app/?criancas) (o cabeçalho mostra sempre a versão em jogo): 10 perguntas simples (5 fáceis e 5 um pouco mais difíceis) para conhecer o país (as ilhas, a bandeira, a música, a comida, a natureza e a língua), com 30 segundos cada, sem sons nem efeitos de tensão e com mensagens de incentivo, também quando a resposta está errada. No fim, há sempre uns parabéns animados, com confetes e estrelas. Não tem perguntas sobre tragédias, mortes, guerras nem álcool.
 - Em português de Portugal (a tratar por «tu»), por defeito, e inglês, nos temas claro e escuro.
+
+## Mapa CV
+
+- Na página inicial escolhes o jogo: **Perguntas** ou **Mapa** (ou abres diretamente [quizcv.vercel.app/?mapa](https://quizcv.vercel.app/?mapa)).
+- Cinco categorias: ilhas, concelhos, sedes de concelho, freguesias e bandeiras dos concelhos. Cada ronda tem 10, ao acaso (primeiro os que ainda não te saíram).
+- Toca no sítio certo do mapa: 3 tentativas para cada um (30, 20 ou 10 pontos); à terceira falhada, o sítio certo pisca a vermelho. Um toque numa ilha aproxima-a.
+- Cronómetro a contar, sons, confetes e, no fim, um cartão de partilha com o mapa pintado com os teus resultados e a lista do que falhaste.
+- Ranking próprio, separado do das perguntas, um por categoria (semana, sempre e total).
+- Mapas: OpenStreetMap (via geoBoundaries) e OCHA; sedes: Wikidata; bandeiras: Wikimedia Commons (créditos no «Sobre»).
 
 ## Critérios
 

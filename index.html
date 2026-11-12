@@ -378,6 +378,87 @@ main{position:relative;z-index:1}
 .rev .racts{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:2px}
 .rrep{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;background:none;border:0;padding:0;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .rrep:hover{color:var(--fg)}.rrep:disabled{cursor:default;text-decoration:none;opacity:.7}
+/* ── Mapa CV ── */
+:root{--m-mar:#d6e7f4;--m-terra:#f4efe2;--m-borda:#a99f86;--m-front:#6f6650;--m-hover:#e9dfc4;--m-c1:#2fa872;--m-c2:#e9b500;--m-c3:#ec7f2f;--m-c0:#d9434b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--m-mar:#0b1c33;--m-terra:#2c3d5c;--m-borda:#5a6d8f;--m-front:#a9b8d4;--m-hover:#3a4f75}}
+:root[data-theme="dark"]{--m-mar:#0b1c33;--m-terra:#2c3d5c;--m-borda:#5a6d8f;--m-front:#a9b8d4;--m-hover:#3a4f75}
+/* escolha do jogo: Perguntas / Mapa */
+.jogos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jogos button{font:inherit;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:13px 14px 12px;border-radius:16px;border:2px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
+.jogos button svg{width:28px;height:28px;color:var(--ocean);margin-bottom:4px}
+.jogos button b{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em;line-height:1.1}
+.jogos button span{font-size:13px;color:var(--muted);line-height:1.35}
+.jogos button[aria-pressed="true"]{border-color:var(--ocean);background:var(--ocean);color:#fff;box-shadow:0 10px 22px -12px rgba(0,0,0,.6)}
+.jogos button[aria-pressed="true"] svg{color:var(--sun)}
+.jogos button[aria-pressed="true"] span{color:rgba(255,255,255,.82)}
+.jogos button:active{transform:scale(.98)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .jogos button:not([aria-pressed="true"]) svg{color:var(--sun)}}
+:root[data-theme="dark"] .jogos button:not([aria-pressed="true"]) svg{color:var(--sun)}
+/* categorias do mapa */
+.mcats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mcats button{font:inherit;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;padding:9px 12px;border-radius:12px;border:2px solid transparent;background:var(--chip);color:var(--fg);cursor:pointer}
+.mcats button b{font-family:var(--display);font-weight:700;font-size:15.5px;line-height:1.2}
+.mcats button span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.mcats button:last-child:nth-child(odd){grid-column:1/-1}
+.mcats button[aria-pressed="true"]{background:var(--surface);border-color:var(--ocean);box-shadow:0 6px 14px -8px rgba(0,0,0,.45)}
+.mcats button[aria-pressed="true"] b{color:var(--ocean)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mcats button[aria-pressed="true"] b{color:var(--sun)}}
+:root[data-theme="dark"] .mcats button[aria-pressed="true"] b{color:var(--sun)}
+.rkcats{grid-template-columns:repeat(3,1fr)}
+.rkcats button{padding:7px 8px;align-items:center;text-align:center}
+.rkcats button b{font-size:13.5px}
+.rkcats button:last-child:nth-child(odd){grid-column:auto}
+/* jogo do mapa */
+.mjogo{display:flex;flex-direction:column;gap:12px}
+.mprog{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.mprog .tm{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;color:var(--fg);display:inline-flex;align-items:center;gap:6px}
+.mprog .tm svg{width:16px;height:16px;color:var(--muted)}
+.mbar{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:-6px}
+.mbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:inherit;transition:width .3s}
+.malvo{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;min-height:78px}
+.malvo .q{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.malvo b{font-family:var(--display);font-weight:800;font-size:clamp(22px,6.4vw,30px);line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
+.malvo img{height:62px;width:auto;max-width:120px;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 6px 14px -8px rgba(0,0,0,.5);background:#fff}
+.mpips{display:flex;gap:5px;flex:none}
+.mpips i{width:10px;height:10px;border-radius:50%;background:var(--ok)}
+.mpips i.x{background:var(--line)}
+.malvo.troca{animation:mtroca .35s ease-out}
+@keyframes mtroca{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.mapbox{position:relative;width:100%;aspect-ratio:1/1;max-height:62vh;background:var(--m-mar);border:1px solid var(--line);border-radius:18px;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+#mSvg{display:block;width:100%;height:100%}
+#mSvg path,#mSvg circle{vector-effect:non-scaling-stroke}
+#mSvg .terra,#mSvg .ilheu{fill:var(--m-terra);stroke:var(--m-borda);stroke-width:.8px}
+#mSvg .ilheu{pointer-events:none}
+#mSvg .halo{fill:none;stroke:transparent;stroke-width:22px;pointer-events:stroke;cursor:pointer}
+#mSvg .alvo{fill:var(--m-terra);stroke:var(--m-borda);stroke-width:1px;cursor:pointer;transition:fill .3s,opacity .3s}
+#mSvg .fronteira{fill:none;stroke:var(--m-front);stroke-width:1.6px;pointer-events:none}
+#mSvg .fronteira.fina{stroke:var(--m-borda);stroke-width:.8px}
+#mSvg .sede{fill:var(--surface);stroke:var(--ocean-deep);stroke-width:2px;transition:fill .3s}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #mSvg .sede{stroke:var(--fg)}}
+:root[data-theme="dark"] #mSvg .sede{stroke:var(--fg)}
+#mSvg .sedehit{fill:transparent;cursor:pointer}
+#mSvg .alvo.c1,#mSvg .sedeg.c1 .sede{fill:var(--m-c1)}
+#mSvg .alvo.c2,#mSvg .sedeg.c2 .sede{fill:var(--m-c2)}
+#mSvg .alvo.c3,#mSvg .sedeg.c3 .sede{fill:var(--m-c3)}
+#mSvg .alvo.c0,#mSvg .sedeg.c0 .sede{fill:var(--m-c0)}
+#mSvg .longe{opacity:.35}
+@media (hover:hover){#mSvg .alvo:not(.c0):not(.c1):not(.c2):not(.c3):hover,#mSvg .sedeg:not(.c0):not(.c1):not(.c2):not(.c3):hover .sede{fill:var(--m-hover)}}
+#mSvg .alvo.erro,#mSvg .sedeg.erro .sede{animation:merro .7s ease-out}
+@keyframes merro{25%{fill:var(--m-c0)}}
+#mSvg .alvo.rev,#mSvg .sedeg.rev .sede{animation:mrev .5s ease-in-out 3}
+@keyframes mrev{50%{fill:var(--m-terra);opacity:.55}}
+.mback{position:absolute;top:10px;left:10px;font:inherit;font-family:var(--display);font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:4px;padding:7px 14px 7px 9px;border-radius:999px;border:0;background:var(--ocean);color:#fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.5);cursor:pointer}
+.mback svg{width:16px;height:16px}
+.mtip{position:absolute;z-index:2;pointer-events:none;background:var(--fg);color:var(--bg);font-family:var(--display);font-weight:700;font-size:14px;padding:5px 10px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-130%);animation:mtip 1.5s ease-out forwards}
+@keyframes mtip{0%{opacity:0;transform:translate(-50%,-100%)}12%,75%{opacity:1;transform:translate(-50%,-130%)}100%{opacity:0;transform:translate(-50%,-140%)}}
+.minfo{margin:-2px 0 0;min-height:1.5em;text-align:center;font-size:14px;color:var(--muted);line-height:1.45}
+.minfo b{color:var(--fg)}.minfo .no{color:var(--bad);font-weight:600}
+#mSkip{background:linear-gradient(135deg,#1c6dd0,var(--ocean))}
+.mrev li{display:flex;gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:14.5px}
+.mrev li i{flex:none;width:12px;height:12px;border-radius:50%}
+.mrev li .t{margin-left:auto;font-size:12.5px;color:var(--muted);text-align:right}
+@media (prefers-reduced-motion:reduce){#mSvg .alvo,#mSvg .sedeg .sede,.mtip,.malvo.troca{animation:none!important}}
+@media (min-width:900px){.mcats{grid-template-columns:repeat(5,1fr)}.mcats button:last-child:nth-child(odd){grid-column:auto}.rkcats{grid-template-columns:repeat(5,1fr)}.mapbox{max-height:64vh}}
 @media (min-width:900px){.fim{max-width:560px;margin:0 auto;width:100%}}
 @media (min-width:900px){
   .wrap{max-width:720px;padding-left:28px;padding-right:28px}
@@ -412,6 +493,8 @@ main{position:relative;z-index:1}
   <div class="wrap">
     <!-- início -->
     <section id="v-ini" class="ini">
+      <div class="jogos" id="jogos" role="group"><button type="button" data-j="quiz" aria-pressed="true"></button><button type="button" data-j="mapa" aria-pressed="false"></button></div>
+      <div class="mcats" id="mcats" role="group" hidden></div>
       <div class="modo" id="modo" role="group"><button type="button" data-m="normal" aria-pressed="true"></button><button type="button" data-m="kids" aria-pressed="false"></button></div>
       <button type="button" class="startbig" id="start"></button>
       <p class="rkhome" id="rkHomeP" hidden><button type="button" class="rkhbtn" id="rkHome"></button></p>
@@ -449,6 +532,16 @@ main{position:relative;z-index:1}
 
     </section>
 
+    <!-- Mapa CV: jogo de mapas (mapa.js, carregado só quando se escolhe o Mapa) -->
+    <section id="v-mapa" hidden class="mjogo">
+      <div class="mprog"><span class="label" id="mNum"></span><span class="tm" id="mTime" role="timer"></span></div>
+      <div class="mbar" aria-hidden="true"><i id="mBar"></i></div>
+      <div class="malvo" id="mAlvo" aria-live="polite"><div class="q"><span class="label" id="mLbl"></span><b id="mNome"></b><img id="mFlag" alt="" hidden></div><div class="mpips" id="mPips" role="img"></div></div>
+      <div class="mapbox" id="mapbox"><svg id="mSvg" preserveAspectRatio="xMidYMid meet" role="img"></svg><button type="button" class="mback" id="mBack" hidden></button></div>
+      <p class="minfo" id="mInfo" aria-live="polite"></p>
+      <div class="tools"><button type="button" class="tool big" id="mSkip"></button><button type="button" class="tool" id="mQuit"></button></div>
+    </section>
+
     <!-- resultado -->
     <section id="v-fim" hidden class="fim">
       <p class="verdict" id="fTxt"></p>
@@ -472,6 +565,7 @@ main{position:relative;z-index:1}
         <button type="button" class="btn rkshr" id="rkShrF" hidden></button>
       </div>
       <button type="button" class="startbig" id="again"></button>
+      <button type="button" class="btn revbtn" id="mOutra" hidden></button>
       <button type="button" class="btn revbtn" id="revBtn" aria-expanded="false" aria-controls="rev"></button>
       <ol class="rev" id="rev" hidden></ol>
     </section>
@@ -511,6 +605,7 @@ main{position:relative;z-index:1}
 <div class="sheet-bg" id="rank" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
     <h2 id="rankTitle"></h2>
+    <div class="mcats rkcats" id="rkCats" role="group" hidden></div>
     <div class="rktabs" id="rkTabs" role="group"><button type="button" data-p="semana" aria-pressed="true"></button><button type="button" data-p="sempre" aria-pressed="false"></button><button type="button" data-p="total" aria-pressed="false"></button></div>
     <p class="rkfim" id="rkFim"></p>
     <ol class="rklist" id="rkList"></ol>
@@ -547,7 +642,7 @@ pt:{title:"Quem quer ser cabo-verdiano?",sub:"15 perguntas sobre Cabo Verde. Qua
  rankShr:"Partilhar ranking",rankEu:"Eu",rankShrOk:"Imagem guardada e texto copiado.",rankShrImg:"Imagem guardada.",rankLugar:(p,n)=>`${p}.º lugar · ${n} pontos`,
  rankShrTxt:(p,n,per,u)=>`Quiz CV: estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":per==="total"?"de pontos acumulados":"de sempre"}, com ${n} pontos. Consegues passar-me? https://${u}`,
  rankNote:"Não guardamos dados pessoais: só um nome gerado pelo jogo e os pontos. O ranking da semana recomeça à segunda-feira.",
- conta:{normal:n=>[n,n===1?"jogo na versão normal":"jogos na versão normal"],kids:n=>[n,n===1?"jogo na versão para crianças":"jogos na versão para crianças"]},
+ conta:{normal:n=>[n,n===1?"jogo na versão normal":"jogos na versão normal"],kids:n=>[n,n===1?"jogo na versão para crianças":"jogos na versão para crianças"],mapa:n=>[n,n===1?"jogo no Mapa":"jogos no Mapa"]},
  lv:{1:"Fácil",2:"Médio",3:"Difícil"},
  qNum:(i,n)=>`Pergunta ${i} de ${n}`,pts:p=>`${p} ${p===1?"ponto":"pontos"}`,
  skip:n=>`Saltar (${n})`,skipL:"Saltar",go:"Já!",somOn:"Ligar o som",somOff:"Desligar o som",keep:"Continuar a jogar",quit:"Terminar",
@@ -562,7 +657,34 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  fLbl:"Resultado",of:"certas",
  verdict:(s,n)=>s===n?"Todas certas! Mereces um lugar no Panteão das ilhas.":s>=12?"Excelente. Conheces Cabo Verde muito bem.":s>=9?"Muito bem. Uma cachupa para celebrar.":s>=6?"Nada mal. Há sempre mais para descobrir.":"Fica a vontade de saber mais. Come uma cachupa e tenta outra vez.",
  ptsTotal:(p,b)=>`${p} pontos${b?" · novo recorde!":""}`,
- modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},vtag:{normal:"Normal",kids:"Crianças"},
+ modoLbl:"Versão",modos:{normal:"Normal",kids:"Para crianças"},vtag:{normal:"Normal",kids:"Crianças",mapa:"Mapa"},
+ jogoLbl:"Jogo",jogos:{quiz:["Perguntas","15 perguntas sobre Cabo Verde"],mapa:["Mapa","Encontra os sítios no mapa"]},
+ // Mapa CV
+ m:{title:"Conheces o mapa de Cabo Verde?",sub:"Ilhas, concelhos, sedes, freguesias e bandeiras. Encontra cada um no mapa.",
+  cats:{ilhas:"Ilhas",concelhos:"Concelhos",sedes:"Sedes de concelho",freguesias:"Freguesias",bandeiras:"Bandeiras"},catLbl:"Categoria",
+  catSub:(n,b)=>b?`${n} no mapa · melhor: ${b}`:`${n} no mapa`,
+  rules:(n,tot,cat)=>[["m",`${n} ${{ilhas:"ilhas",concelhos:"concelhos",sedes:"sedes",freguesias:"freguesias",bandeiras:"bandeiras"}[cat]}`,n<tot?`Ao acaso, entre ${tot}`:"Toca no sítio certo do mapa"],["o","3 tentativas","30, 20 ou 10 pontos"],["t","Cronómetro","Ganha quem faz mais pontos em menos tempo"],cat==="ilhas"?["s","Saltar","Deixa para o fim"]:["z","Toca numa ilha","Para a veres de perto"]],
+  ptsNote:"<b>Pontos:</b> 30 se acertares à primeira, 20 à segunda e 10 à terceira. À terceira falhada, o sítio certo pisca a vermelho.",
+  best:(p,s)=>`Melhor resultado: ${p}% em ${s}`,
+  toca:"Toca em",tocaB:"Toca no concelho desta bandeira",flagAlt:"Bandeira de um concelho",mapAria:"Mapa de Cabo Verde",
+  num:(i,n)=>`${i} de ${n}`,tries:n=>`${n===1?"Resta":"Restam"} ${n} ${n===1?"tentativa":"tentativas"}`,back:"Arquipélago",
+  semAlvo:n=>`${n}: aqui não há nada para encontrar`,
+  infoIlha:(n,k)=>`<b>${n}</b> · ${k} ${k===1?"concelho":"concelhos"}`,
+  infoConc:(n,i,s)=>`<b>${n}</b> · ilha: ${i} · sede: ${s}`,
+  infoSede:(n,c,i)=>`<b>${n}</b> · sede do concelho: ${c} · ilha: ${i}`,
+  infoFreg:(n,c,i)=>`<b>${n}</b> · concelho: ${c} · ilha: ${i}`,
+  era:"Era aqui:",
+  quitQ:"Terminar o mapa?",quitTxt:"Uma ronda que não chega ao fim não entra no ranking.",
+  verdict:p=>p===100?"Perfeito! Conheces o mapa de Cabo Verde de cor.":p>=85?"Excelente. Sabes bem onde fica cada sítio.":p>=60?"Muito bem. Mais uma volta e chegas lá.":p>=35?"Nada mal. O mapa já tem menos segredos.":"Cada volta ensina. Tenta outra vez.",
+  parcial:"Terminaste antes do fim. Só as rondas completas entram no ranking.",
+  fimPts:(p,s,r)=>`${p} pontos em ${s}${r?" · novo recorde!":""}`,
+  parab:"Mapa completo!",parabSub:p=>`${p}% dos pontos`,
+  cardLbl:"MAPA CV",cardFirst:n=>`${n} À PRIMEIRA`,cardFoot:"QUIZ CV · O MAPA DE CABO VERDE",
+  shareText:(c,p,s,u)=>`Mapa CV (${c}): fiz ${p}% em ${s}. Consegues fazer melhor? https://${u}`,
+  rankT:"Ranking do Mapa",lugar:(p,v)=>`${p}.º lugar · ${v}`,
+  rankShrTxt:(p,v,per,c,u)=>`Mapa CV (${c}): estou em ${p}.º lugar no ranking ${per==="semana"?"desta semana":per==="total"?"de pontos acumulados":"de sempre"} (${v}). Consegues passar-me? https://${u}`,
+  revShow:"Ver o que falhaste",revHide:"Esconder o que falhaste",tent:k=>k===0?"Não encontraste":`À ${k}.ª tentativa`,
+  outra:"Escolher outra categoria",loadFail:"Não foi possível carregar o mapa. Tenta outra vez."},
  // versão para crianças: estes textos substituem os normais (ver LK)
  k:{sub:"10 perguntas para conhecer Cabo Verde. Vamos aprender a brincar?",
   rules:(n,t,sk,rv)=>[["q",`${n} perguntas`,"Para conhecer o país"],["t",`${t} segundos`,"Sem pressa"],["s",`${sk} saltos`,"Trocam a pergunta"],["a",`${rv} ajuda 50/50`,"Tira duas opções erradas"]],
@@ -585,12 +707,14 @@ secs:s=>`${s} segundos`,gain:g=>`+${g.total} pontos: ${g.base} (${["","fácil","
  repMot:{certa:"A resposta dada como certa está errada",outra:"Há mais do que uma opção certa",pergunta:"A pergunta é confusa ou ambígua",fonte:"A fonte não confirma a resposta",traducao:"Erro de português ou de tradução",ofensivo:"Conteúdo ofensivo"},
  cancel:"Cancelar",send:"Enviar",repOk:"Obrigado. O reporte foi enviado e vai ser revisto.",repFail:"Não foi possível enviar. Tenta mais tarde.",repOff:"Os reportes ainda não estão ligados. Obrigado na mesma.",
  temas:{politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações",geografia:"Geografia"},
- foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas sobre Cabo Verde"},
+ foot:"Quiz CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Quiz CV",aboutTitle:"Sobre o Quiz CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas e de mapas sobre Cabo Verde"},
  about:[["Objetivo","Conhecer melhor Cabo Verde a jogar. Cada pergunta é uma pequena lição sobre as ilhas, a história, a cultura, a música e as pessoas que fizeram o país, para quem cá vive, para a diáspora e para quem tem curiosidade."],
   ["Como se joga","15 perguntas, do fácil ao difícil, com 20 segundos cada. Tens 3 saltos e uma ajuda 50/50. Depois de cada resposta aparece uma explicação curta, porque o mais importante é aprender."],
   ["Para crianças","Uma versão com 10 perguntas simples, mais tempo e mensagens de incentivo, pensada para as crianças descobrirem o essencial: as ilhas, a bandeira, a língua, a música, a comida e a natureza."],
   ["Fontes","Todas as perguntas assentam em factos comprovados e têm uma fonte que podes consultar. Se encontrares um erro, usa «Reportar problema»."],
-  ["Ranking","Na versão normal, cada ronda entra sozinha no ranking da semana, no de sempre e no total de pontos acumulados, com um nome gerado pelo jogo (podes trocá-lo por outro). Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
+  ["Mapa","Encontra no mapa as ilhas, os concelhos, as sedes de concelho, as freguesias e as bandeiras dos concelhos. Cada ronda tem 10, ao acaso (primeiro os que ainda não te saíram), com 3 tentativas para cada um, e o cronómetro conta o tempo. Toca numa ilha para a veres de perto. O Mapa tem o seu próprio ranking, um por categoria, separado do das perguntas."],
+  ["Ranking","Na versão normal e no Mapa, cada ronda entra sozinha no ranking da semana, no de sempre e no total de pontos acumulados (no Mapa, um por categoria), com um nome gerado pelo jogo (podes trocá-lo por outro). Não guardamos dados pessoais: nem o teu nome, nem email, nem telefone."],
+  ["Mapas e bandeiras","Ilhas e concelhos: © colaboradores do OpenStreetMap (ODbL), via geoBoundaries. Freguesias: OCHA (CC BY 3.0 IGO), acertadas às fronteiras dos concelhos. Sedes de concelho: Wikidata. Bandeiras: Wikimedia Commons (CC BY-SA 4.0 ou CC0), desenhos de António Martins, Valentin Poposki, Waldir, Tuvalkin, Flagvisioner, Demon201x e dos próprios municípios, a partir do Flags of the World. Entram as 16 bandeiras com licença livre; faltam a da Boa Vista e as de cinco concelhos de Santiago."],
   ["Hoje CV","É um projeto irmão do Hoje CV, que mostra o que aconteceu na história de Cabo Verde em cada dia do ano."],
   ["","Um projeto de Marco Stiehl."]]},
 en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. How many can you get right?",
@@ -605,7 +729,7 @@ en:{title:"Who wants to be Cabo Verdean?",sub:"15 questions about Cabo Verde. Ho
  rankShr:"Share leaderboard",rankEu:"Me",rankShrOk:"Image saved and text copied.",rankShrImg:"Image saved.",rankLugar:(p,n)=>`${ordEN(p)} place · ${n} points`,
  rankShrTxt:(p,n,per,u)=>`Quiz CV: I am ${ordEN(p)} on the ${per==="semana"?"weekly":per==="total"?"total points":"all-time"} leaderboard with ${n} points. Can you beat me? https://${u}`,
  rankNote:"We do not store personal data: only a name made up by the game and the points. The weekly leaderboard restarts on Monday.",
- conta:{normal:n=>[n,n===1?"game in the standard version":"games in the standard version"],kids:n=>[n,n===1?"game in the kids version":"games in the kids version"]},
+ conta:{normal:n=>[n,n===1?"game in the standard version":"games in the standard version"],kids:n=>[n,n===1?"game in the kids version":"games in the kids version"],mapa:n=>[n,n===1?"game on the Map":"games on the Map"]},
  lv:{1:"Easy",2:"Medium",3:"Hard"},
  qNum:(i,n)=>`Question ${i} of ${n}`,pts:p=>`${p} ${p===1?"point":"points"}`,
  skip:n=>`Skip (${n})`,skipL:"Skip",go:"Go!",somOn:"Turn sound on",somOff:"Turn sound off",keep:"Keep playing",quit:"End quiz",
@@ -620,7 +744,33 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  fLbl:"Result",of:"right",
  verdict:(s,n)=>s===n?"All correct! You deserve a place in the islands' hall of fame.":s>=12?"Excellent. You know Cabo Verde very well.":s>=9?"Very good. A cachupa to celebrate.":s>=6?"Not bad. There is always more to discover.":"Plenty left to learn. Have a cachupa and try again.",
  ptsTotal:(p,b)=>`${p} points${b?" · new record!":""}`,
- modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},vtag:{normal:"Standard",kids:"Kids"},
+ modoLbl:"Version",modos:{normal:"Standard",kids:"For kids"},vtag:{normal:"Standard",kids:"Kids",mapa:"Map"},
+ jogoLbl:"Game",jogos:{quiz:["Questions","15 questions about Cabo Verde"],mapa:["Map","Find the places on the map"]},
+ m:{title:"Do you know the map of Cabo Verde?",sub:"Islands, municipalities, seats, parishes and flags. Find each one on the map.",
+  cats:{ilhas:"Islands",concelhos:"Municipalities",sedes:"Municipal seats",freguesias:"Parishes",bandeiras:"Flags"},catLbl:"Category",
+  catSub:(n,b)=>b?`${n} on the map · best: ${b}`:`${n} on the map`,
+  rules:(n,tot,cat)=>[["m",`${n} ${{ilhas:"islands",concelhos:"municipalities",sedes:"seats",freguesias:"parishes",bandeiras:"flags"}[cat]}`,n<tot?`Picked at random from ${tot}`:"Tap the right place on the map"],["o","3 tries","30, 20 or 10 points"],["t","Stopwatch","Most points in the least time wins"],cat==="ilhas"?["s","Skip","Leave it for the end"]:["z","Tap an island","To see it up close"]],
+  ptsNote:"<b>Points:</b> 30 if you get it first time, 20 on the second try and 10 on the third. After the third miss, the right place flashes red.",
+  best:(p,s)=>`Best score: ${p}% in ${s}`,
+  toca:"Tap",tocaB:"Tap the municipality with this flag",flagAlt:"Flag of a municipality",mapAria:"Map of Cabo Verde",
+  num:(i,n)=>`${i} of ${n}`,tries:n=>`${n} ${n===1?"try":"tries"} left`,back:"Archipelago",
+  semAlvo:n=>`${n}: nothing to find here`,
+  infoIlha:(n,k)=>`<b>${n}</b> · ${k} ${k===1?"municipality":"municipalities"}`,
+  infoConc:(n,i,s)=>`<b>${n}</b> · island: ${i} · seat: ${s}`,
+  infoSede:(n,c,i)=>`<b>${n}</b> · seat of the municipality: ${c} · island: ${i}`,
+  infoFreg:(n,c,i)=>`<b>${n}</b> · municipality: ${c} · island: ${i}`,
+  era:"It was here:",
+  quitQ:"End the map?",quitTxt:"A round that does not reach the end does not join the leaderboard.",
+  verdict:p=>p===100?"Perfect! You know the map of Cabo Verde by heart.":p>=85?"Excellent. You know where everything is.":p>=60?"Very good. One more round and you'll have it.":p>=35?"Not bad. The map has fewer secrets now.":"Every round teaches something. Try again.",
+  parcial:"You ended before the finish. Only complete rounds join the leaderboard.",
+  fimPts:(p,s,r)=>`${p} points in ${s}${r?" · new record!":""}`,
+  parab:"Map complete!",parabSub:p=>`${p}% of the points`,
+  cardLbl:"MAPA CV",cardFirst:n=>`${n} FIRST TIME`,cardFoot:"QUIZ CV · THE MAP OF CABO VERDE",
+  shareText:(c,p,s,u)=>`Mapa CV (${c}): I scored ${p}% in ${s}. Can you beat it? https://${u}`,
+  rankT:"Map leaderboard",lugar:(p,v)=>`${ordEN(p)} place · ${v}`,
+  rankShrTxt:(p,v,per,c,u)=>`Mapa CV (${c}): I am ${ordEN(p)} on the ${per==="semana"?"weekly":per==="total"?"total points":"all-time"} leaderboard (${v}). Can you beat me? https://${u}`,
+  revShow:"See what you missed",revHide:"Hide what you missed",tent:k=>k===0?"Not found":`On try ${k}`,
+  outra:"Choose another category",loadFail:"The map could not be loaded. Please try again."},
  k:{sub:"10 questions to get to know Cabo Verde. Shall we learn while we play?",
   rules:(n,t,sk,rv)=>[["q",`${n} questions`,"Get to know the country"],["t",`${t} seconds`,"No rush"],["s",`${sk} skips`,"Swap the question"],["a",`${rv} 50/50 help`,"Removes two wrong options"]],
   ptsNote:"<b>Points:</b> 10 or 20 for each right answer, plus 1 for every second left. Mistakes help you learn too!",
@@ -642,12 +792,14 @@ secs:s=>`${s} seconds`,gain:g=>`+${g.total} points: ${g.base} (${["","easy","med
  repMot:{certa:"The answer marked as right is wrong",outra:"More than one option is right",pergunta:"The question is confusing or ambiguous",fonte:"The source does not confirm the answer",traducao:"Language or translation error",ofensivo:"Offensive content"},
  cancel:"Cancel",send:"Send",repOk:"Thank you. The report was sent and will be reviewed.",repFail:"It could not be sent. Please try later.",repOff:"Reports are not connected yet. Thank you anyway.",
  temas:{politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations",geografia:"Geography"},
- foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz game about Cabo Verde"},
+ foot:"Quiz CV · A project by Marco Stiehl",aboutBtn:"About Quiz CV",aboutTitle:"About Quiz CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz and map game about Cabo Verde"},
  about:[["Purpose","Get to know Cabo Verde better while you play. Each question is a small lesson about the islands, history, culture, music and the people who shaped the country, for those who live here, for the diaspora and for anyone curious."],
   ["How to play","15 questions, from easy to hard, with 20 seconds each. You have 3 skips and one 50/50 help. After each answer there is a short explanation, because learning is what matters most."],
   ["For kids","A version with 10 simple questions, more time and encouraging messages, made for children to discover the essentials: the islands, the flag, the language, music, food and nature."],
   ["Sources","Every question is based on proven facts and has a source you can check. If you find a mistake, use “Report a problem”."],
-  ["Leaderboard","In the standard version, every round joins the weekly, all-time and total-points leaderboards on its own, with a name made up by the game (you can switch it for another). We do not store personal data: not your name, email or phone."],
+  ["Map","Find the islands, municipalities, municipal seats, parishes and municipal flags on the map. Each round has 10, picked at random (the ones you have not had yet come first), with 3 tries for each one, and the stopwatch keeps the time. Tap an island to see it up close. The Map has its own leaderboard, one per category, separate from the questions one."],
+  ["Leaderboard","In the standard version and on the Map, every round joins the weekly, all-time and total-points leaderboards on its own (on the Map, one per category), with a name made up by the game (you can switch it for another). We do not store personal data: not your name, email or phone."],
+  ["Maps and flags","Islands and municipalities: © OpenStreetMap contributors (ODbL), via geoBoundaries. Parishes: OCHA (CC BY 3.0 IGO), fitted to the municipal borders. Municipal seats: Wikidata. Flags: Wikimedia Commons (CC BY-SA 4.0 or CC0), drawn by António Martins, Valentin Poposki, Waldir, Tuvalkin, Flagvisioner, Demon201x and the municipalities themselves, based on Flags of the World. The 16 flags with a free licence are included; Boa Vista's and those of five Santiago municipalities are missing."],
   ["Hoje CV","It is a sister project of Hoje CV, which shows what happened in Cabo Verde's history on each day of the year."],
   ["","A project by Marco Stiehl."]]}
 };
@@ -666,15 +818,23 @@ let modo=/[?&](criancas|kids)(=[^&]*)?(&|$)/.test(location.search)?"kids":"norma
 const KIDS=()=>modo==="kids";
 const LK={pt:{...I18N.pt,...I18N.pt.k},en:{...I18N.en,...I18N.en.k}};
 const L=()=>KIDS()?LK[LANG]:I18N[LANG];
+// Jogo: "quiz" (perguntas) ou "mapa" (Mapa CV). No URL: ?mapa abre já no mapa (não tem versão para crianças).
+let JOGO=/[?&]mapa(=[^&]*)?(&|$)/.test(location.search)?"mapa":"quiz";
+const MAPA=()=>JOGO==="mapa";
+if(MAPA())modo="normal";
+// categorias do mapa: MTOT = quantos há no mapa.js (o gerador confirma); cada ronda tem MR elementos ao acaso
+// (MR igual a MAPA_RONDA no Code.gs: o servidor valida os pontos com ele)
+const MCATS=["ilhas","concelhos","sedes","freguesias","bandeiras"],MTOT={ilhas:10,concelhos:22,sedes:22,freguesias:32,bandeiras:16},MR=10;
+let mCat=ls.get("quizcv_mcat","ilhas");if(!MTOT[mCat])mCat="ilhas";
 const API=(window.QUIZCV_CONFIG||{}).API||"";
 // contador público (Code.gs, folha «contador»): lido ao abrir; cada ronda começada soma 1 jogo à sua versão
 let CONTA=null;
-function lerConta(j){if(j&&typeof j.normal==="number"&&typeof j.kids==="number"){CONTA={normal:j.normal,kids:j.kids};if(vista==="ini")renderConta()}}
+function lerConta(j){if(j&&typeof j.normal==="number"&&typeof j.kids==="number"){CONTA={normal:j.normal,kids:j.kids,mapa:typeof j.mapa==="number"?j.mapa:null};if(vista==="ini")renderConta()}}
 function renderConta(){const el=$("conta");if(!CONTA){el.hidden=true;return}const t=L(),f=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT");
- const IC={normal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>',kids:'<svg viewBox="0 0 24 24" fill="var(--sun)" stroke="var(--lv2)" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>'};
- el.innerHTML=["normal","kids"].map(m=>{const[n,txt]=t.conta[m](CONTA[m]);return`<span>${IC[m]}<span><b>${f(n)}</b> ${esc(txt)}</span></span>`}).join("");el.hidden=false}
+ const IC={normal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>',kids:'<svg viewBox="0 0 24 24" fill="var(--sun)" stroke="var(--lv2)" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>',mapa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg>'};
+ el.innerHTML=["normal","kids"].concat(CONTA.mapa!=null?["mapa"]:[]).map(m=>{const[n,txt]=t.conta[m](CONTA[m]);return`<span>${IC[m]}<span><b>${f(n)}</b> ${esc(txt)}</span></span>`}).join("");el.hidden=false}
 function contaJogo(){if(!API)return;
- fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({acao:"jogo",modo})}).then(r=>r.json()).then(lerConta).catch(()=>{})}
+ fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({acao:"jogo",modo:MAPA()?"mapa":modo})}).then(r=>r.json()).then(lerConta).catch(()=>{})}
 // ranking (só versão normal): nome gerado = animal + ilha + número, tudo junto (ex.: TartarugaDoFogo10), sem texto livre nem dados pessoais.
 // ANIMAIS e ILHAS_N têm de ser iguais às do Code.gs (o servidor recusa outros nomes).
 const ANIMAIS=["Cagarra","Tartaruga","Baleia","Garoupa","Golfinho","Tubarão","Calhandra","Lagosta","Polvo","Garça","Falcão","Lagartixa","Moreia","Atum"];
@@ -693,7 +853,10 @@ function jogador(){if(JOG)return JOG;let j=ls.get("quizcv_jogador",null);
 function outroNome(){const j=jogador();let n;do n=novoNome();while(n===j.nome);j.nome=n;ls.set("quizcv_jogador",j);if(vista==="fim")renderRk();if(!$("rank").hidden)renderRank();
  if(API&&ls.get("quizcv_no_rank",0))rkPost({acao:"nome",jogador:j.id,nome:n}).then(r=>{if(r&&r.ok){rkDados=null;carregaRank()}}).catch(()=>{})}
 // estado da ronda: token pedido no início (o servidor exige 1 min entre o início e o envio), e resultado do envio
-let rkTok=null,rkT0=0,rkEnv=null,rkDados=null,rkPer="semana",rkNovo=false;
+let rkTok=null,rkT0=0,rkEnv=null,rkDados=null,rkPer="semana",rkNovo=false,rkCat=mCat;
+// valor de cada linha: pontos (perguntas e «Total» do mapa) ou percentagem e tempo (semana e sempre do mapa)
+const fmtN=n=>n.toLocaleString(LANG==="en"?"en-GB":"pt-PT");
+const rkVal=x=>MAPA()&&rkPer!=="total"?`${mPctDe(x.pontos,rkCat)}% · ${fmtT(x.segundos||0)}`:`${fmtN(x.pontos)} ${L().rankPts}`;
 const rkPost=o=>fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
 function pedeToken(){rkTok=null;rkEnv=null;rkT0=Date.now();if(!API||KIDS())return;rkPost({acao:"inicio"}).then(j=>{if(j&&j.ok&&j.token)rkTok=j.token}).catch(()=>{})}
 // três separadores: semana (melhor ronda da semana), sempre (melhor ronda de sempre) e total (soma de todas as rondas)
@@ -707,14 +870,15 @@ function listaRank(tabs,lista,fim){const t=L(),f=n=>n.toLocaleString(LANG==="en"
  if(fim){const cv=new Date(Date.now()-3600000),dw=cv.getUTCDay()||7;fim.hidden=false;
   fim.innerHTML=rkPer==="semana"?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/></svg>${esc(t.rankEnds(7-dw))}`:esc(rkPer==="total"?t.rankTotH:t.rankAllH)}
  const linha=(x,pos,i)=>{const a=ANIMAIS.find(n=>x.nome.startsWith(n))||x.nome,ai=Math.max(0,ANIMAIS.indexOf(a)),cores=["var(--ocean)","var(--mar)","var(--lv1)","var(--rubro)","var(--lv2)","var(--ocean-deep)"];
-  return `<li class="${[x.eu?"eu":"",pos===1?"top1":"",x.eu&&rkNovo?"novo":""].join(" ").trim()}" style="--i:${i}"><span class="p${pos<=3?" m m"+pos:""}">${pos}</span><span class="av" style="background:${cores[ai%cores.length]}" aria-hidden="true">${esc(a.charAt(0))}</span><span class="n"><span>${esc(x.nome).replace(/([a-zà-ÿ])(?=[A-ZÀ-Þ])/g,"$1<wbr>").replace(/(\D)(?=\d{2}$)/,"$1<wbr>")}</span>${x.eu?`<b class="tu">${esc(t.rankTu)}</b>`:""}</span><span class="s">${f(x.pontos)} ${esc(t.rankPts)}${rkPer==="total"&&x.rondas?` <small class="rd">${esc(t.rankRondas(x.rondas))}</small>`:""}</span></li>`};
+  return `<li class="${[x.eu?"eu":"",pos===1?"top1":"",x.eu&&rkNovo?"novo":""].join(" ").trim()}" style="--i:${i}"><span class="p${pos<=3?" m m"+pos:""}">${pos}</span><span class="av" style="background:${cores[ai%cores.length]}" aria-hidden="true">${esc(a.charAt(0))}</span><span class="n"><span>${esc(x.nome).replace(/([a-zà-ÿ])(?=[A-ZÀ-Þ])/g,"$1<wbr>").replace(/(\D)(?=\d{2}$)/,"$1<wbr>")}</span>${x.eu?`<b class="tu">${esc(t.rankTu)}</b>`:""}</span><span class="s">${esc(rkVal(x))}${rkPer==="total"&&x.rondas?` <small class="rd">${esc(t.rankRondas(x.rondas))}</small>`:""}</span></li>`};
  if(!rkDados)lista.innerHTML=`<li class="vazio">${esc(t.rankLoad)}</li>`;else if(rkDados.erro)lista.innerHTML=`<li class="vazio">${esc(t.rankFail)}</li>`;
  else{const l=rkDados[rkPer]||[],mm=meuDe(),meu=mm&&mm.pos>l.length?mm:null;
   lista.innerHTML=l.length?l.map((x,i)=>linha(x,i+1,i)).join("")+(meu?`<li class="sep" aria-hidden="true">···</li>`+linha({...meu,eu:true},meu.pos,l.length+1):""):`<li class="vazio">${esc(t.rankEmpty)}</li>`}}
-function carregaRank(){fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+jogador().id).then(r=>r.json()).then(j=>{rkDados=j&&j.ok?j:{erro:1}}).catch(()=>{rkDados={erro:1}})
+function carregaRank(){const k=JOGO+"|"+rkCat,mesmo=()=>k===JOGO+"|"+rkCat;
+ fetch(API+(API.includes("?")?"&":"?")+"acao=ranking&eu="+jogador().id+(MAPA()?"&jogo=mapa&cat="+rkCat:"")).then(r=>r.json()).then(j=>{if(mesmo())rkDados=j&&j.ok?j:{erro:1}}).catch(()=>{if(mesmo())rkDados={erro:1}})
  .then(()=>{if(!$("rank").hidden)renderRank();if(vista==="fim")renderRk();rkNovo=false})}
-function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!API||!res.length;if(box.hidden)return;
- $("rkH").textContent=t.rankT;listaRank($("rkTabsF"),$("rkListF"),$("rkFimF"));botaoShr($("rkShrF"));
+function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!API||!(MAPA()?mCompleto():res.length);if(box.hidden)return;
+ $("rkH").textContent=MAPA()?`${t.m.rankT} · ${t.m.cats[mCat]}`:t.rankT;listaRank($("rkTabsF"),$("rkListF"),$("rkFimF"));botaoShr($("rkShrF"));
  const env=rkEnv&&rkEnv.ok;$("rkNome").innerHTML=`${esc(t.rankMe)} <b>${esc(j.nome)}</b>`;
  const m=$("rkMsg");m.className="rkmsg";
  if(rkEnv==="a"){m.textContent=t.rankSending;m.classList.add("erro");m.hidden=false}
@@ -722,13 +886,14 @@ function renderRk(){const t=L(),box=$("rkBox"),j=jogador();box.hidden=KIDS()||!A
  else if(rkEnv&&rkEnv.erro){m.textContent=t.rankFail;m.classList.add("erro");m.hidden=false}else m.hidden=true;
  $("rkOther").innerHTML=`<span class="rkre">${ICRE}${esc(t.rankOther)}</span>`;$("rkDev").textContent=t.rankDev}
 // no fim de cada ronda da versão normal, os pontos entram sozinhos no ranking (o token pode ainda estar a chegar: tenta outra vez)
-function autoEnvia(n=0){if(KIDS()||!API||!res.length||rkEnv)return;if(Date.now()-rkT0<61000)return;
+function autoEnvia(n=0){if(KIDS()||!API||rkEnv||!(MAPA()?mCompleto():res.length))return;if(Date.now()-rkT0<(MAPA()?MR*500+300:61000))return;
  if(rkTok)enviaPontos();else if(n<5)setTimeout(()=>{if(vista==="fim")autoEnvia(n+1)},1500)}
 function enviaPontos(){if(!rkTok||rkEnv==="a")return;const j=jogador(),tok=rkTok;rkEnv="a";renderRk();
- rkPost({acao:"pontos",token:tok,jogador:j.id,nome:j.nome,pontos:pts}).then(r=>{rkEnv=r&&r.ok?{ok:true,pos:r.pos,melhor:r.melhor}:{erro:(r&&r.erro)||"x"};rkTok=null;if(r&&r.ok){ls.set("quizcv_no_rank",1);rkDados=null;rkNovo=true;rkPer="semana";carregaRank()}})
+ rkPost(MAPA()?{acao:"mapa",token:tok,jogador:j.id,nome:j.nome,cat:mCat,pontos:mPts,segundos:Math.max(mSegF,Math.ceil(MR*.5))}:{acao:"pontos",token:tok,jogador:j.id,nome:j.nome,pontos:pts}).then(r=>{rkEnv=r&&r.ok?{ok:true,pos:r.pos,melhor:r.melhor}:{erro:(r&&r.erro)||"x"};rkTok=null;if(r&&r.ok){ls.set("quizcv_no_rank",1);rkDados=null;rkNovo=true;rkPer="semana";carregaRank()}})
   .catch(()=>{rkEnv={erro:"rede"};rkTok=null}).then(()=>{if(vista==="fim")renderRk()})}
-function abreRank(){$("rank").hidden=false;rkPer="semana";rkDados=null;renderRank();$("rankClose").focus();carregaRank()}
-function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=t.rankT;$("rankClose").textContent=t.close;$("rkNote").textContent=t.rankNote;
+function abreRank(){$("rank").hidden=false;rkPer="semana";rkCat=mCat;rkDados=null;renderRank();$("rankClose").focus();carregaRank()}
+function renderRank(){const t=L(),j=jogador();$("rankTitle").textContent=MAPA()?t.m.rankT:t.rankT;
+ const rc=$("rkCats");rc.hidden=!MAPA();if(MAPA()){rc.setAttribute("aria-label",t.m.catLbl);rc.innerHTML=MCATS.map(c=>`<button type="button" data-c="${c}" aria-pressed="${c===rkCat}"><b>${esc(t.m.cats[c])}</b></button>`).join("")}$("rankClose").textContent=t.close;$("rkNote").textContent=t.rankNote;
  listaRank($("rkTabs"),$("rkList"),$("rkFim"));botaoShr($("rkShr"));
  $("rkMe").innerHTML=`<span>${esc(t.rankMe)} <b>${esc(j.nome)}</b></span><button type="button" class="aboutlink" id="rkOther2"><span class="rkre">${ICRE}${esc(t.rankOther)}</span></button><span class="rkdev">${esc(t.rankDev)}</span>`;$("rkOther2").onclick=outroNome}
 // partilhar o ranking: cartão 1080×1080 com o top 10 do separador aberto e a minha linha destacada (só se eu lá estiver).
@@ -739,10 +904,10 @@ function rankLinhas(){if(!rkDados||rkDados.erro)return null;const l=(rkDados[rkP
  const eu=l.find(x=>x.eu);return eu?{l,eu}:null}
 let rkCard={k:"",blob:null},rkShrT=0;
 function botaoShr(b){const d=rankLinhas();b.hidden=!d;if(!d)return;if(Date.now()>rkShrT)b.innerHTML=ICSH+esc(L().rankShr);
- const k=[LANG,rkPer,jogador().nome,JSON.stringify(d.l)].join("|");if(rkCard.k===k)return;rkCard={k,blob:null};
+ const k=[LANG,JOGO,rkCat,rkPer,jogador().nome,JSON.stringify(d.l)].join("|");if(rkCard.k===k)return;rkCard={k,blob:null};
  const cv=document.createElement("canvas");cv.width=cv.height=1080;drawRank(cv,d).then(()=>cv.toBlob(bl=>{if(rkCard.k===k)rkCard.blob=bl},"image/png"))}
 async function partilhaRank(ev){const b=ev.currentTarget,d=rankLinhas(),t=L();if(!d||!rkCard.blob)return;
- const txt=t.rankShrTxt(d.eu.pos,d.eu.pontos,rkPer,SITE),file=new File([rkCard.blob],"quizcv-ranking.png",{type:"image/png"});
+ const txt=MAPA()?t.m.rankShrTxt(d.eu.pos,rkVal(d.eu),rkPer,t.m.cats[rkCat],SITE+"/?mapa"):t.rankShrTxt(d.eu.pos,d.eu.pontos,rkPer,SITE),file=new File([rkCard.blob],"quizcv-ranking.png",{type:"image/png"});
  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:txt});return}}catch(err){if(err&&err.name==="AbortError")return}
  const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;document.body.appendChild(a);a.click();a.remove();
  let cop=false;try{await navigator.clipboard.writeText(txt);cop=true}catch(_){}
@@ -753,8 +918,8 @@ async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotes
  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);drawFlagBg(ctx,W,H,.1);
  let y=84;ctx.textBaseline="alphabetic";ctx.font="800 56px "+BG;ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
- y=222;ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(`${t.rankT} · ${perNome(rkPer)}`.toUpperCase(),P,y);
- y+=72;ctx.font="800 60px "+BG;ctx.fillStyle="#f7d116";ctx.fillText(t.rankLugar(d.eu.pos,f(d.eu.pontos)),P,y);
+ y=222;ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(`${MAPA()?t.m.rankT+" · "+t.m.cats[rkCat]:t.rankT} · ${perNome(rkPer)}`.toUpperCase(),P,y);
+ y+=72;ctx.font="800 60px "+BG;ctx.fillStyle="#f7d116";ctx.fillText(MAPA()?t.m.lugar(d.eu.pos,rkVal(d.eu)):t.rankLugar(d.eu.pos,f(d.eu.pontos)),P,y);
  // linhas: altura ajustada ao número de linhas, entre o título e a faixa do rodapé
  const n=d.l.length,sepH=d.l.some(x=>x.sep)?30:0,y0=y+36,gap=8,rh=Math.min(58,Math.floor((fb-24-y0-sepH)/n)-gap),med={1:"#f2c230",2:"#b9c2cf",3:"#cd8a52"};
  y=y0;ctx.textBaseline="middle";
@@ -766,10 +931,11 @@ async function drawRank(cv,d){try{await Promise.all(['800 80px "Bricolage Grotes
   ctx.font=`${x.eu?800:600} ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.fillText(x.nome,P+88,cy+1);
   if(x.eu){const nx=P+88+ctx.measureText(x.nome).width+16;ctx.font=`500 ${Math.round(fs*.62)}px ${MO}`;const tw=ctx.measureText(t.rankEu.toUpperCase()).width+24,th=Math.round(fs*1.05);
    ctx.fillStyle="#002566";ctx.beginPath();ctx.roundRect(nx,cy-th/2,tw,th,th/2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.rankEu.toUpperCase(),nx+12,cy+1)}
-  ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.textAlign="right";let rx=W-P-24;if(rkPer==="total"&&x.rondas){const rt=t.rankRondas(x.rondas);ctx.font=`500 ${Math.round(fs*.72)}px ${BG}`;ctx.fillStyle=x.eu?"rgba(0,37,102,.75)":"rgba(255,255,255,.65)";ctx.fillText(rt,rx,cy+1);rx-=ctx.measureText(rt).width+12;ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff"}ctx.fillText(`${f(x.pontos)} ${t.rankPts}`,rx,cy+1);ctx.textAlign="left";y+=rh+gap}
+  ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff";ctx.textAlign="right";let rx=W-P-24;if(rkPer==="total"&&x.rondas){const rt=t.rankRondas(x.rondas);ctx.font=`500 ${Math.round(fs*.72)}px ${BG}`;ctx.fillStyle=x.eu?"rgba(0,37,102,.75)":"rgba(255,255,255,.65)";ctx.fillText(rt,rx,cy+1);rx-=ctx.measureText(rt).width+12;ctx.font=`800 ${fs}px ${BG}`;ctx.fillStyle=x.eu?"#002566":"#fff"}ctx.fillText(rkVal(x),rx,cy+1);ctx.textAlign="left";y+=rh+gap}
  ctx.textBaseline="alphabetic";ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
- ctx.font="500 23px "+MO;ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
+ ctx.font="500 23px "+MO;ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(MAPA()?t.m.cardFoot:t.card.foot,P,fb+88);
  ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
+$("rkCats").addEventListener("click",ev=>{const b=ev.target.closest("button[data-c]");if(!b||b.dataset.c===rkCat)return;rkCat=b.dataset.c;rkDados=null;renderRank();carregaRank()});
 $("rkShr").onclick=$("rkShrF").onclick=partilhaRank;
 $("rkTabs").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRank()});
 $("rkTabsF").addEventListener("click",ev=>{const b=ev.target.closest("button[data-p]");if(!b)return;rkPer=b.dataset.p;renderRk()});
@@ -785,7 +951,7 @@ const lerQ=a=>(a||[]).filter(r=>Array.isArray(r)&&Array.isArray(r[4])&&r[4].leng
  .map(r=>({id:r[0],nv:r[1],tema:r[2],q:r[3],o:r[4],x:r[5],src:r[6],q_en:r[7],o_en:r[8],x_en:r[9],p:r[10]||"",p_en:r[11]||""}));
 const QS_N=lerQ(window.QUIZCV_PERGUNTAS),QS_K=lerQ(window.QUIZCV_CRIANCAS);
 let QS=KIDS()?QS_K:QS_N;
-function urlModo(){const q=location.search.slice(1).split("&").filter(x=>x&&!/^(criancas|kids)(=|$)/.test(x));if(KIDS())q.unshift("criancas");
+function urlModo(){const q=location.search.slice(1).split("&").filter(x=>x&&!/^(criancas|kids|mapa)(=|$)/.test(x));if(MAPA())q.unshift("mapa");else if(KIDS())q.unshift("criancas");
  try{history.replaceState(null,"",location.pathname+(q.length?"?"+q.join("&"):"")+location.hash)}catch(_){}}
 function mudaModo(m){modo=m==="kids"?"kids":"normal";urlModo();NIVEIS=MODOS[modo].niveis;TEMPO=MODOS[modo].tempo;QS=KIDS()?QS_K:QS_N;applyLang()}
 // pista de contexto (só nas perguntas geradas); em EN só aparece se houver tradução
@@ -831,17 +997,26 @@ const marcaVista=e=>{vistas.add(e.id);ls.set("quizcv_vistas",[...vistas])};
 let escolhas=[],repAlvo=null,revAberta=false;
 let fora=new Set(),ronda=[],idx=0,pts=0,saltos=SALTOS,meio=MEIO,res=[],resp=null,estado="",ordem=[],vista="ini",t0=0,restante=TEMPO,tick=null,pausa=false;
 const usadas=new Set();
-function show(v){vista=v;pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-fim").hidden=v!=="fim"}
-const HOWI={q:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>',t:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',s:'<path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/>',a:'<circle cx="12" cy="12" r="9"/><path d="M12 3v18"/>'};
+function show(v){vista=v;pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on");if(v!=="jogo")$("resbg").hidden=true;$("alerta").classList.remove("on");$("hero").hidden=$("hSub").hidden=v!=="ini";$("v-ini").hidden=v!=="ini";$("v-jogo").hidden=v!=="jogo";$("v-mapa").hidden=v!=="mapa";$("v-fim").hidden=v!=="fim"}
+const HOWI={q:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/>',t:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',s:'<path d="M4 17a8 8 0 0 1 14-7"/><path d="M19 4v6h-6"/>',a:'<circle cx="12" cy="12" r="9"/><path d="M12 3v18"/>',
+ m:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',o:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+ z:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/>'};
 function renderIni(){const t=L();
  const MI={normal:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/>',kids:'<path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/>'};
  $("modo").setAttribute("aria-label",t.modoLbl);$("modo").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-pressed",String(b.dataset.m===modo));b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${MI[b.dataset.m]}</svg>${esc(t.modos[b.dataset.m])}`});
- $("iniNone").textContent=t.none;$("iniNone").hidden=!!QS.length;
- $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!QS.length;
- $("howT").textContent=t.howT;$("how").hidden=!QS.length;
- $("rules").innerHTML=t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
- $("ptsNote").innerHTML=t.ptsNote;
- const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b;renderConta();
+ // escolha do jogo (Perguntas / Mapa) e, no mapa, da categoria
+ const JI={quiz:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .9-1 1.6v.5M12 17h.01"/>',mapa:'<path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/>'};
+ $("jogos").setAttribute("aria-label",t.jogoLbl);$("jogos").querySelectorAll("button").forEach(b=>{const j=b.dataset.j;b.setAttribute("aria-pressed",String(j===JOGO));b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${JI[j]}</svg><b>${esc(t.jogos[j][0])}</b><span>${esc(t.jogos[j][1])}</span>`});
+ $("modo").hidden=MAPA();$("mcats").hidden=!MAPA();
+ const B=ls.get("quizcv_mapa_best",{}),mb=c=>B[c]?`${mPctDe(B[c].p,c)}% · ${fmtT(B[c].s)}`:"";
+ if(MAPA()){$("mcats").setAttribute("aria-label",t.m.catLbl);$("mcats").innerHTML=MCATS.map(c=>`<button type="button" data-c="${c}" aria-pressed="${c===mCat}"><b>${esc(t.m.cats[c])}</b><span>${esc(t.m.catSub(MTOT[c],mb(c)))}</span></button>`).join("")}
+ const ok=MAPA()||!!QS.length;$("iniNone").textContent=t.none;$("iniNone").hidden=ok;
+ $("start").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.start)}`;$("start").hidden=!ok;
+ $("howT").textContent=t.howT;$("how").hidden=!ok;
+ $("rules").innerHTML=(MAPA()?t.m.rules(Math.min(MR,MTOT[mCat]),MTOT[mCat],mCat):t.rules(NIVEIS.length,TEMPO,SALTOS,MEIO)).map(([k,b,sp])=>`<li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${HOWI[k]}</svg></i><div><b>${esc(b)}</b><span>${esc(sp)}</span></div></li>`).join("");
+ $("ptsNote").innerHTML=MAPA()?t.m.ptsNote:t.ptsNote;
+ if(MAPA()){const b=B[mCat];$("best").textContent=b?t.m.best(mPctDe(b.p,mCat),fmtT(b.s)):"";$("best").hidden=!b}
+ else{const b=ls.get(MODOS[modo].best,0);$("best").textContent=b?t.best(b):"";$("best").hidden=!b}renderConta();
  $("rkHomeP").hidden=KIDS()||!API;$("rkHome").innerHTML=ICTROF+esc(t.rankVer)}
 function start(){usadas.clear();ronda=[];
  for(const nv of NIVEIS){const viz=[ronda[ronda.length-1]];const e=sorteia(nv,usadas,viz)||sorteia(nv,new Set(),viz);if(e){ronda.push(e);usadas.add(e.id)}}
@@ -899,9 +1074,9 @@ function desenhaTempo(){const s=Math.ceil(restante),alerta=restante<=ALERTA&&!es
  if(s!==ultSeg&&ativo&&s<TEMPO){tm.classList.remove("beat");void tm.offsetWidth;tm.classList.add("beat");somTique(s);
   const fa=$("fantasma");if(s<=5&&s>0&&!reduz()&&!KIDS()){fa.textContent=s;fa.classList.remove("on");void fa.offsetWidth;fa.classList.add("on")}}
  if(!ativo||s>5)$("fantasma").classList.remove("on");ultSeg=s}
-const pausar=()=>{if(!pausa){pausa=true;$("alerta").classList.remove("on");pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on")}};
-const retomar=()=>{if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
-document.addEventListener("visibilitychange",()=>{if(vista!=="jogo")return;document.hidden?pausar():retomar()});
+const pausar=()=>{if(vista==="mapa"){mPara();return}if(!pausa){pausa=true;$("alerta").classList.remove("on");pararTensao();tensaoVisual(0,false);$("fantasma").classList.remove("on")}};
+const retomar=()=>{if(vista==="mapa"){mRetoma();return}if(pausa){pausa=false;t0=performance.now()-(TEMPO-restante)*1000}};
+document.addEventListener("visibilitychange",()=>{if(vista!=="jogo"&&vista!=="mapa")return;document.hidden?pausar():retomar()});
 
 function renderQ(){const t=L(),e=ronda[idx],n=ronda.length;
  $("pNum").textContent=t.qNum(idx+1,n);$("pPts").textContent=t.pts(pts);
@@ -984,17 +1159,17 @@ let recorde=false;
 function fim(){clearInterval(tick);const kb=MODOS[modo].best,b=ls.get(kb,0);recorde=pts>b;if(recorde)ls.set(kb,pts);if(!KIDS()&&API&&res.length){rkDados=null;rkPer="semana";carregaRank()}show("fim");renderFim();autoEnvia();scrollTo({top:0});if(KIDS()&&res.length)parabens()}
 // fim da versão para crianças: fanfarra curta, «Parabéns!» / «Chegaste ao fim!» ao centro e chuva de confetes e estrelas com as cores da bandeira.
 // Aparece sempre, seja qual for o resultado (nunca desanimar). Sem animação com movimento reduzido.
-function parabens(){const t=L();[523,659,784,1047].forEach((f,i)=>bip(f,i===3?.5:.16,.08,"triangle",null,i*.13));if(reduz())return;
+function parabens(tit=L().parab,sub=L().parabSub){[523,659,784,1047].forEach((f,i)=>bip(f,i===3?.5:.16,.08,"triangle",null,i*.13));if(reduz())return;
  const fx=document.createElement("div");fx.className="fx";document.body.appendChild(fx);const cores=["#003893","#f7d116","#cf2027","#ffffff","#2fa872"],W=innerWidth,H=innerHeight;
  for(let i=0;i<90;i++){const p=document.createElement("i");if(i%6===0){p.className="st";p.textContent="★";p.style.color=i%12?"#f7d116":"#ffffff"}else p.style.background=cores[i%cores.length];
   p.style.left=(Math.random()*W)+"px";p.style.top="-30px";fx.appendChild(p);const dx=(Math.random()-.5)*180,rot=Math.random()*900-450;
   p.animate([{transform:"translate(0,0) rotate(0)"},{transform:`translate(${dx}px,${H+80}px) rotate(${rot}deg)`}],{duration:2200+Math.random()*1600,delay:Math.random()*800,easing:"cubic-bezier(.3,.4,.6,1)",fill:"backwards"})}
- const b=document.createElement("div");b.className="parab";b.setAttribute("aria-hidden","true");b.innerHTML=`<b>${esc(t.parab)}</b><span>${esc(t.parabSub)}</span>`;document.body.appendChild(b);
+ const b=document.createElement("div");b.className="parab";b.setAttribute("aria-hidden","true");b.innerHTML=`<b>${esc(tit)}</b><span>${esc(sub)}</span>`;document.body.appendChild(b);
  setTimeout(()=>b.remove(),3300);setTimeout(()=>fx.remove(),4700)}
 const certas=()=>res.filter(x=>x==="ok").length;
-function renderFim(){const t=L(),n=ronda.length,s=certas();
- $("fTxt").textContent=t.verdict(s,n);$("fPts").textContent=t.ptsTotal(pts,recorde);
- $("fCv").setAttribute("aria-label",t.shareText(s,n,pts,SITE));drawCard($("fCv"));
+function renderFim(){const t=L();$("mOutra").hidden=!MAPA();
+ if(MAPA())mRenderFim();else{const n=ronda.length,s=certas();$("fTxt").textContent=t.verdict(s,n);$("fPts").textContent=t.ptsTotal(pts,recorde);
+  $("fCv").setAttribute("aria-label",t.shareText(s,n,pts,SITE));drawCard($("fCv"))}
  $("again").innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>${esc(t.again)}`;
  $("shrNative").textContent=t.native;$("shrSave").textContent=t.save;$("shrCopy").textContent=t.copy;$("shrMsg").hidden=true;
  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
@@ -1002,7 +1177,7 @@ function renderFim(){const t=L(),n=ronda.length,s=certas();
 // revisão: cada pergunta respondida, com a resposta dada, a certa, a explicação, a fonte e «Reportar problema»
 const ICOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
  ICNO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>';
-function renderRev(){const t=L(),n=res.length,rb=$("revBtn"),rv=$("rev");rb.hidden=!n;
+function renderRev(){if(MAPA()){mRenderRev();return}const t=L(),n=res.length,rb=$("revBtn"),rv=$("rev");rb.hidden=!n;rv.className="rev";
  rb.setAttribute("aria-expanded",String(revAberta));rb.innerHTML=`${esc(revAberta?t.revHide:t.revShow)}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
  rv.hidden=!revAberta||!n;if(rv.hidden)return;
  const abertas=new Set([...rv.querySelectorAll("details[open]")].map(d=>d.dataset.i)),feitos=ls.get("quizcv_rep",[]);
@@ -1014,13 +1189,17 @@ $("revBtn").onclick=()=>{revAberta=!revAberta;renderRev();if(revAberta)$("rev").
 $("rev").addEventListener("click",ev=>{const b=ev.target.closest("[data-rep]");if(b)abreRep(ronda[+b.dataset.rep])});
 // contagem de 3 segundos antes de cada ronda
 function contagem(){audio();const cd=$("cd"),n=$("cdN"),seq=["3","2","1",L().go];let i=0;cd.hidden=false;
- const passo=()=>{if(i>=seq.length){cd.hidden=true;start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";if(i<3)bip(440,.18,.12,"triangle");else{bip(880,.35,.13,"triangle");bip(1320,.3,.06,"sine")}i++;setTimeout(passo,reduz()?450:900)};
+ const passo=()=>{if(i>=seq.length){cd.hidden=true;MAPA()?mStart():start();return}n.textContent=seq[i];n.className="";void n.offsetWidth;n.className=(i===3?"go ":"")+"tic";if(i<3)bip(440,.18,.12,"triangle");else{bip(880,.35,.13,"triangle");bip(1320,.3,.06,"sine")}i++;setTimeout(passo,reduz()?450:900)};
  n.className="";passo()}
 $("modo").addEventListener("click",ev=>{const b=ev.target.closest("button[data-m]");if(b&&b.dataset.m!==modo)mudaModo(b.dataset.m)});
-$("start").onclick=contagem;$("again").onclick=contagem;
+// no mapa, os dados (mapa.js) carregam antes da contagem
+const comeca=()=>{if(!MAPA()){contagem();return}carregaMapa().then(()=>contagem(),()=>{const m=$("iniNone");m.textContent=L().m.loadFail;m.hidden=false;if(vista!=="ini")show("ini")})};
+$("start").onclick=comeca;$("again").onclick=comeca;
+$("jogos").addEventListener("click",ev=>{const b=ev.target.closest("button[data-j]");if(!b||b.dataset.j===JOGO)return;JOGO=b.dataset.j;if(MAPA()){carregaMapa().catch(()=>{});if(KIDS()){mudaModo("normal");return}}urlModo();applyLang()});
+$("mcats").addEventListener("click",ev=>{const b=ev.target.closest("button[data-c]");if(!b||b.dataset.c===mCat)return;mCat=b.dataset.c;ls.set("quizcv_mcat",mCat);renderIni()});
 // confirmação (janela própria; o temporizador pára enquanto está aberta)
 function confirma(tit,txt,sim){return new Promise(res=>{const t=L();pausar();$("confTitle").textContent=tit;$("confTxt").textContent=txt;$("confYes").textContent=sim;$("confNo").textContent=t.keep;$("conf").hidden=false;$("confYes").focus();
- const fecha=v=>{$("conf").hidden=true;$("confYes").onclick=$("confNo").onclick=null;$("conf").onclick=null;if(vista==="jogo")retomar();res(v)};
+ const fecha=v=>{$("conf").hidden=true;$("confYes").onclick=$("confNo").onclick=null;$("conf").onclick=null;if(vista==="jogo"||vista==="mapa")retomar();res(v)};
  $("confYes").onclick=()=>fecha(true);$("confNo").onclick=()=>fecha(false);$("conf").onclick=ev=>{if(ev.target.id==="conf")fecha(false)}})}
 $("quit").onclick=async()=>{const t=L();if(await confirma(t.quitQ,t.quitTxt,t.quitYes))fim()};
 
@@ -1061,7 +1240,7 @@ async function drawCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesqu
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.card.foot,P,fb+88);
  ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
 // na versão para crianças, o link partilhado abre já nessa versão
-const shareText=()=>L().shareText(certas(),ronda.length,pts,KIDS()?SITE+"/?criancas":SITE);
+const shareText=()=>MAPA()?L().m.shareText(L().m.cats[mCat],mPct(),fmtT(mSegF),SITE+"/?mapa"):L().shareText(certas(),ronda.length,pts,KIDS()?SITE+"/?criancas":SITE);
 const cardBlob=()=>new Promise(r=>$("fCv").toBlob(r,"image/png"));
 const shrMsg=m=>{$("shrMsg").textContent=m;$("shrMsg").hidden=false};
 $("shrNative").onclick=async()=>{try{const blob=await cardBlob();const f=new File([blob],"quizcv.png",{type:"image/png"});
@@ -1085,21 +1264,161 @@ $("repSend").onclick=async()=>{const t=L(),e=repAlvo,motivos=[...$("repOpts").qu
  if(m!==t.repFail){const s=ls.get("quizcv_rep",[]);s.push(e.id);ls.set("quizcv_rep",s)}
  $("repMsg").textContent=m;$("repMsg").hidden=false;$("repSend").hidden=true;$("repCancel").textContent=t.close;if(vista==="jogo")renderQ();else renderRev()};
 
+// ── Mapa CV (jogo de mapas) ──
+// Dados em mapa.js (gerado por scripts/gerar-mapa.js), carregado só quando se escolhe o Mapa.
+// Estilo World Map Quiz: todos os elementos da categoria por ordem aleatória, cronómetro a contar, 3 tentativas por elemento
+// (30, 20 ou 10 pontos); à 3.ª falhada o sítio certo pisca a vermelho. Nas categorias com várias regiões por ilha,
+// um toque numa ilha aproxima-a (#mBack volta ao arquipélago); numa ilha com um só alvo, o toque já é a resposta.
+let MD=null,mItens=[],mFila=[],mRes={},mTent={},mPts=0,mLock=false,mZoom=null,mVB=[0,0,1,1],mAnim=0,mT0=0,mAcum=0,mPausa=false,mTick=null,mSegF=0,mTimers=[];
+function carregaMapa(){if(MD)return Promise.resolve(MD);if(window.QUIZCV_MAPA)return Promise.resolve(MD=window.QUIZCV_MAPA);
+ return new Promise((ok,ko)=>{const s=document.createElement("script");s.src="mapa.js";s.onload=()=>{MD=window.QUIZCV_MAPA||null;MD?ok(MD):ko()};s.onerror=()=>{s.remove();ko()};document.head.appendChild(s)})}
+const fmtT=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+const mPctDe=p=>Math.round(100*p/(30*MR));
+const mIlhaN=id=>(MD.ilhas.find(i=>i.id===id)||{}).n||"";
+const mConc=id=>MD.concelhos.find(c=>c.id===id)||{};
+// elementos a encontrar: {id (do alvo no mapa), n (nome a mostrar), nome, ilha, conc?, img?}
+function mItensDe(cat){const M=MD;
+ if(cat==="ilhas")return M.ilhas.map(i=>({id:i.id,n:i.n,nome:i.n,ilha:i.id}));
+ if(cat==="concelhos")return M.concelhos.map(c=>({id:c.id,n:c.n,nome:c.n,ilha:c.ilha}));
+ if(cat==="sedes")return M.sedes.map(s=>({id:s.id,n:s.n,nome:s.n,ilha:s.ilha,conc:s.conc}));
+ if(cat==="freguesias")return M.freguesias.map(f=>({id:f.id,n:f.q,nome:f.n,ilha:f.ilha,conc:f.conc}));
+ return M.bandeiras.map(b=>{const c=mConc(b.conc);return{id:c.id,n:c.n,nome:c.n,ilha:c.ilha,img:b.img}})}
+// alvos desenhados no mapa (nas bandeiras, os 22 concelhos)
+const mAlvos=cat=>cat==="ilhas"?MD.ilhas.map(i=>({id:i.id,n:i.n,ilha:i.id,d:i.d})):cat==="freguesias"?MD.freguesias.map(f=>({...f,n:f.q})):cat==="sedes"?MD.sedes:MD.concelhos;
+const mPorIlha=ilha=>mAlvos(mCat).filter(a=>a.ilha===ilha);
+const mEl=id=>$("mSvg").querySelector(`[data-id="${CSS.escape(id)}"]`);
+// camadas: halos (área de toque alargada à volta de cada ilha), ilhéus, terra sem alvos, alvos, fronteiras dos concelhos
+function desenhaMapa(){const M=MD,c=mCat,T=a=>`data-id="${a.id}" data-ilha="${a.ilha}"`;
+ let h=`<g>${M.ilhas.map(i=>`<path class="halo" d="${i.d}" data-ilha="${i.id}"/>`).join("")}</g><path class="ilheu" d="${M.ilheus}"/>`;
+ if(c==="sedes"){h+=M.ilhas.map(i=>`<path class="terra" d="${i.d}" data-ilha="${i.id}"/>`).join("")+`<g>${M.concelhos.map(k=>`<path class="fronteira fina" d="${k.d}" data-ilha="${k.ilha}"/>`).join("")}</g>`
+  +`<g>${M.sedes.map(s=>`<g class="sedeg" ${T(s)}><circle class="sedehit" cx="${s.x}" cy="${s.y}" r="8"/><circle class="sede" cx="${s.x}" cy="${s.y}" r="3"/></g>`).join("")}</g>`}
+ else{const al=mAlvos(c);if(c!=="ilhas")h+=M.ilhas.filter(i=>!al.some(a=>a.ilha===i.id)).map(i=>`<path class="terra" d="${i.d}" data-ilha="${i.id}"/>`).join("");
+  h+=`<g>${al.map(a=>`<path class="alvo" fill-rule="evenodd" d="${a.d}" ${T(a)}/>`).join("")}</g>`;
+  if(c==="freguesias")h+=`<g>${M.concelhos.map(k=>`<path class="fronteira" d="${k.d}" data-ilha="${k.ilha}"/>`).join("")}</g>`}
+ $("mSvg").innerHTML=h}
+// enquadramento (viewBox) com a proporção da caixa do mapa; aproximar uma ilha anima o viewBox
+function mAspect(){const b=$("mapbox").getBoundingClientRect();return b.width&&b.height?b.width/b.height:1}
+function mCaixa(b,pad){let w=b[2]-b[0]+pad*2,h=b[3]-b[1]+pad*2;const ar=mAspect();if(w/h<ar)w=h*ar;else h=w/ar;const cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2;return[cx-w/2,cy-h/2,w,h]}
+const vbTudo=()=>mCaixa([0,0,MD.w,MD.h],0);
+const vbIlha=id=>{const b=MD.ilhas.find(i=>i.id===id).bb;return mCaixa(b,Math.max(b[2]-b[0],b[3]-b[1])*.1+6)};
+function aplicaVB(){const s=$("mSvg");s.setAttribute("viewBox",mVB.map(v=>v.toFixed(2)).join(" "));
+ const px=mVB[2]/Math.max(1,$("mapbox").clientWidth); // unidades do mapa por píxel: as sedes têm sempre o mesmo tamanho no ecrã
+ s.querySelectorAll(".sede").forEach(c=>c.setAttribute("r",(5.5*px).toFixed(2)));s.querySelectorAll(".sedehit").forEach(c=>c.setAttribute("r",(15*px).toFixed(2)))}
+function vaiPara(alvo,ja){cancelAnimationFrame(mAnim);if(ja||reduz()){mVB=alvo;aplicaVB();return}const de=[...mVB],t0=performance.now(),dur=420;
+ const passo=now=>{const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);mVB=de.map((v,i)=>v+(alvo[i]-v)*e);aplicaVB();if(k<1)mAnim=requestAnimationFrame(passo)};mAnim=requestAnimationFrame(passo)}
+function zoom(ilha,ja){mZoom=ilha||null;vaiPara(mZoom?vbIlha(mZoom):vbTudo(),ja);$("mBack").hidden=!mZoom;
+ $("mSvg").querySelectorAll("[data-ilha]").forEach(e=>e.classList.toggle("longe",!!mZoom&&e.dataset.ilha!==mZoom));if(!ja&&mZoom)bip(520,.09,.025,"sine",780)}
+addEventListener("resize",()=>{if(vista==="mapa"&&MD){mVB=mZoom?vbIlha(mZoom):vbTudo();aplicaVB()}});
+// cronómetro (pára com o separador escondido e com a janela de confirmação aberta)
+const mSeg=()=>Math.floor((mAcum+(mPausa?0:performance.now()-mT0))/1000);
+const mPara=()=>{if(!mPausa){mAcum+=performance.now()-mT0;mPausa=true}};
+const mRetoma=()=>{if(mPausa){mT0=performance.now();mPausa=false}};
+function mRelogio(){$("mTime").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/></svg>${fmtT(mSeg())}`}
+const mDepois=(f,ms)=>mTimers.push(setTimeout(f,ms));
+const mCompleto=()=>mItens.length>0&&Object.keys(mRes).length===mItens.length;
+const mPct=()=>mItens.length?mPctDe(mPts,mCat):0;
+function renderAlvo(troca){const t=L(),a=mFila[0],tot=mItens.length,feitos=Object.keys(mRes).length;
+ $("mNum").textContent=t.m.num(Math.min(feitos+1,tot),tot);$("mBar").style.width=(tot?100*feitos/tot:0)+"%";mRelogio();
+ $("mSkip").innerHTML=`${RUNNER}${esc(t.skipL)}`;$("mSkip").disabled=mLock||mFila.length<2;$("mQuit").textContent=t.quit;
+ $("mBack").innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>${esc(t.m.back)}`;
+ $("mSvg").setAttribute("aria-label",t.m.mapAria);
+ if(!a)return;const fl=mCat==="bandeiras",im=$("mFlag");
+ $("mLbl").textContent=fl?t.m.tocaB:t.m.toca;$("mNome").textContent=fl?"":a.n;$("mNome").hidden=fl;im.hidden=!fl;if(fl&&im.getAttribute("src")!==a.img)im.src=a.img;im.alt=fl?t.m.flagAlt:"";
+ const k=mTent[a.id]||0;$("mPips").innerHTML=[0,1,2].map(i=>`<i class="${i>=3-k?"x":""}"></i>`).join("");$("mPips").setAttribute("aria-label",t.m.tries(3-k));
+ if(troca&&!reduz()){const b=$("mAlvo");b.classList.remove("troca");void b.offsetWidth;b.classList.add("troca")}}
+// depois de cada resposta: uma linha curta sobre o sítio (ilha, sede, concelho)
+function mInfo(a,falhou){const t=L(),c=mConc(a.conc||a.id);let s;
+ if(mCat==="ilhas")s=t.m.infoIlha(esc(a.nome),MD.concelhos.filter(k=>k.ilha===a.id).length);
+ else if(mCat==="sedes")s=t.m.infoSede(esc(a.nome),esc(c.n),esc(mIlhaN(a.ilha)));
+ else if(mCat==="freguesias")s=t.m.infoFreg(esc(a.nome),esc(c.n),esc(mIlhaN(a.ilha)));
+ else s=t.m.infoConc(esc(a.nome),esc(mIlhaN(a.ilha)),esc(c.sede));
+ $("mInfo").innerHTML=(falhou?`<span class="no">${esc(t.m.era)}</span> `:"")+s}
+// nome do sítio tocado (errado), junto ao dedo
+function mTip(txt,ev){const box=$("mapbox"),r=box.getBoundingClientRect();box.querySelectorAll(".mtip").forEach(x=>x.remove());const d=document.createElement("div");d.className="mtip";d.textContent=txt;
+ const x=Math.max(70,Math.min(r.width-70,(ev?ev.clientX:r.left+r.width/2)-r.left)),y=Math.max(44,(ev?ev.clientY:r.top+r.height/2)-r.top);d.style.left=x+"px";d.style.top=y+"px";box.appendChild(d);setTimeout(()=>d.remove(),1500)}
+function mResponde(id,ev){const a=mFila[0];if(!a||mLock)return;
+ if(id===a.id){const k=mTent[a.id]||0,g=[30,20,10][k];mPts+=g;mRes[a.id]=k+1;const el=mEl(a.id);if(el){el.classList.remove("erro","rev");el.classList.add("c"+(k+1))}
+  somCerto();if(k===0)boa();if(el)festa(el.querySelector(".sede")||el,g);mInfo(a);mLock=true;renderAlvo();mDepois(mProximo,reduz()?200:700);return}
+ const k=(mTent[a.id]||0)+1;mTent[a.id]=k;const el=mEl(id);
+ if(el){el.classList.remove("erro");void el.getBoundingClientRect();el.classList.add("erro")}
+ const al=mAlvos(mCat).find(x=>x.id===id);if(al)mTip(al.n,ev);
+ if(navigator.vibrate)try{navigator.vibrate(70)}catch(_){}
+ if(k<3){bip(240,.2,.07,"triangle",150);renderAlvo();return}
+ // 3.ª falhada: o sítio certo pisca a vermelho (aproxima a ilha, se for preciso)
+ mRes[a.id]=0;somTempo();mLock=true;
+ if(mCat!=="ilhas"&&mZoom!==a.ilha&&mPorIlha(a.ilha).length>1)zoom(a.ilha);
+ const ce=mEl(a.id);if(ce){ce.classList.remove("erro");ce.classList.add("c0","rev")}
+ mInfo(a,true);renderAlvo();mDepois(mProximo,reduz()?700:1800)}
+function mProximo(){mFila.shift();mLock=false;if(!mFila.length){mFim();return}renderAlvo(true)}
+$("mSvg").addEventListener("click",ev=>{if(vista!=="mapa"||mLock||!mFila.length)return;const el=ev.target.closest("[data-id],[data-ilha]");if(!el)return;
+ const ilha=el.dataset.ilha,id=el.dataset.id;
+ if(mCat==="ilhas"){mResponde(id||ilha,ev);return}
+ if(ilha!==mZoom){const al=mPorIlha(ilha);if(al.length===1)mResponde(al[0].id,ev);else if(al.length)zoom(ilha);else mTip(L().m.semAlvo(mIlhaN(ilha)),ev);return}
+ if(id)mResponde(id,ev)});
+$("mBack").onclick=()=>zoom(null);
+// saltar: o elemento passa para o fim da fila (as tentativas gastas ficam)
+$("mSkip").onclick=()=>{if(mLock||mFila.length<2)return;mFila.push(mFila.shift());renderAlvo(true);bip(660,.1,.04,"triangle",440)};
+$("mQuit").onclick=async()=>{const t=L();if(await confirma(t.m.quitQ,t.m.quitTxt,t.quitYes))mFim()};
+// ronda: MR elementos ao acaso, primeiro os que ainda não saíram nesta categoria (quizcv_mvistos); quando se esgotam, recomeça
+function mSorteia(cat){const todos=mItensDe(cat),V=ls.get("quizcv_mvistos",{});let vistos=new Set(V[cat]||[]);
+ let novos=shuffle(todos.filter(a=>!vistos.has(a.id)));if(novos.length<MR){const resto=shuffle(todos.filter(a=>vistos.has(a.id)));novos=novos.concat(resto.slice(0,MR-novos.length));vistos=new Set()}
+ const r=novos.slice(0,MR);r.forEach(a=>vistos.add(a.id));V[cat]=[...vistos];ls.set("quizcv_mvistos",V);return r}
+function mStart(){mTimers.forEach(clearTimeout);mTimers=[];mItens=mSorteia(mCat);mFila=shuffle(mItens);mRes={};mTent={};mPts=0;mLock=false;revAberta=false;
+ mAcum=0;mPausa=false;mT0=performance.now();contaJogo();pedeToken();show("mapa");desenhaMapa();zoom(null,true);$("mInfo").textContent="";renderAlvo();
+ clearInterval(mTick);mTick=setInterval(()=>{if(vista==="mapa")mRelogio()},250);scrollTo({top:0})}
+function mFim(){mTimers.forEach(clearTimeout);mTimers=[];clearInterval(mTick);mSegF=mSeg();mPara();mLock=true;
+ const ok=mCompleto(),B=ls.get("quizcv_mapa_best",{}),b=B[mCat];recorde=ok&&(!b||mPts>b.p||(mPts===b.p&&mSegF<b.s));if(recorde){B[mCat]={p:mPts,s:mSegF};ls.set("quizcv_mapa_best",B)}
+ if(API&&ok){rkDados=null;rkPer="semana";rkCat=mCat;carregaRank()}
+ show("fim");renderFim();autoEnvia();scrollTo({top:0});if(ok)parabens(L().m.parab,L().m.parabSub(mPct()))}
+function mRenderFim(){const t=L(),ok=mCompleto();
+ $("fTxt").textContent=ok?t.m.verdict(mPct()):t.m.parcial;$("fPts").textContent=t.m.fimPts(mPts,fmtT(mSegF),recorde);
+ $("fCv").setAttribute("aria-label",shareText());drawMapCard($("fCv"));$("mOutra").textContent=t.m.outra}
+// revisão: o que não foi encontrado à primeira
+function mRenderRev(){const t=L(),rb=$("revBtn"),rv=$("rev"),mal=mItens.filter(a=>a.id in mRes&&mRes[a.id]!==1);rb.hidden=!mal.length;rv.className="rev mrev";
+ rb.setAttribute("aria-expanded",String(revAberta));rb.innerHTML=`${esc(revAberta?t.m.revHide:t.m.revShow)}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+ rv.hidden=!revAberta||!mal.length;if(rv.hidden)return;const cor={0:"var(--m-c0)",2:"var(--m-c2)",3:"var(--m-c3)"};
+ rv.innerHTML=mal.map(a=>`<li><i style="background:${cor[mRes[a.id]]}"></i><b>${esc(a.n)}</b><span class="t">${esc(t.m.tent(mRes[a.id]))}</span></li>`).join("")}
+// cartão de partilha do mapa (1080×1080): categoria, percentagem, tempo e o mapa pintado com os resultados
+async function drawMapCard(cv){try{await Promise.all(['800 80px "Bricolage Grotesque"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
+ const W=1080,H=1080,ctx=cv.getContext("2d"),t=L(),P=88,fb=H-150,M=MD,BG='"Bricolage Grotesque", system-ui, sans-serif',MO='"JetBrains Mono", ui-monospace, monospace';
+ // sem a bandeira de fundo: aqui o mapa é a imagem
+ ctx.setTransform(1,0,0,1,0,0);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ let y=84;ctx.textBaseline="alphabetic";ctx.font="800 56px "+BG;ctx.fillStyle="#fff";ctx.fillText("Quiz",P,y+48);const hw=ctx.measureText("Quiz ").width;
+ ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
+ // mapa à direita
+ const ax=440,ay=210,aw=W-P+20-ax,ah=fb-36-ay,s=Math.min(aw/M.w,ah/M.h),ox=ax+(aw-M.w*s)/2,oy=ay+(ah-M.h*s)/2,cor={1:"#2fa872",2:"#e9b500",3:"#ec7f2f",0:"#e0474f"};
+ ctx.save();ctx.translate(ox,oy);ctx.scale(s,s);ctx.fillStyle="rgba(255,255,255,.18)";[...M.ilhas.map(i=>i.d),M.ilheus].forEach(d=>ctx.fill(new Path2D(d),"evenodd"));
+ if(mCat==="sedes"){ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=1.2/s;M.concelhos.forEach(k=>ctx.stroke(new Path2D(k.d)));
+  M.sedes.forEach(x=>{const r=mRes[x.id];ctx.fillStyle=r==null?"rgba(255,255,255,.55)":cor[r];ctx.beginPath();ctx.arc(x.x,x.y,8/s,0,7);ctx.fill()})}
+ else mAlvos(mCat).forEach(a=>{const r=mRes[a.id],p=new Path2D(a.d);if(r!=null){ctx.fillStyle=cor[r];ctx.fill(p,"evenodd")}ctx.strokeStyle="rgba(255,255,255,.4)";ctx.lineWidth=1.2/s;ctx.stroke(p)});
+ ctx.restore();
+ y=318;ctx.font="500 30px "+MO;ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(t.m.cardLbl,P,y);
+ y+=52;ctx.font="800 42px "+BG;ctx.fillStyle="#fff";ctx.fillText(t.m.cats[mCat],P,y);
+ y+=178;ctx.font="800 170px "+BG;ctx.fillStyle="#f7d116";ctx.fillText(mPct()+"%",P-6,y);
+ y+=78;ctx.font="500 34px "+MO;ctx.fillStyle="#fff";ctx.fillText(fmtT(mSegF),P,y);
+ y+=52;ctx.fillText(t.card.pts(mPts),P,y);
+ const n1=Object.values(mRes).filter(v=>v===1).length;y+=62;ctx.font="500 26px "+MO;const lab=t.m.cardFirst(`${n1}/${mItens.length}`),tw=ctx.measureText(lab).width+40;
+ ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(P,y-35,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(lab,P+20,y);
+ ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
+ ctx.font="500 23px "+MO;ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(t.m.cardFoot,P,fb+88);
+ ctx.font="500 28px "+MO;ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+88);ctx.textAlign="left"}
+$("mOutra").onclick=()=>{show("ini");renderIni();scrollTo({top:0})};
+
 function applyLang(){const t=L();document.documentElement.lang=LANG;
- {const v=$("vtag");v.className="vtag"+(KIDS()?" kids":"");v.innerHTML=(KIDS()?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>':"")+esc(t.vtag[modo]);v.title=t.modoLbl+": "+t.modos[modo]}
- $("hTitle").textContent=t.title;$("hSub").textContent=t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}
+ {const v=$("vtag");v.className="vtag"+(KIDS()?" kids":"");v.innerHTML=(KIDS()?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.6 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/></svg>':"")+esc(t.vtag[MAPA()?"mapa":modo]);v.title=MAPA()?t.jogos.mapa[0]:t.modoLbl+": "+t.modos[modo]}
+ $("hTitle").textContent=MAPA()?t.m.title:t.title;$("hSub").textContent=MAPA()?t.m.sub:t.sub;$("foot").textContent=t.foot;$("aboutBtn").textContent=t.aboutBtn;{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}
  $("aboutTitle").textContent=t.aboutTitle;$("aboutClose").textContent=t.close;
  $("aboutTxt").innerHTML=t.about.map(([h,p])=>(h?`<h3>${esc(h)}</h3>`:"")+`<p>${esc(p)}</p>`).join("");
  $("repTitle").textContent=t.repTitle;$("repLbl").textContent=t.repLbl;$("repCancel").textContent=t.cancel;$("repSend").textContent=t.send;
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));
- desenhaSom();renderIni();if(vista==="jogo")renderQ();if(vista==="fim")renderFim();if(!$("rank").hidden)renderRank()}
+ desenhaSom();renderIni();if(vista==="jogo")renderQ();if(vista==="mapa")renderAlvo();if(vista==="fim")renderFim();if(!$("rank").hidden)renderRank()}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;ls.set("quizcv_lang",LANG);applyLang()});
 $("aboutBtn").onclick=()=>{$("about").hidden=false;$("aboutClose").focus()};
 $("aboutClose").onclick=()=>{$("about").hidden=true};
 for(const id of ["about"])$(id).addEventListener("click",ev=>{if(ev.target.id===id)$(id).hidden=true});
 $("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")fechaRep()});
 addEventListener("keydown",ev=>{if(ev.key!=="Escape")return;if(!$("conf").hidden){$("confNo").click();return}$("about").hidden=true;$("rank").hidden=true;if(!$("rep").hidden)fechaRep()});
-applyLang();show("ini");
+applyLang();show("ini");if(MAPA())carregaMapa().catch(()=>{});
 </script>
 </body>
 </html>
